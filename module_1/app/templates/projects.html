@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Projects - Portfolio{% endblock %}
+
+{% block content %}
+<div class="projects-content">
+    <h1>Projects & Publications</h1>
+
+    <!-- Module 1 Project Card -->
+    <div class="project-card">
+        <h2 class="project-title">Module 1: Flask Personal Website</h2>
+        <p class="project-description">
+            A comprehensive portfolio website built with Flask, showcasing modern web development practices. 
+            This project demonstrates the implementation of a multi-page web application with blueprint-based 
+            architecture, responsive design, and clean code practices.
+            <br><br>
+            <strong>Key Features:</strong>
+            <ul style="margin-left: 20px; margin-top: 10px; color: #7f8c8d;">
+                <li>Multi-page application with Flask blueprints</li>
+                <li>Responsive HTML/CSS design</li>
+                <li>Navigation bar with active tab highlighting</li>
+                <li>Professional portfolio layout</li>
+                <li>Contact information management</li>
+                <li>Project showcase capabilities</li>
+            </ul>
+            <br>
+            <strong>Technologies Used:</strong> Python 3.10+, Flask, HTML5, CSS3, Jinja2 Templates
+        </p>
+        <div class="project-links">
+            <a href="https://github.com/yourusername/jhu_software_concepts" class="project-link" target="_blank">
+                View on GitHub
+            </a>
+            <a href="#" class="project-link">Live Demo</a>
+        </div>
+    </div>
+
+    <!-- Example Project Card (Additional) -->
+    <div class="project-card">
+        <h2 class="project-title">Additional Project Placeholder</h2>
+        <p class="project-description">
+            Add more of your projects here as you complete them. This template is ready to accommodate 
+            multiple projects and publications. Each project card includes a title, description, technologies used, 
+            and links to relevant resources.
+        </p>
+        <div class="project-links">
+            <a href="#" class="project-link">Learn More</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

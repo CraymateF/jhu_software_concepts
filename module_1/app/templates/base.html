@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Portfolio{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="navbar-container">
+            <a href="{{ url_for('home.index') }}" class="navbar-brand">./Data</a>
+            <ul class="navbar-links">
+                <li><a href="{{ url_for('home.index') }}" class="{% if request.endpoint == 'home.index' %}active{% endif %}">Home</a></li>
+                <li><a href="{{ url_for('contact.contact') }}" class="{% if request.endpoint == 'contact.contact' %}active{% endif %}">Contact</a></li>
+                <li><a href="{{ url_for('projects.projects') }}" class="{% if request.endpoint == 'projects.projects' %}active{% endif %}">Projects</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+</html>

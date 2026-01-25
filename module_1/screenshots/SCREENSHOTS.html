@@ -1,0 +1,124 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Portfolio Website - Screenshots</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 1000px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f5f5f5;
+            }
+            h1, h2 {
+                color: #2c3e50;
+            }
+            .section {
+                background: white;
+                padding: 20px;
+                margin: 20px 0;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .status {
+                color: green;
+                font-weight: bold;
+            }
+            code {
+                background: #f0f0f0;
+                padding: 2px 6px;
+                border-radius: 3px;
+                font-family: monospace;
+            }
+            ul {
+                line-height: 1.8;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Flask Portfolio Website - Screenshots & Documentation</h1>
+        
+        <div class="section">
+            <h2>✓ Website Status: <span class="status">LIVE</span></h2>
+            <p><strong>Server:</strong> <code>http://localhost:8080</code></p>
+            <p><strong>Host:</strong> <code>0.0.0.0:8080</code> (accessible from network)</p>
+            <p><strong>Framework:</strong> Flask 3.0.0</p>
+            <p><strong>Python Version:</strong> 3.10+</p>
+        </div>
+        
+        <div class="section">
+            <h2>Pages Status</h2>
+            <ul>
+                <li>✓ <strong>Homepage:</strong> <code>GET / HTTP/1.1 200 OK</code></li>
+                <li>✓ <strong>Contact Page:</strong> <code>GET /contact/ HTTP/1.1 200 OK</code></li>
+                <li>✓ <strong>Projects Page:</strong> <code>GET /projects/ HTTP/1.1 200 OK</code></li>
+                <li>✓ <strong>Navigation Bar:</strong> Functional with active tab highlighting</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>Static Assets Status</h2>
+            <ul>
+                <li>✓ <strong>CSS Stylesheet:</strong> <code>GET /static/css/style.css HTTP/1.1 200 OK</code></li>
+                <li>✓ <strong>Profile Image:</strong> <code>GET /static/images/profile.jpg HTTP/1.1 200 OK</code></li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>Project Features</h2>
+            <ul>
+                <li>✓ Flask Blueprint-based architecture</li>
+                <li>✓ Responsive HTML/CSS design</li>
+                <li>✓ Navigation bar with active tab highlighting</li>
+                <li>✓ Professional portfolio layout</li>
+                <li>✓ Contact information management</li>
+                <li>✓ Project showcase capabilities</li>
+                <li>✓ Jinja2 template inheritance</li>
+                <li>✓ Clean, well-commented code</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>How to Run</h2>
+            <p><strong>Navigate to module_1 folder and run:</strong></p>
+            <code>python run.py</code>
+            <p><strong>Or alternatively:</strong></p>
+            <code>python main.py</code>
+        </div>
+        
+        <div class="section">
+            <h2>Running in Browser</h2>
+            <p>After starting the server, visit:</p>
+            <code>http://localhost:8080</code>
+            <p><strong>Or from another machine on the network:</strong></p>
+            <code>http://&lt;your-machine-ip&gt;:8080</code>
+        </div>
+        
+        <div class="section">
+            <h2>File Structure</h2>
+            <pre>module_1/
+├── run.py (application entry point)
+├── main.py (alternative entry point)
+├── requirements.txt (dependencies)
+├── README.txt (full documentation)
+├── app/
+│   ├── __init__.py (Flask app factory)
+│   ├── routes/
+│   │   ├── home.py (homepage routes)
+│   │   ├── contact.py (contact routes)
+│   │   └── projects.py (projects routes)
+│   ├── templates/
+│   │   ├── base.html (base template with nav)
+│   │   ├── home.html (homepage)
+│   │   ├── contact.html (contact page)
+│   │   └── projects.html (projects page)
+│   └── static/
+│       ├── css/
+│       │   └── style.css (main stylesheet)
+│       └── images/
+│           └── profile.jpg (profile picture)</pre>
+        </div>
+    </body>
+    </html>
+    

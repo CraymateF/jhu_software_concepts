@@ -1,0 +1,397 @@
+/* 
+ * Main stylesheet for the portfolio website.
+ * Controls layout, formatting, color, and spacing.
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #00ff00;
+    --secondary-color: #00cc00;
+    --accent-color: #ff00ff;
+    --light-bg: #0a0a0a;
+    --text-dark: #00ff00;
+    --text-light: #00cc00;
+    --nav-bg: #000000;
+}
+
+body {
+    font-family: 'Courier New', 'Courier', monospace;
+    line-height: 1.6;
+    color: var(--primary-color);
+    background-color: #000000;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+/* ========== NAVIGATION BAR ========== */
+nav {
+    background-color: var(--nav-bg);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+}
+
+.navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 2px;
+}
+
+.navbar-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+.navbar-links a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    font-family: 'Courier New', monospace;
+    border: 1px solid transparent;
+}
+
+.navbar-links a:hover {
+    background-color: var(--primary-color);
+    color: #000000;
+    border: 1px solid var(--primary-color);
+    text-shadow: none;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+}
+
+/* Highlight current active tab */
+.navbar-links a.active {
+    background-color: var(--primary-color);
+    color: #000000;
+    font-weight: 600;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+}
+
+/* ========== CONTAINER AND LAYOUT ========== */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    min-height: calc(100vh - 60px);
+}
+
+/* ========== HOMEPAGE STYLING ========== */
+.home-content {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    background: #0a0a0a;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+.bio-section {
+    flex: 1;
+    min-width: 300px;
+}
+
+.bio-section h1 {
+    font-size: 36px;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.position {
+    font-size: 20px;
+    color: var(--secondary-color);
+    font-weight: 600;
+    margin-bottom: 20px;
+    font-family: 'Courier New', monospace;
+}
+
+.bio-text {
+    color: var(--text-light);
+    line-height: 1.8;
+    margin-bottom: 20px;
+    text-align: justify;
+    font-family: 'Courier New', monospace;
+}
+
+.profile-image-section {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-image {
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+    object-fit: cover;
+}
+
+/* ========== CONTACT PAGE STYLING ========== */
+.contact-content {
+    background: #0a0a0a;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    max-width: 600px;
+}
+
+.contact-content h1 {
+    font-size: 32px;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.contact-item {
+    margin-bottom: 25px;
+    padding: 15px;
+    background-color: #000000;
+    border-left: 4px solid var(--primary-color);
+    border-radius: 4px;
+    box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.1);
+}
+
+.contact-label {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 8px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: 'Courier New', monospace;
+}
+
+.contact-value {
+    color: var(--text-light);
+    font-size: 16px;
+    font-family: 'Courier New', monospace;
+}
+
+.contact-value a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.contact-value a:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+}
+
+/* ========== PROJECTS PAGE STYLING ========== */
+.projects-content {
+    background: #0a0a0a;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+.projects-content h1 {
+    font-size: 32px;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.project-card {
+    border: 1px solid var(--primary-color);
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    background-color: #000000;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+}
+
+.project-card:hover {
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.6);
+    transform: translateY(-2px);
+}
+
+.project-title {
+    font-size: 24px;
+    color: var(--primary-color);
+    margin-bottom: 12px;
+    font-weight: 600;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
+}
+
+.project-description {
+    color: var(--text-light);
+    line-height: 1.8;
+    margin-bottom: 15px;
+    font-family: 'Courier New', monospace;
+}
+
+.project-links {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.project-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #000000;
+    color: var(--primary-color);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border: 1px solid var(--primary-color);
+    font-family: 'Courier New', monospace;
+}
+
+.project-link:hover {
+    background-color: var(--primary-color);
+    color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (max-width: 768px) {
+    .navbar-links {
+        gap: 15px;
+    }
+
+    .home-content {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .bio-section h1 {
+        font-size: 28px;
+    }
+
+    .position {
+        font-size: 18px;
+    }
+
+    .contact-content {
+        max-width: 100%;
+    }
+
+    .project-card {
+        padding: 15px;
+    }
+
+    .project-title {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-container {
+        flex-direction: column;
+        height: auto;
+        gap: 10px;
+        padding: 10px 20px;
+    }
+
+    .navbar-links {
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .navbar-links a {
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+
+    .container {
+        padding: 20px 10px;
+    }
+
+    .bio-section h1 {
+        font-size: 24px;
+    }
+
+    .position {
+        font-size: 16px;
+    }
+
+    .bio-text {
+        text-align: left;
+    }
+
+    .profile-image {
+        max-width: 250px;
+    }
+
+    .home-content {
+        padding: 15px;
+        gap: 20px;
+    }
+
+    .project-links {
+        flex-direction: column;
+    }
+
+    .project-link {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* ========== UTILITY CLASSES ========== */
+.section-title {
+    font-size: 28px;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    border-bottom: 3px solid var(--primary-color);
+    padding-bottom: 10px;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
