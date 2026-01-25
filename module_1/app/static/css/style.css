@@ -17,6 +17,7 @@
     --text-dark: #00ff00;
     --text-light: #00cc00;
     --nav-bg: #000000;
+    --nav-link-color: #d3d3d3;
 }
 
 body {
@@ -67,7 +68,7 @@ nav {
 }
 
 .navbar-links a {
-    color: var(--primary-color);
+    color: var(--nav-link-color);
     text-decoration: none;
     font-weight: 500;
     padding: 8px 12px;
@@ -78,19 +79,19 @@ nav {
 }
 
 .navbar-links a:hover {
-    background-color: var(--primary-color);
+    background-color: var(--nav-link-color);
     color: #000000;
-    border: 1px solid var(--primary-color);
+    border: 1px solid var(--nav-link-color);
     text-shadow: none;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+    box-shadow: 0 0 8px rgba(211, 211, 211, 0.4);
 }
 
 /* Highlight current active tab */
 .navbar-links a.active {
-    background-color: var(--primary-color);
+    background-color: var(--nav-link-color);
     color: #000000;
     font-weight: 600;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+    box-shadow: 0 0 8px rgba(211, 211, 211, 0.4);
 }
 
 /* ========== CONTAINER AND LAYOUT ========== */
