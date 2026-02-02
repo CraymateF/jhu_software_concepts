@@ -107,16 +107,7 @@ Approach:
 
 Known Bugs:
 
-1. Missing Season Data for First Entry:
-   - Issue: The first entry on a page may not have season information because
-     the look-ahead logic checks the next row, but there's no previous row
-     with season data for the first entry
-   - Impact: Some entries may have season=null
-   - Fix: Could implement a look-back mechanism or extract season differently,
-     possibly by analyzing the page structure more carefully to understand
-     where season badges consistently appear
-
-2. Incomplete Notes Extraction:
+1. Incomplete Notes Extraction:
    - Issue: The notes extraction looks for sections containing "note" but the
      actual HTML structure on result pages may vary
    - Impact: Notes field may be null even when notes exist on the page
