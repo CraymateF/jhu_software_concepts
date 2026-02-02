@@ -1,5 +1,40 @@
 [
   {
+    "University": "University of Michigan - Ann Arbor",
+    "Program": "Social Work",
+    "Degree": "Masters",
+    "Status": "wait listed on 2 dec",
+    "Term": "Fall 2026",
+    "Date Added": "Added on 2026-02-01",
+    "GPA": 3.8,
+    "US/International": "American",
+    "Url": "https://www.thegradcafe.com/result/994362",
+    "Notes": "Submitted a complete advanced standing MSW application 10/19/2026."
+  },
+  {
+    "University": "Boston University",
+    "Program": "Computer Science",
+    "Degree": "Masters",
+    "Status": "Accepted",
+    "Term": "Fall 2026",
+    "Date Added": "Added on 2026-02-01",
+    "Acceptance Date": "29/01/2026",
+    "GPA": 3.87,
+    "US/International": "International",
+    "Url": "https://www.thegradcafe.com/result/994361"
+  },
+  {
+    "University": "Northeastern University",
+    "Program": "Clinical Psychology",
+    "Degree": "Masters",
+    "Status": "Interview",
+    "Term": "Fall 2026",
+    "Date Added": "Added on 2026-02-01",
+    "GPA": 3.88,
+    "US/International": "International",
+    "Url": "https://www.thegradcafe.com/result/994360"
+  },
+  {
     "University": "University of South Carolina",
     "Program": "Statistics",
     "Degree": "PhD",
@@ -16,6 +51,7 @@
     "Status": "Accepted",
     "Term": "Fall 2026",
     "Date Added": "Added on 2026-02-01",
+    "Acceptance Date": "30/01/2016",
     "GPA": 4.0,
     "US/International": "International",
     "Url": "https://www.thegradcafe.com/result/994358"
@@ -28,7 +64,8 @@
     "Term": "Fall 2026",
     "Date Added": "Added on 2026-02-01",
     "US/International": "International",
-    "Url": "https://www.thegradcafe.com/result/994357"
+    "Url": "https://www.thegradcafe.com/result/994357",
+    "Notes": "Interview Invite: 16/12/2025, Interview: 13/1/2026, Portal change to Decision Pending: 23/1/2026"
   },
   {
     "University": "Johns Hopkins University",
@@ -57,9 +94,11 @@
     "Status": "Rejected",
     "Term": "Fall 2026",
     "Date Added": "Added on 2026-02-01",
+    "Rejection Date": "31/01/2026",
     "GPA": 3.9,
     "US/International": "International",
-    "Url": "https://www.thegradcafe.com/result/994354"
+    "Url": "https://www.thegradcafe.com/result/994354",
+    "Notes": "Frustrating. Check the portal. no email"
   },
   {
     "University": "Boston University",
@@ -68,9 +107,11 @@
     "Status": "Rejected",
     "Term": "Fall 2026",
     "Date Added": "Added on 2026-02-01",
+    "Rejection Date": "30/01/2026",
     "GPA": 3.92,
     "US/International": "International",
-    "Url": "https://www.thegradcafe.com/result/994353"
+    "Url": "https://www.thegradcafe.com/result/994353",
+    "Notes": "NO GRE"
   },
   {
     "University": "Vanderbilt University",
@@ -90,7 +131,8 @@
     "Term": "Fall 2026",
     "Date Added": "Added on 2026-02-01",
     "US/International": "American",
-    "Url": "https://www.thegradcafe.com/result/994351"
+    "Url": "https://www.thegradcafe.com/result/994351",
+    "Notes": "Informal interview"
   },
   {
     "University": "Rush University",
@@ -110,6 +152,7 @@
     "Status": "Rejected",
     "Term": "Fall 2026",
     "Date Added": "Added on 2026-02-01",
+    "Rejection Date": "29/01/2026",
     "US/International": "American",
     "Url": "https://www.thegradcafe.com/result/994349"
   },
@@ -142,6 +185,7 @@
     "Status": "Accepted",
     "Term": "Fall 2026",
     "Date Added": "Added on 2026-02-01",
+    "Acceptance Date": "30/01/2026",
     "GPA": 3.7,
     "US/International": "American",
     "Url": "https://www.thegradcafe.com/result/994346"
@@ -175,40 +219,10 @@
     "Status": "Rejected",
     "Term": "Fall 2026",
     "Date Added": "Added on 2026-02-01",
+    "Rejection Date": "12/12/2025",
     "GPA": 3.82,
     "US/International": "American",
-    "Url": "https://www.thegradcafe.com/result/994342"
-  },
-  {
-    "University": "CUNY Graduate Center",
-    "Program": "Sociology",
-    "Degree": "PhD",
-    "Status": "Rejected",
-    "Term": "Fall 2026",
-    "Date Added": "Added on 2026-02-01",
-    "GPA": 3.82,
-    "US/International": "American",
-    "Url": "https://www.thegradcafe.com/result/994341"
-  },
-  {
-    "University": "Indiana University",
-    "Program": "Gender Studies",
-    "Degree": "PhD",
-    "Status": "Interview",
-    "Term": "Fall 2026",
-    "Date Added": "Added on 2026-02-01",
-    "GPA": 3.82,
-    "US/International": "American",
-    "Url": "https://www.thegradcafe.com/result/994340"
-  },
-  {
-    "University": "University of Michigan - Ann Arbor",
-    "Program": "Chemistry",
-    "Degree": "PhD",
-    "Status": "Rejected",
-    "Term": "Fall 2026",
-    "Date Added": "Added on 2026-02-01",
-    "US/International": "American",
-    "Url": "https://www.thegradcafe.com/result/994339"
+    "Url": "https://www.thegradcafe.com/result/994342",
+    "Notes": "Received a personal email from a faculty member saying that they liked my research topic and plan but wanted a more mainstream dissertation idea (I'm making an encyclopedia)."
   }
 ]

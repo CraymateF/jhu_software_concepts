@@ -107,27 +107,19 @@ Approach:
 
 Known Bugs:
 
-1. Incomplete Notes Extraction:
-   - Issue: The notes extraction looks for sections containing "note" but the
-     actual HTML structure on result pages may vary
-   - Impact: Notes field may be null even when notes exist on the page
-   - Fix: Need to inspect actual result pages more thoroughly to identify
-     the correct HTML structure for notes sections (likely specific div classes
-     or data attributes)
-
-3. SSL Certificate Warning:
+1. SSL Certificate Warning:
    - Issue: Disabling SSL verification (ssl.CERT_NONE) is a security risk
    - Impact: Could be vulnerable to MITM attacks (though unlikely for this use)
    - Fix: Install proper SSL certificates on the system, or use certifi library
      to provide certificate bundle. For production, should never disable verification.
 
-4. Rate Limiting Not Detected:
+2. Rate Limiting Not Detected:
    - Issue: If Grad Cafe implements rate limiting, the scraper will fail silently
      or collect incomplete data
    - Impact: May stop collecting data prematurely
    - Fix: Implement detection of HTTP 429 responses and exponential backoff retry logic
 
-5. Memory Usage for Large Datasets:
+3. Memory Usage for Large Datasets:
    - Issue: All data stored in memory (self.data list) before saving to disk
    - Impact: For very large scrapes (100k+ entries), could cause memory issues
    - Fix: Implement streaming/chunked writing to JSON file, periodically flushing

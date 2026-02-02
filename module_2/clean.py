@@ -90,7 +90,7 @@ class GradCafeDataCleaner:
             # Define desired field order for output
             field_order = [
                 'university', 'program', 'degree',
-                'status', 'term', "date_added",
+                'status', 'term', "date_added", 'acceptance_date', 'rejection_date',
                 'GRE_General', 'GRE_Verbal', 'GRE_Quantitative', 'GRE_Analytical_Writing', 'GPA',
                 'degrees_country_of_origin',
                 'comments', 'comments_date',
@@ -185,6 +185,10 @@ class GradCafeDataCleaner:
             # Program timing
             cleaned['term'] = get_value(entry, 'season', 'Term')
             
+            # Acceptance/Rejection dates
+            cleaned['acceptance_date'] = get_value(entry, 'acceptance_date', 'Acceptance Date')
+            cleaned['rejection_date'] = get_value(entry, 'rejection_date', 'Rejection Date')
+            
             # Degree type
             cleaned['degree'] = get_value(entry, 'degree', 'Degree')
             
@@ -201,6 +205,7 @@ class GradCafeDataCleaner:
             # URL and metadata
             cleaned['url'] = get_value(entry, 'url', 'Url')
             cleaned['data_added_date'] = get_value(entry, 'data_added_date', 'Data Added Date')
+            cleaned['notes'] = self._normalize_text(get_value(entry, 'notes', 'Notes'))
             
             return cleaned
             

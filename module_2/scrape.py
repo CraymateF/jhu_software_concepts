@@ -375,7 +375,7 @@ class GradCafeScraper:
                     # Fetch detailed data from result page to get GRE scores, GPA, and season
                     # This fetches each result page to extract additional information
                     if data.get('url'):
-                        detailed = self._fetch_detailed_data(data['url'])
+                        detailed = self._fetch_detailed_data(data['url'], data.get('applicant_status'))
                         if detailed:
                             data.update(detailed)
                         time.sleep(self.request_delay)
@@ -684,7 +684,7 @@ class GradCafeScraper:
             pass
         return None
     
-    def _fetch_detailed_data(self, url: str) -> Optional[Dict]:
+    def _fetch_detailed_data(self, url: str, status: Optional[str] = None) -> Optional[Dict]:
         """
         Fetch detailed data from an individual result page.
         
@@ -789,12 +789,37 @@ class GradCafeScraper:
                     details['comments'] = self._clean_text(comments_text[:500])
             
             # Look for notes section
+            # HTML structure: <dt>Notes</dt><dd>note information</dd>
             notes_section = soup.find(string=re.compile(r'notes', re.IGNORECASE))
             if notes_section:
                 parent = notes_section.find_parent()
-                if parent:
-                    notes_text = parent.get_text(strip=True)
-                    details['notes'] = self._clean_text(notes_text[:500]) if notes_text != "Notes" else None
+                if parent and parent.name == 'dt':
+                    # Get the next <dd> sibling element
+                    dd_element = parent.find_next_sibling('dd')
+                    if dd_element:
+                        notes_text = dd_element.get_text(strip=True)
+                        details['notes'] = self._clean_text(notes_text[:500]) if notes_text else None
+            
+            # Extract acceptance/rejection date from Notification section
+            # HTML structure: <dt>Notification</dt><dd>date information</dd>
+            notification_section = soup.find(string=re.compile(r'Notification', re.IGNORECASE))
+            if notification_section and status:
+                parent = notification_section.find_parent()
+                if parent and parent.name == 'dt':
+                    # Get the next <dd> sibling element
+                    dd_element = parent.find_next_sibling('dd')
+                    if dd_element:
+                        notification_text = dd_element.get_text()
+                        # Look for date patterns in notification text
+                        # Common formats: "January 15, 2026", "01/15/2026", "2026-01-15"
+                        date_match = re.search(r'([A-Z][a-z]+\s+\d{1,2},?\s+\d{4}|\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}[-/]\d{1,2}[-/]\d{1,2})', notification_text)
+                        if date_match:
+                            notification_date = date_match.group(1)
+                            # Add as acceptance_date or rejection_date based on status
+                            if status and 'accept' in status.lower():
+                                details['acceptance_date'] = notification_date
+                            elif status and 'reject' in status.lower():
+                                details['rejection_date'] = notification_date
             
             # Check for Degree's Country of Origin
             # Look for explicit label "Degree's Country of Origin: ..."
@@ -923,6 +948,15 @@ class GradCafeScraper:
                 if season:
                     output['season'] = season
                 
+                # Acceptance/Rejection dates - add if available
+                acceptance_date = entry.get('acceptance_date')
+                if acceptance_date:
+                    output['acceptance_date'] = acceptance_date
+                
+                rejection_date = entry.get('rejection_date')
+                if rejection_date:
+                    output['rejection_date'] = rejection_date
+                
                 formatted_data.append(output)
             
             with open(filename, 'w', encoding='utf-8') as f:
@@ -968,7 +1002,7 @@ def main():
     # Uncomment the desired scraping strategy:
     
     # Option 1: Quick test (1 page = ~20 entries)
-    # scraper.scrape_data(max_pages=1)
+    scraper.scrape_data(max_pages=1)
     
     # Option 2: Medium collection (50 pages = ~1,000 entries, ~3-5 min)
     # scraper.scrape_data(max_pages=50)
@@ -977,7 +1011,7 @@ def main():
     # scraper.scrape_data(max_pages=150)
     
     # Option 4: Complete collection (1500+ pages = 30,000+ entries, ~6-10 hours)
-    scraper.scrape_data(max_pages=None)
+    # scraper.scrape_data(max_pages=None)
     
     # Save the raw scraped data to applicant_data.json
     scraper.save_data('applicant_data.json')
