@@ -237,6 +237,7 @@ class GradCafeScraper:
                 'comments': None,
                 'comments_date': None,
                 'season': None,
+                'notes': None,
                 'GRE_Verbal': 0,
                 'GRE_Quantitative': 0,
                 'GRE_General': 0,
@@ -478,6 +479,7 @@ class GradCafeScraper:
             data['comments'] = None
             data['comments_date'] = None
             data['season'] = season
+            data['notes'] = None
             data['GRE_Verbal'] = 0
             data['GRE_Quantitative'] = 0
             data['GRE_General'] = 0
@@ -723,6 +725,7 @@ class GradCafeScraper:
                 'GRE_Analytical_Writing': 0.0,
                 'GPA': 0.0,
                 'comments': None,
+                'notes': None,
                 'degrees_country_of_origin': None,
             }
             
@@ -784,6 +787,14 @@ class GradCafeScraper:
                 if parent:
                     comments_text = parent.get_text(strip=True)
                     details['comments'] = self._clean_text(comments_text[:500])
+            
+            # Look for notes section
+            notes_section = soup.find(string=re.compile(r'notes', re.IGNORECASE))
+            if notes_section:
+                parent = notes_section.find_parent()
+                if parent:
+                    notes_text = parent.get_text(strip=True)
+                    details['notes'] = self._clean_text(notes_text[:500]) if notes_text != "Notes" else None
             
             # Check for Degree's Country of Origin
             # Look for explicit label "Degree's Country of Origin: ..."
@@ -886,6 +897,10 @@ class GradCafeScraper:
                 comments = entry.get('comments')
                 if comments:
                     output['comments'] = comments
+                
+                notes = entry.get('notes')
+                if notes:
+                    output['notes'] = notes
                 
                 gre_verbal = entry.get('GRE_Verbal')
                 if gre_verbal and gre_verbal !=0:

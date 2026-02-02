@@ -94,7 +94,7 @@ class GradCafeDataCleaner:
                 'GRE_General', 'GRE_Verbal', 'GRE_Quantitative', 'GRE_Analytical_Writing', 'GPA',
                 'degrees_country_of_origin',
                 'comments', 'comments_date',
-                'url', 'data_added_date',
+                'url', 'data_added_date', "notes",
                 'llm-generated-program', 'llm-generated-university',
             ]
             
@@ -409,7 +409,7 @@ def main():
         for degree, count in sorted(degrees.items()):
             print(f"  {degree}: {count}")
 
-    apply_llm_standardization('applicant_data_cleaned.json', output_file='llm_extended_applicant_data.json')
+    apply_llm_standardization('applicant_data.json', output_file='llm_extend_applicant_data.json')
 
 
 

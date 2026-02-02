@@ -1,269 +1,143 @@
-# Grad Cafe Data Scraper - Module 2
+Name: Zhendong Zhang - 8A80D7
 
-## Overview
+Module Info: Module 2 - Web Scraping Assignment: Grad Cafe Data Collection
+Due Date: Feb 1st - 2026
 
-This project scrapes graduate admissions data from The Grad Cafe (https://www.thegradcafe.com) and processes it into a clean, standardized JSON format. The scraper collects information about graduate program applicants, including their academic scores, application status, and program details.
+Approach:
 
-## Project Structure
+1. WEB SCRAPING IMPLEMENTATION (scrape.py):
 
-```
-module_2/
-├── scrape.py                 # Web scraper implementation
-├── clean.py                  # Data cleaning and standardization
-├── requirements.txt          # Python dependencies
-├── README.md                 # This file
-├── applicant_data.json       # Final cleaned output (generated)
-├── raw_data.json            # Raw scraped data (generated)
-└── llm_hosting/             # LLM-based data standardization
-    ├── requirements.txt
-    ├── app.py
-    └── ...
-```
+   Data Structures:
+   - GradCafeScraper class: Main scraper encapsulating all scraping logic
+   - self.data: List to store all scraped entry dictionaries
+   - self.found_urls: Set to track all result URLs discovered during scraping
+   - self.processed_urls: Set to track which URLs have been fetched for details
+   - self.edge_cases: List to log entries that failed standard parsing
 
-## Requirements Met
+   Core Algorithm:
+   a) Page-by-page scraping:
+      - Construct URL with page parameter: base_url?page={page_number}
+      - Fetch HTML using urllib.request with SSL context (handles certificate issues)
+      - Parse HTML with BeautifulSoup (html.parser)
+      - Extract table rows containing applicant entries
+      - Continue until no more entries found or max_pages reached
+      - 2-second delay between requests to respect server resources
 
-### SHALL Requirements
-- ✅ Programmatically pulls data from Grad Cafe using Python
-- ✅ Relies only on libraries covered in module 2 lecture (urllib, BeautifulSoup, regex, json)
-- ✅ Extracts all required data categories:
-  - Program Name
-  - University
-  - Comments (if available)
-  - Date of Information Added to Grad Café
-  - URL link to applicant entry
-  - Applicant Status
-  - Acceptance/Rejection Dates
-  - Semester and Year of Program Start (if available)
-  - International / American Student (if available)
-  - GRE Score (V and Q)
-  - Masters or PhD (if available)
-  - GPA (if available)
-  - GRE AW (if available)
-- ✅ Uses urllib for URL management
-- ✅ Uses JSON to store data in applicant_data.json with reasonable keys
-- ✅ Collects at least 30,000 grad applicant entries
-- ✅ Includes README and requirements.txt
-- ✅ Complies with robots.txt
-- ✅ Uses Python 3.10+
+   b) Entry extraction (_extract_entry_data):
+      - Find all <td> cells in each table row
+      - Extract season BEFORE filtering cells (season might be in "empty" cells)
+      - Look ahead to next row for season information (season appears after data row)
+      - Filter out empty cells for regular data extraction
+      - Extract from cells:
+        * Cell 0: University name (from div.tw-font-medium)
+        * Cell 1: Program name and degree (from spans, split by bullet •)
+        * Cell 2: Date information
+        * Cell 3: Application status (Accepted/Rejected/Interview/etc)
+      - Extract URL from <a> tag within the row
 
-### SHOULD Requirements
-- ✅ Uses BeautifulSoup and regex for data parsing
-- ✅ Implements required functions:
-  - `scrape_data()`: Pulls data from Grad Cafe
-  - `clean_data()`: Converts data into structured format
-  - `save_data()`: Saves cleaned data to JSON
-  - `load_data()`: Loads data from JSON
-  - Private methods marked with `_` prefix
-- ✅ Scraping in scrape.py, cleaning in clean.py
-- ✅ Removes HTML remnants
-- ✅ Uses consistent format for unavailable data (None or empty string)
-- ✅ Handles messy and unexpected information
-- ✅ Extracts accurate information
-- ✅ Well-commented and clearly named variables
+   c) Detailed data fetching (_fetch_detailed_data):
+      - For each entry with a URL, fetch the individual result page
+      - Use regex patterns to extract from result page text:
+        * GRE Verbal: Pattern "GRE\s+Verbal\s*:\s*(\d{2,3})"
+        * GRE Quantitative: Pattern "Quantitative\s*:\s*(\d{2,3})"
+        * GRE General (if Quant not found): Pattern "GRE\s+General\s*:\s*(\d{2,3})"
+        * GRE Analytical Writing: Pattern "Analytical\s+Writing\s*:\s*(\d+\.\d+)"
+        * GPA: Pattern "Undergrad\s+GPA\s*[:\s]*([0-4](?:\.\d{1,2})?)"
+        * Notes: Search for sections containing "note" (case-insensitive)
+        * Comments: Search for sections containing "comment"
+        * Country of Origin: Pattern "Degree'?s?\s+Country\s+of\s+Origin\s*:\s*([^\n]+)"
 
-## Installation
+   d) Edge case recovery (_recover_edge_cases):
+      - Identify URLs found in HTML but not successfully parsed
+      - Attempt to extract data directly from result pages for these entries
+      - Use regex to find university/program patterns in plain text
+      - Merge with detailed data if successful
 
-### Step 1: Install Python Dependencies
-```bash
-cd module_2
-pip install -r requirements.txt
-```
+   e) Season extraction challenge:
+      - Initial approach tried extracting from filtered cells - failed
+      - Issue: Season badges in divs with "tw-bg-orange" class appeared in cells
+        that get_text(strip=True) returned empty, so they were filtered out
+      - Solution: Extract season from ALL cells BEFORE filtering
+      - Additional challenge: Season information in separate row AFTER data row
+      - Final solution: Look ahead to next entry (idx+1) to find season
 
-### Step 2: (Optional) Set up LLM Hosting for Data Cleaning
-The LLM hosting component helps standardize program and university names. To use it:
+2. DATA CLEANING IMPLEMENTATION (clean.py):
 
-```bash
-cd llm_hosting
-pip install -r requirements.txt
-cd ..
-```
+   Data Structures:
+   - GradCafeDataCleaner class: Handles all cleaning operations
+   - self.data: List of raw entries loaded from JSON
+   - self.cleaned_data: List of cleaned/standardized entries
 
-Note: The LLM component requires additional setup. See [llm_hosting/README.md](llm_hosting/README.md) for details.
+   Cleaning Algorithm:
+   a) Text cleaning (_clean_text):
+      - Remove HTML tags and entities
+      - Normalize whitespace (collapse multiple spaces)
+      - Strip leading/trailing whitespace
 
-## Usage
+   b) Field standardization:
+      - Rename 'season' field to 'term' for consistency
+      - Map 'applicant_status' to 'status'
+      - Format date_added as "Added on YYYY-MM-DD"
+      - Convert numeric fields (GRE, GPA) to proper types
 
-### Step 1: Scrape Data from Grad Cafe
+   c) Validation:
+      - Check GRE scores are in valid range (130-170)
+      - Check GPA is in valid range (0.0-4.0)
+      - Check Analytical Writing in valid range (0.0-6.0)
 
-```bash
-python scrape.py
-```
+   d) Output ordering:
+      - Define specific field order for consistent JSON output
+      - Include: university, program, degree, status, term, scores, demographics
 
-This will:
-- Fetch applicant data from Grad Cafe survey pages
-- Parse HTML using BeautifulSoup
-- Extract structured information from each entry
-- Save raw data to `raw_data.json`
-- Display progress and total entries collected
+3. SSL CERTIFICATE HANDLING:
+   - Issue: macOS often has SSL certificate verification problems
+   - Solution: Create SSL context with verification disabled
+   - Implementation: ssl.create_default_context() with CERT_NONE mode
 
-The scraper respects robots.txt guidelines and includes appropriate delays between requests.
+4. ROBOTS.TXT COMPLIANCE:
+   - Verified /survey/ pages are not disallowed
+   - Implemented 2-second delay between requests
+   - Set proper User-Agent header
+   - Limited concurrent requests (sequential processing)
 
-### Step 2: Clean and Standardize Data
+5. DATA PERSISTENCE:
+   - Raw data saved to applicant_data.json after scraping
+   - Cleaned data saved to applicant_data_cleaned.json after cleaning
+   - JSON format with indent=2 for readability
 
-```bash
-python clean.py
-```
+Known Bugs:
 
-This will:
-- Load raw data from `raw_data.json`
-- Apply basic cleaning (remove HTML, normalize text)
-- Save cleaned data to `applicant_data.json`
-- Display summary statistics
+1. Missing Season Data for First Entry:
+   - Issue: The first entry on a page may not have season information because
+     the look-ahead logic checks the next row, but there's no previous row
+     with season data for the first entry
+   - Impact: Some entries may have season=null
+   - Fix: Could implement a look-back mechanism or extract season differently,
+     possibly by analyzing the page structure more carefully to understand
+     where season badges consistently appear
 
-### Step 3: (Optional) Apply LLM-Based Standardization
+2. Incomplete Notes Extraction:
+   - Issue: The notes extraction looks for sections containing "note" but the
+     actual HTML structure on result pages may vary
+   - Impact: Notes field may be null even when notes exist on the page
+   - Fix: Need to inspect actual result pages more thoroughly to identify
+     the correct HTML structure for notes sections (likely specific div classes
+     or data attributes)
 
-For enhanced program and university name standardization using a local LLM:
+3. SSL Certificate Warning:
+   - Issue: Disabling SSL verification (ssl.CERT_NONE) is a security risk
+   - Impact: Could be vulnerable to MITM attacks (though unlikely for this use)
+   - Fix: Install proper SSL certificates on the system, or use certifi library
+     to provide certificate bundle. For production, should never disable verification.
 
-```python
-# Python API
-from clean import apply_llm_standardization
+4. Rate Limiting Not Detected:
+   - Issue: If Grad Cafe implements rate limiting, the scraper will fail silently
+     or collect incomplete data
+   - Impact: May stop collecting data prematurely
+   - Fix: Implement detection of HTTP 429 responses and exponential backoff retry logic
 
-# Apply to cleaned data
-apply_llm_standardization('applicant_data.json')
-
-# Or save to a different file
-apply_llm_standardization('applicant_data.json', output_file='standardized.json')
-```
-
-Alternatively, use the llm_hosting Flask API for more advanced features:
-
-```bash
-# Start Flask API server
-cd llm_hosting
-python app.py --serve
-
-# Or process files from CLI
-python app.py --file data.json --stdout
-```
-
-For more details on the LLM hosting component, see [llm_hosting/README.md](llm_hosting/README.md).
-
-### Step 4: Analyze the Results
-
-The final dataset is saved in `applicant_data.json` with the following structure:
-
-```json
-[
-  {
-    "program": "Computer Science",
-    "university": "Johns Hopkins University",
-    "program_clean": "Computer Science",
-    "university_clean": "Johns Hopkins University",
-    "applicant_status": "Accepted",
-    "status_date": "03/15/2025",
-    "comments": "Received acceptance with full funding",
-    "comments_date": "03/15/2025",
-    "season": "Fall 2025",
-    "degree": "PhD",
-    "gre_v": 162,
-    "gre_q": 168,
-    "gre_aw": 4.5,
-    "gpa": 3.87,
-    "international": "American",
-    "url": "https://www.thegradcafe.com/survey/...",
-    "data_added_date": "2026-02-01T..."
-  },
-  ...
-]
-```
-
-## Robots.txt Compliance
-
-### Verification
-
-Before scraping, we verified that Grad Cafe permits data collection:
-
-```bash
-# To check robots.txt yourself:
-curl https://www.thegradcafe.com/robots.txt
-```
-
-### Key Findings
-
-- ✅ Grad Cafe allows crawling of survey pages for research purposes
-- ✅ The `/survey/index.php` endpoint is not explicitly disallowed
-- ✅ A 2-second delay is included between requests to minimize server load
-- ✅ User-Agent is properly identified
-
-**Evidence**: See `robots_verification.txt` in this directory for the full robots.txt content.
-
-## Data Dictionary
-
-| Field | Type | Description |
-|-------|------|-------------|
-| program | string | Name of the graduate program |
-| program_clean | string | Standardized program name (after LLM cleaning) |
-| university | string | Name of the university |
-| university_clean | string | Standardized university name (after LLM cleaning) |
-| applicant_status | string | Application status (Accepted, Rejected, Waitlisted, etc.) |
-| status_date | string | Date of status change |
-| comments | string | Applicant comments about the program |
-| comments_date | string | Date comments were posted |
-| season | string | Application season (Fall 2025, Spring 2026, etc.) |
-| degree | string | Degree type (PhD, Masters) |
-| gre_v | integer | GRE Verbal score (130-170) |
-| gre_q | integer | GRE Quantitative score (130-170) |
-| gre_aw | float | GRE Analytical Writing score (0.0-6.0) |
-| gpa | float | Undergraduate GPA |
-| international | string | Student status (International, American) |
-| url | string | Direct link to applicant entry on Grad Cafe |
-| data_added_date | string | ISO format timestamp when data was scraped |
-
-## Error Handling
-
-The scraper includes robust error handling:
-- Connection timeouts are caught and logged
-- Malformed HTML entries are skipped
-- Missing data fields are set to None
-- Empty entries are filtered out during cleaning
-
-## Performance
-
-- Typical scraping time: 2-6 hours for full dataset (30,000+ entries)
-- Data processing: 5-15 minutes for cleaning and standardization
-- Output file size: 15-25 MB (JSON format)
-
-## Troubleshooting
-
-### Issue: "Connection refused" error
-**Solution**: Check your internet connection and ensure Grad Cafe is accessible. The scraper may also be rate-limited; try again after a few minutes.
-
-### Issue: Few entries collected
-**Solution**: Grad Cafe may have changed its HTML structure. Inspect the page source and update the CSS selectors in `_parse_entries()`.
-
-### Issue: LLM cleaning not working
-**Solution**: Ensure you've set up the llm_hosting directory and installed its dependencies. See [llm_hosting/README.md](llm_hosting/README.md).
-
-### Issue: "ModuleNotFoundError" for BeautifulSoup
-**Solution**: Install requirements: `pip install -r requirements.txt`
-
-## Data Cleaning Notes
-
-The cleaning process handles several common issues:
-1. **Name Variations**: "JHU", "Johns Hopkins", "Johns Hopkins University" → "Johns Hopkins University"
-2. **Abbreviations**: Program names are expanded and standardized
-3. **Typos**: Common misspellings are corrected using fuzzy matching
-4. **HTML Remnants**: All HTML tags and entities are removed
-5. **Missing Data**: Consistently represented as None or empty strings
-6. **Whitespace**: Extra spaces and line breaks are normalized
-
-## Future Improvements
-
-1. Add database storage (SQLite/PostgreSQL)
-2. Implement incremental scraping (avoid re-scraping known entries)
-3. Add visualization dashboard for statistics
-4. Expand LLM cleaning with more canonical program lists
-5. Add progress persistence for long-running scrapes
-
-## Academic Integrity
-
-This project was created for educational purposes as part of the JHU Software Concepts course. All data collected is from publicly available sources and used solely for academic analysis.
-
-## License
-
-Educational use only. See course syllabus for terms.
-
-## Author
-
-Student
-Course: JHU Software Concepts - Module 2
-Date: February 2026
+5. Memory Usage for Large Datasets:
+   - Issue: All data stored in memory (self.data list) before saving to disk
+   - Impact: For very large scrapes (100k+ entries), could cause memory issues
+   - Fix: Implement streaming/chunked writing to JSON file, periodically flushing
+     data to disk and clearing the in-memory list
