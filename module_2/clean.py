@@ -384,31 +384,8 @@ def main():
     # Print summary statistics
     print("\n=== Cleaning Summary ===")
     print(f"Total entries cleaned: {len(cleaner.cleaned_data)}")
-    
-    if cleaner.cleaned_data:
-        # Count by status
-        statuses = {}
-        for entry in cleaner.cleaned_data:
-            status = entry.get('status', 'Unknown')
-            statuses[status] = statuses.get(status, 0) + 1
-        
-        print("\nEntries by Status:")
-        for status, count in sorted(statuses.items()):
-            print(f"  {status}: {count}")
-        
-        # Count by degree
-        degrees = {}
-        for entry in cleaner.cleaned_data:
-            degree = entry.get('degree', 'Unknown')
-            degrees[degree] = degrees.get(degree, 0) + 1
-        
-        print("\nEntries by Degree:")
-        for degree, count in sorted(degrees.items()):
-            print(f"  {degree}: {count}")
 
     apply_llm_standardization('applicant_data.json', output_file='llm_extend_applicant_data.json')
-
-
 
 if __name__ == "__main__":
     main()
