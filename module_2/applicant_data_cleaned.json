@@ -700,6 +700,17 @@
     "LLM Generated University": ""
   },
   {
+    "University": "Yale University",
+    "Program": "Medieval Studies",
+    "Degree": "PhD",
+    "Status": "Interview",
+    "Date Added": "Added on 2026-02-01",
+    "US/International": "American",
+    "Url": "https://www.thegradcafe.com/result/994290",
+    "LLM Generated Program": "",
+    "LLM Generated University": ""
+  },
+  {
     "University": "Ed Witten Community College",
     "Program": "Physics",
     "Degree": "PhD",
@@ -922,6 +933,21 @@
     "LLM Generated University": ""
   },
   {
+    "University": "Penn State University",
+    "Program": "Economics",
+    "Degree": "PhD",
+    "Status": "Accepted",
+    "Date Added": "Added on 2026-02-01",
+    "GRE General": 168,
+    "GRE Verbal": 165,
+    "GRE Analytical Writing": 4.0,
+    "GPA": 3.9,
+    "US/International": "International",
+    "Url": "https://www.thegradcafe.com/result/994271",
+    "LLM Generated Program": "",
+    "LLM Generated University": ""
+  },
+  {
     "University": "Northwestern University",
     "Program": "English",
     "Degree": "PhD",
@@ -1124,6 +1150,17 @@
     "Date Added": "Added on 2026-02-01",
     "US/International": "American",
     "Url": "https://www.thegradcafe.com/result/994253",
+    "LLM Generated Program": "",
+    "LLM Generated University": ""
+  },
+  {
+    "University": "Ohio State University",
+    "Program": "Clinical Psychology",
+    "Degree": "PhD",
+    "Status": "Interview",
+    "Date Added": "Added on 2026-02-01",
+    "US/International": "American",
+    "Url": "https://www.thegradcafe.com/result/994252",
     "LLM Generated Program": "",
     "LLM Generated University": ""
   },
@@ -1369,42 +1406,6 @@
     "GPA": 3.87,
     "US/International": "International",
     "Url": "https://www.thegradcafe.com/result/994233",
-    "LLM Generated Program": "",
-    "LLM Generated University": ""
-  },
-  {
-    "University": "University of Wisconsin - Madison",
-    "Program": "Mass Communications",
-    "Degree": "PhD",
-    "Status": "Rejected",
-    "Date Added": "Added on 2026-02-01",
-    "GPA": 3.88,
-    "US/International": "International",
-    "Url": "https://www.thegradcafe.com/result/994232",
-    "LLM Generated Program": "",
-    "LLM Generated University": ""
-  },
-  {
-    "University": "Northeastern University",
-    "Program": "Mathematics",
-    "Degree": "PhD",
-    "Status": "Interview",
-    "Date Added": "Added on 2026-02-01",
-    "GPA": 3.98,
-    "US/International": "American",
-    "Url": "https://www.thegradcafe.com/result/994231",
-    "LLM Generated Program": "",
-    "LLM Generated University": ""
-  },
-  {
-    "University": "University of Texas at Austin",
-    "Program": "Computer Science",
-    "Degree": "PhD",
-    "Status": "Interview",
-    "Date Added": "Added on 2026-02-01",
-    "GPA": 3.98,
-    "US/International": "American",
-    "Url": "https://www.thegradcafe.com/result/994230",
     "LLM Generated Program": "",
     "LLM Generated University": ""
   }

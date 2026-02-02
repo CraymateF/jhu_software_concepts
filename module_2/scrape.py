@@ -17,6 +17,7 @@ from bs4 import BeautifulSoup
 import re
 from datetime import datetime
 from typing import List, Dict, Optional
+import ssl
 
 
 class GradCafeScraper:
@@ -318,11 +319,17 @@ class GradCafeScraper:
             HTML content as string, or None if fetch failed
         """
         try:
+            # Create SSL context that doesn't verify certificates
+            # This is needed on some systems where SSL certificates aren't properly installed
+            ssl_context = ssl.create_default_context()
+            ssl_context.check_hostname = False
+            ssl_context.verify_mode = ssl.CERT_NONE
+            
             request = urllib.request.Request(
                 url,
                 headers={'User-Agent': self.user_agent}
             )
-            with urllib.request.urlopen(request, timeout=10) as response:
+            with urllib.request.urlopen(request, timeout=10, context=ssl_context) as response:
                 return response.read().decode('utf-8', errors='ignore')
         except urllib.error.URLError as e:
             print(f"URL Error fetching {url}: {str(e)}")
@@ -353,9 +360,8 @@ class GradCafeScraper:
                 
                 data = self._extract_entry_data(entry)
                 if data:
-                    # Optionally fetch detailed data from result page to get GRE scores and GPA
-                    # Note: This can significantly slow down scraping (doubles or triples runtime),
-                    # so it's disabled by default. Enable only if you need detailed score data.
+                    # Fetch detailed data from result page to get GRE scores, GPA, and season
+                    # This fetches each result page to extract additional information
                     if data.get('url'):
                         detailed = self._fetch_detailed_data(data['url'])
                         if detailed:
@@ -752,7 +758,9 @@ class GradCafeScraper:
                 details['GPA'] = gpa
             
             # Look for season
-            season_match = re.search(r'(Fall|Spring|Summer|Winter)\s+(\d{4})', text)
+            season_match = re.search(r'(Fall|Spring|Summer|Winter)', text)
+            print("Test !")
+            print(season_match)
             if season_match:
                 details['season'] = f"{season_match.group(1)} {season_match.group(2)}"
             
@@ -882,6 +890,11 @@ class GradCafeScraper:
                 if gre_aw and gre_aw !=0.0:
                     output['GRE Analytical Writing'] = gre_aw
                 
+                # Season - add if available
+                season = entry.get('season')
+                if season:
+                    output['season'] = season
+                
                 formatted_data.append(output)
             
             with open(filename, 'w', encoding='utf-8') as f:
@@ -927,7 +940,7 @@ def main():
     # Uncomment the desired scraping strategy:
     
     # Option 1: Quick test (1 page = ~20 entries)
-    scraper.scrape_data(max_pages=6)
+    scraper.scrape_data(max_pages=1)
     
     # Option 2: Medium collection (50 pages = ~1,000 entries, ~3-5 min)
     # scraper.scrape_data(max_pages=50)
