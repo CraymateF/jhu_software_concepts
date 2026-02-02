@@ -25,7 +25,7 @@ class GradCafeDataCleaner:
         self.data = []
         self.cleaned_data = []
         
-    def clean_data(self, input_file: str, output_file: str = 'applicant_data_cleaned.json') -> List[Dict]:
+    def clean_data(self, input_file: str, output_file: str = 'applicant_data.json') -> List[Dict]:
         """
         Load, clean, and save applicant data.
         
@@ -95,7 +95,6 @@ class GradCafeDataCleaner:
                 'degrees_country_of_origin',
                 'comments', 'comments_date',
                 'url', 'data_added_date', "notes",
-                'llm-generated-program', 'llm-generated-university',
             ]
             
             # Format and filter data
@@ -128,9 +127,6 @@ class GradCafeDataCleaner:
                     # Special handling for specific fields
                     if key == 'degrees_country_of_origin':
                         formatted_key = 'US/International'
-                    elif key.startswith('llm-'):
-                        formatted_key = key.replace('-', ' ').replace('_', ' ').title()
-                        formatted_key = formatted_key.replace('Llm', 'LLM')
                     else:
                         # Replace underscores with spaces and capitalize
                         formatted_key = key.replace('_', ' ').title()
@@ -205,10 +201,6 @@ class GradCafeDataCleaner:
             # URL and metadata
             cleaned['url'] = get_value(entry, 'url', 'Url')
             cleaned['data_added_date'] = get_value(entry, 'data_added_date', 'Data Added Date')
-            
-            # Standardized fields (to be filled by LLM if available)
-            cleaned['llm-generated-program'] = ""
-            cleaned['llm-generated-university'] = ""
             
             return cleaned
             
@@ -346,8 +338,8 @@ def apply_llm_standardization(input_file: str, output_file: Optional[str] = None
             result = _call_llm(program_text)
             
             # Add LLM-generated fields to entry (always present, even if empty)
-            entry['llm-generated-program'] = result.get('standardized_program', "") or ""
-            entry['llm-generated-university'] = result.get('standardized_university', "") or ""
+            entry['LLM Generated Program'] = result.get('standardized_program', "") or ""
+            entry['LLM Generated University'] = result.get('standardized_university', "") or ""
             
             standardized_data.append(entry)
             
@@ -366,7 +358,7 @@ def apply_llm_standardization(input_file: str, output_file: Optional[str] = None
             json.dump(standardized_data, f, indent=2, ensure_ascii=False)
         
         print(f"✅ LLM standardization complete!")
-        print(f"   Added 'llm-generated-program' and 'llm-generated-university' fields")
+        print(f"   Added 'LLM Generated Program' and 'LLM Generated University' fields")
         print(f"   Saved to: {output_file}")
         return True
         
