@@ -968,7 +968,7 @@ def main():
     # Uncomment the desired scraping strategy:
     
     # Option 1: Quick test (1 page = ~20 entries)
-    scraper.scrape_data(max_pages=1)
+    # scraper.scrape_data(max_pages=1)
     
     # Option 2: Medium collection (50 pages = ~1,000 entries, ~3-5 min)
     # scraper.scrape_data(max_pages=50)
@@ -977,7 +977,7 @@ def main():
     # scraper.scrape_data(max_pages=150)
     
     # Option 4: Complete collection (1500+ pages = 30,000+ entries, ~6-10 hours)
-    # scraper.scrape_data(max_pages=None)
+    scraper.scrape_data(max_pages=None)
     
     # Save the raw scraped data to applicant_data.json
     scraper.save_data('applicant_data.json')
