@@ -90,7 +90,7 @@ class GradCafeDataCleaner:
             # Define desired field order for output
             field_order = [
                 'university', 'program', 'degree',
-                'status', 'season', "date_added",
+                'status', 'term', "date_added",
                 'GRE_General', 'GRE_Verbal', 'GRE_Quantitative', 'GRE_Analytical_Writing', 'GPA',
                 'degrees_country_of_origin',
                 'comments', 'comments_date',
@@ -187,7 +187,7 @@ class GradCafeDataCleaner:
             cleaned['comments_date'] = get_value(entry, 'comments_date', 'Comments Date')
             
             # Program timing
-            cleaned['season'] = self._clean_season(get_value(entry, 'season', 'Season'))
+            cleaned['term'] = get_value(entry, 'season', 'Term')
             
             # Degree type
             cleaned['degree'] = get_value(entry, 'degree', 'Degree')
@@ -265,37 +265,7 @@ class GradCafeDataCleaner:
                 cleaned = cleaned[:5000] + "..."
         
         return cleaned
-    
-    def _clean_season(self, season: Optional[str]) -> Optional[str]:
-        """
-        Standardize season/year format.
-        
-        Args:
-            season: Raw season text (e.g., "Fall 2025", "F25")
-            
-        Returns:
-            Standardized season string
-        """
-        if not season:
-            return None
-        
-        season = season.strip().upper()
-        
-        # Expand abbreviations
-        if 'F' in season or 'FALL' in season:
-            season = season.replace('F', 'FALL')
-            season = season.replace('FALL', 'Fall')
-        elif 'S' in season or 'SPRING' in season:
-            season = season.replace('S', 'SPRING')
-            season = season.replace('SPRING', 'Spring')
-        elif 'SU' in season or 'SUMMER' in season:
-            season = season.replace('SU', 'SUMMER')
-            season = season.replace('SUMMER', 'Summer')
-        elif 'W' in season or 'WINTER' in season:
-            season = season.replace('W', 'WINTER')
-            season = season.replace('WINTER', 'Winter')
-        
-        return season if season else None
+
 
 
 def apply_llm_standardization(input_file: str, output_file: Optional[str] = None) -> bool:
