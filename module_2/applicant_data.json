@@ -1,5 +1,80 @@
 [
   {
+    "program": "Global Health",
+    "university": "New York University",
+    "status": "Interview",
+    "date_added": "Added on 2026-02-01",
+    "url": "https://www.thegradcafe.com/result/994351",
+    "US/International": "American",
+    "Degree": "PhD",
+    "season": "Fall 2026"
+  },
+  {
+    "program": "Speech Language Pathology",
+    "university": "Rush University",
+    "status": "Interview",
+    "date_added": "Added on 2026-02-01",
+    "url": "https://www.thegradcafe.com/result/994350",
+    "US/International": "American",
+    "Degree": "Masters",
+    "GPA": 3.7,
+    "season": "Fall 2026"
+  },
+  {
+    "program": "Communications",
+    "university": "Stanford University",
+    "status": "Rejected",
+    "date_added": "Added on 2026-02-01",
+    "url": "https://www.thegradcafe.com/result/994349",
+    "US/International": "American",
+    "Degree": "Masters",
+    "season": "Fall 2026"
+  },
+  {
+    "program": "Communication Sciences And Disorders",
+    "university": "Emerson College",
+    "status": "Interview",
+    "date_added": "Added on 2026-02-01",
+    "url": "https://www.thegradcafe.com/result/994348",
+    "US/International": "American",
+    "Degree": "Masters",
+    "GPA": 3.7,
+    "season": "Fall 2026"
+  },
+  {
+    "program": "Mathematics",
+    "university": "Rice University",
+    "status": "Interview",
+    "date_added": "Added on 2026-02-01",
+    "url": "https://www.thegradcafe.com/result/994347",
+    "US/International": "International",
+    "Degree": "PhD",
+    "GPA": 3.87,
+    "season": "Fall 2026"
+  },
+  {
+    "program": "Speech Language Pathology",
+    "university": "Midwestern University",
+    "status": "Accepted",
+    "date_added": "Added on 2026-02-01",
+    "url": "https://www.thegradcafe.com/result/994346",
+    "US/International": "American",
+    "Degree": "Masters",
+    "GPA": 3.7,
+    "season": "Fall 2026"
+  },
+  {
+    "program": "Clinical Psychology",
+    "university": "Yeshiva University",
+    "status": "Interview",
+    "date_added": "Added on 2026-02-01",
+    "url": "https://www.thegradcafe.com/result/994345",
+    "US/International": "American",
+    "Degree": "PhD",
+    "GPA": 3.88,
+    "season": "Fall 2026"
+  },
+  {
     "program": "Economics",
     "university": "University of Virginia",
     "status": "Interview",
@@ -7,7 +82,8 @@
     "url": "https://www.thegradcafe.com/result/994344",
     "US/International": "International",
     "Degree": "PhD",
-    "GPA": 3.91
+    "GPA": 3.91,
+    "season": "Fall 2026"
   },
   {
     "program": "Gender Studies",
@@ -17,7 +93,8 @@
     "url": "https://www.thegradcafe.com/result/994342",
     "US/International": "American",
     "Degree": "PhD",
-    "GPA": 3.82
+    "GPA": 3.82,
+    "season": "Fall 2026"
   },
   {
     "program": "Sociology",
@@ -27,7 +104,8 @@
     "url": "https://www.thegradcafe.com/result/994341",
     "US/International": "American",
     "Degree": "PhD",
-    "GPA": 3.82
+    "GPA": 3.82,
+    "season": "Fall 2026"
   },
   {
     "program": "Gender Studies",
@@ -37,7 +115,8 @@
     "url": "https://www.thegradcafe.com/result/994340",
     "US/International": "American",
     "Degree": "PhD",
-    "GPA": 3.82
+    "GPA": 3.82,
+    "season": "Fall 2026"
   },
   {
     "program": "Chemistry",
@@ -46,7 +125,8 @@
     "date_added": "Added on 2026-02-01",
     "url": "https://www.thegradcafe.com/result/994339",
     "US/International": "American",
-    "Degree": "PhD"
+    "Degree": "PhD",
+    "season": "Fall 2026"
   },
   {
     "program": "Chemistry",
@@ -55,7 +135,8 @@
     "date_added": "Added on 2026-02-01",
     "url": "https://www.thegradcafe.com/result/994338",
     "US/International": "American",
-    "Degree": "PhD"
+    "Degree": "PhD",
+    "season": "Fall 2026"
   },
   {
     "program": "Chemistry",
@@ -64,7 +145,8 @@
     "date_added": "Added on 2026-02-01",
     "url": "https://www.thegradcafe.com/result/994337",
     "US/International": "American",
-    "Degree": "PhD"
+    "Degree": "PhD",
+    "season": "Fall 2026"
   },
   {
     "program": "Chemistry",
@@ -73,7 +155,8 @@
     "date_added": "Added on 2026-02-01",
     "url": "https://www.thegradcafe.com/result/994336",
     "US/International": "American",
-    "Degree": "PhD"
+    "Degree": "PhD",
+    "season": "Fall 2026"
   },
   {
     "program": "Clinical Psychology (Health Emphasis)",
@@ -83,7 +166,8 @@
     "url": "https://www.thegradcafe.com/result/994335",
     "US/International": "American",
     "Degree": "PhD",
-    "GPA": 3.3
+    "GPA": 3.3,
+    "season": "Fall 2026"
   },
   {
     "program": "Speech Language Pathology",
@@ -93,7 +177,8 @@
     "url": "https://www.thegradcafe.com/result/994334",
     "US/International": "American",
     "Degree": "Masters",
-    "GPA": 3.4
+    "GPA": 3.4,
+    "season": "Fall 2026"
   },
   {
     "program": "Biostatistics",
@@ -105,7 +190,8 @@
     "Degree": "Masters",
     "GPA": 3.9,
     "GRE Verbal": 164,
-    "GRE General": 167
+    "GRE General": 167,
+    "season": "Fall 2026"
   },
   {
     "program": "Biostatistics",
@@ -117,7 +203,8 @@
     "Degree": "Masters",
     "GPA": 3.9,
     "GRE Verbal": 164,
-    "GRE General": 167
+    "GRE General": 167,
+    "season": "Fall 2026"
   },
   {
     "program": "Data Science",
@@ -129,71 +216,7 @@
     "Degree": "Masters",
     "GPA": 3.9,
     "GRE Verbal": 164,
-    "GRE General": 167
-  },
-  {
-    "program": "Biomedical Engineering",
-    "university": "Cornell University",
-    "status": "Accepted",
-    "date_added": "Added on 2026-02-01",
-    "url": "https://www.thegradcafe.com/result/994330",
-    "US/International": "International",
-    "Degree": "Masters"
-  },
-  {
-    "program": "Clinical Psychology",
-    "university": "Nova Southeastern University",
-    "status": "Accepted",
-    "date_added": "Added on 2026-02-01",
-    "url": "https://www.thegradcafe.com/result/994329",
-    "US/International": "American",
-    "Degree": "psyd"
-  },
-  {
-    "program": "Computer Science",
-    "university": "University of Utah",
-    "status": "Interview",
-    "date_added": "Added on 2026-02-01",
-    "url": "https://www.thegradcafe.com/result/994328",
-    "US/International": "International",
-    "Degree": "PhD"
-  },
-  {
-    "program": "Comparative Literature",
-    "university": "Cornell University",
-    "status": "Rejected",
-    "date_added": "Added on 2026-02-01",
-    "url": "https://www.thegradcafe.com/result/994327",
-    "US/International": "International",
-    "Degree": "PhD"
-  },
-  {
-    "program": "Finance",
-    "university": "SPI EPFL",
-    "status": "wait listed on 1 feb",
-    "date_added": "Added on 2026-02-01",
-    "url": "https://www.thegradcafe.com/result/994326",
-    "US/International": "International",
-    "Degree": "PhD"
-  },
-  {
-    "program": "City Planning",
-    "university": "University of Glasgow",
-    "status": "Accepted",
-    "date_added": "Added on 2026-02-01",
-    "url": "https://www.thegradcafe.com/result/994325",
-    "US/International": "American",
-    "Degree": "Masters",
-    "GPA": 3.66
-  },
-  {
-    "program": "City Planning",
-    "university": "University College London",
-    "status": "Accepted",
-    "date_added": "Added on 2026-02-01",
-    "url": "https://www.thegradcafe.com/result/994324",
-    "US/International": "American",
-    "Degree": "Masters",
-    "GPA": 3.66
+    "GRE General": 167,
+    "season": "Fall 2026"
   }
 ]

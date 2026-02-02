@@ -351,7 +351,7 @@ class GradCafeScraper:
         """
         parsed_entries = []
         
-        for entry in entries:
+        for idx, entry in enumerate(entries):
             try:
                 # First, track the URL if this entry has one (for edge case recovery)
                 url = self._extract_url(entry)
@@ -360,6 +360,17 @@ class GradCafeScraper:
                 
                 data = self._extract_entry_data(entry)
                 if data:
+                    # Look ahead to the next entry for season information
+                    if idx + 1 < len(entries):
+                        next_entry = entries[idx + 1]
+                        next_cells = next_entry.find_all('td')
+                        for cell in next_cells:
+                            cell_text = cell.get_text(strip=True)
+                            season_match = re.search(r'(Fall|Spring|Summer|Winter)\s+\d{4}', cell_text)
+                            if season_match:
+                                data['season'] = season_match.group(0)
+                                break
+                    
                     # Fetch detailed data from result page to get GRE scores, GPA, and season
                     # This fetches each result page to extract additional information
                     if data.get('url'):
@@ -398,10 +409,20 @@ class GradCafeScraper:
         """
         try:
             # Find all cells in the row
-            cells = entry.find_all('td')
+            all_cells = entry.find_all('td')
+            # Extract season BEFORE filtering cells (season might be in a cell that appears empty)
+            season = None
+            for idx, cell in enumerate(all_cells):
+                cell_text = cell.get_text(strip=True)
+                # Match "Fall 2026", "Spring 2025", etc.
+                season_match = re.search(r'(Fall|Spring|Summer|Winter)\s+\d{4}', cell_text)
+                if season_match:
+                    season = season_match.group(0)
+                    # print(season)
+                    break
             
-            # Filter out empty cells
-            cells = [c for c in cells if c.get_text(strip=True)]
+            # Now filter out empty cells for regular data extraction
+            cells = [c for c in all_cells if c.get_text(strip=True)]
             
             # Need at least 3 cells to process
             if len(cells) < 3:
@@ -453,10 +474,10 @@ class GradCafeScraper:
                 status_text = cells[3].get_text(strip=True)
                 data['applicant_status'] = self._extract_status(status_text)
             
-            # Additional fields with defaults
+            # Additional fields with defaults (season was extracted earlier before filtering cells)
             data['comments'] = None
             data['comments_date'] = None
-            data['season'] = None
+            data['season'] = season
             data['GRE_Verbal'] = 0
             data['GRE_Quantitative'] = 0
             data['GRE_General'] = 0
@@ -701,7 +722,6 @@ class GradCafeScraper:
                 'GRE_General': 0,
                 'GRE_Analytical_Writing': 0.0,
                 'GPA': 0.0,
-                'season': None,
                 'comments': None,
                 'degrees_country_of_origin': None,
             }
@@ -756,13 +776,6 @@ class GradCafeScraper:
             if gpa_match:
                 gpa = float(gpa_match.group(1))
                 details['GPA'] = gpa
-            
-            # Look for season
-            season_match = re.search(r'(Fall|Spring|Summer|Winter)', text)
-            print("Test !")
-            print(season_match)
-            if season_match:
-                details['season'] = f"{season_match.group(1)} {season_match.group(2)}"
             
             # Look for comments
             comments_section = soup.find(string=re.compile(r'comment', re.IGNORECASE))
