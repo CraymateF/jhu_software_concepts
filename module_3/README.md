@@ -310,6 +310,6 @@ This project is created for educational purposes as part of JHU Software Concept
 ---
 
 **Course**: JHU Software Concepts  
-**Module**: Module 3 - 
-**Author**: Zhendong Zhang
+**Module**: Module 3 - Databases & Software System Architecture
+**Author**: Zhendong Zhang - 8A80D7
 **Date**: February 2026
