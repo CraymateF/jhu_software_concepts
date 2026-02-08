@@ -2,19 +2,6 @@
 
 A comprehensive web-based application for analyzing graduate school admissions data from GradCafe. This system provides SQL-based analytics, automated data scraping, and multi-database support with an intuitive web interface.
 
-## 📋 Table of Contents
-
-- [Features](#features)
-- [System Requirements](#system-requirements)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Usage Guide](#usage-guide)
-- [Project Structure](#project-structure)
-- [Database Schema](#database-schema)
-- [API Endpoints](#api-endpoints)
-- [Development](#development)
-- [Troubleshooting](#troubleshooting)
-
 ## ✨ Features
 
 ### Core Functionality
