@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GradCafe Database Query Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>GradCafe Database Analysis</h1>
+            <p class="subtitle">Graduate School Admissions Data Insights</p>
+        </header>
+
+        <div class="results-grid">
+            <!-- Question 1 -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>Question 1</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q1.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q1.answer }}</span>
+                        <span class="answer-label">entries</span>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q1.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>Question 2</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q2.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q2.answer }}</span>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q2.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>Question 3</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q3.question }}</p>
+                    <div class="stats-grid">
+                        <div class="stat">
+                            <span class="stat-label">Avg GPA</span>
+                            <span class="stat-value">{{ results.q3.answer.avg_gpa }}</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Avg GRE</span>
+                            <span class="stat-value">{{ results.q3.answer.avg_gre }}</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Avg GRE V</span>
+                            <span class="stat-value">{{ results.q3.answer.avg_gre_v }}</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Avg GRE AW</span>
+                            <span class="stat-value">{{ results.q3.answer.avg_gre_aw }}</span>
+                        </div>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q3.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>Question 4</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q4.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q4.answer }}</span>
+                        <span class="answer-label">GPA</span>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q4.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>Question 5</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q5.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q5.answer }}</span>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q5.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>Question 6</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q6.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q6.answer }}</span>
+                        <span class="answer-label">GPA</span>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q6.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>Question 7</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q7.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q7.answer }}</span>
+                        <span class="answer-label">entries</span>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q7.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>Question 8</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q8.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q8.answer }}</span>
+                        <span class="answer-label">acceptances</span>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q8.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>Question 9</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q9.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q9.answer }}</span>
+                        <span class="answer-label">acceptances (using LLM fields)</span>
+                    </div>
+                    <p class="comparison">Original count (Q8): {{ results.q8.answer }}</p>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q9.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 10 (Additional Question 1) -->
+            <div class="result-card additional">
+                <div class="card-header">
+                    <h2>Additional Question 1</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q10.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q10.answer }}</span>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q10.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 11 (Additional Question 2) -->
+            <div class="result-card additional full-width">
+                <div class="card-header">
+                    <h2>Additional Question 2</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q11.question }}</p>
+                    <div class="table-container">
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>University</th>
+                                    <th>Average GPA</th>
+                                    <th>Number of Acceptances</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in results.q11.answer %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ row[0] }}</td>
+                                    <td>{{ row[1] }}</td>
+                                    <td>{{ row[2] }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q11.query }}</pre>
+                    </details>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Data Source: GradCafe Database | JHU Software Concepts Module 3</p>
+        </footer>
+    </div>
+</body>
+</html>
