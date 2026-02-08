@@ -9,8 +9,36 @@
 <body>
     <div class="container">
         <header>
-            <h1>GradCafe Database Analysis</h1>
-            <p class="subtitle">Graduate School Admissions Data Insights</p>
+            <div class="header-top">
+                <div class="header-left">
+                    <h1>GradCafe Database Analysis</h1>
+                    <p class="subtitle">Graduate School Admissions Data Insights</p>
+                </div>
+                <div class="header-right">
+                    <button id="updateAnalysisBtn" class="control-btn update-btn" title="Refresh the page to display the most up-to-date analysis with the latest data from the database">
+                        <span class="btn-icon">🔄</span>
+                        <span class="btn-text">Update Analysis</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="data-controls">
+                <button id="pullDataBtn" class="pull-data-btn">
+                    <span class="btn-icon">📥</span>
+                    <span class="btn-text">Pull Data</span>
+                </button>
+                <p class="control-description">
+                    <strong>Pull Data:</strong> Automatically scrape the latest graduate admissions data from GradCafe website and add new entries to the database. 
+                    This process runs in the background and may take a few minutes.
+                </p>
+            </div>
+            
+            <div id="statusMessage" class="status-message" style="display: none;">
+                <div class="status-content">
+                    <span class="status-icon">⏳</span>
+                    <span id="statusText">Ready</span>
+                </div>
+            </div>
         </header>
 
         <div class="results-grid">
@@ -247,5 +275,141 @@
             <p>Data Source: GradCafe Database | JHU Software Concepts Module 3</p>
         </footer>
     </div>
+    
+    <script>
+        let statusCheckInterval = null;
+        
+        // Pull Data button functionality
+        document.getElementById('pullDataBtn').addEventListener('click', async function() {
+            const btn = this;
+            btn.disabled = true;
+            
+            // Show status message
+            const statusDiv = document.getElementById('statusMessage');
+            const statusText = document.getElementById('statusText');
+            statusDiv.style.display = 'block';
+            statusText.textContent = 'Starting data scraping...';
+            
+            try {
+                const response = await fetch('/pull_data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ max_pages: 2 })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusText.textContent = 'Scraping in progress...';
+                    // Start polling for status updates
+                    startStatusPolling();
+                } else {
+                    statusText.textContent = data.message;
+                    btn.disabled = false;
+                    setTimeout(() => {
+                        statusDiv.style.display = 'none';
+                    }, 3000);
+                }
+            } catch (error) {
+                statusText.textContent = 'Error starting scraper: ' + error.message;
+                btn.disabled = false;
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 3000);
+            }
+        });
+        
+        // Update Analysis button functionality
+        document.getElementById('updateAnalysisBtn').addEventListener('click', async function() {
+            const btn = this;
+            const originalHTML = btn.innerHTML;
+            
+            // Check if scraping is running
+            try {
+                const statusResponse = await fetch('/scraping_status');
+                const statusData = await statusResponse.json();
+                
+                if (statusData.is_running) {
+                    alert('⚠️ Cannot update analysis while data pull is in progress.\\n\\nPlease wait for the scraping to complete, then try again.');
+                    return;
+                }
+                
+                btn.disabled = true;
+                btn.innerHTML = '<span class="btn-icon">⏳</span><span class="btn-text">Updating...</span>';
+                
+                // Reload the page to get fresh data
+                window.location.reload();
+                
+            } catch (error) {
+                alert('Error updating analysis: ' + error.message);
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
+        });
+        
+        // Poll for scraping status updates
+        function startStatusPolling() {
+            if (statusCheckInterval) {
+                clearInterval(statusCheckInterval);
+            }
+            
+            statusCheckInterval = setInterval(async () => {
+                try {
+                    const response = await fetch('/scraping_status');
+                    const status = await response.json();
+                    
+                    const statusText = document.getElementById('statusText');
+                    statusText.textContent = status.status_message;
+                    
+                    if (!status.is_running) {
+                        clearInterval(statusCheckInterval);
+                        statusCheckInterval = null;
+                        
+                        // Re-enable pull data button
+                        document.getElementById('pullDataBtn').disabled = false;
+                        
+                        // Show completion message
+                        if (status.records_added > 0) {
+                            statusText.textContent = '✅ ' + status.status_message;
+                            setTimeout(() => {
+                                if (confirm('🎉 New data has been added to the database!\\n\\n' + status.records_added + ' new records were added.\\n\\nWould you like to refresh the page to see the updated analysis?')) {
+                                    window.location.reload();
+                                } else {
+                                    document.getElementById('statusMessage').style.display = 'none';
+                                }
+                            }, 2000);
+                        } else {
+                            setTimeout(() => {
+                                document.getElementById('statusMessage').style.display = 'none';
+                            }, 5000);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error checking status:', error);
+                }
+            }, 2000); // Check every 2 seconds
+        }
+        
+        // Check initial status on page load
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch('/scraping_status');
+                const status = await response.json();
+                
+                if (status.is_running) {
+                    const statusDiv = document.getElementById('statusMessage');
+                    const statusText = document.getElementById('statusText');
+                    statusDiv.style.display = 'block';
+                    statusText.textContent = status.status_message;
+                    document.getElementById('pullDataBtn').disabled = true;
+                    startStatusPolling();
+                }
+            } catch (error) {
+                console.error('Error checking initial status:', error);
+            }
+        });
+    </script>
 </body>
 </html>

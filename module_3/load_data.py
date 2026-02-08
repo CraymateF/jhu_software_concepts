@@ -6,7 +6,8 @@ from datetime import datetime
 def load_data():
     # 1. Database connection parameters
     conn_params = {
-        "dbname": "gradcafe",
+        # "dbname": "gradcafe",
+        "dbname": "gradcafe_sample",
         "user": "fadetoblack", 
         "host": "localhost"
     }
@@ -41,9 +42,36 @@ def load_data():
         """)
 
         # 3. Load and parse JSON file
-        file_path = 'module_2/llm_extend_applicant_data.json'
+        # file_path = 'module_2/llm_extend_applicant_data.json'
+        file_path = 'module_3/sample_data/llm_extend_applicant_data.json'
+        
+        # Try to handle both standard JSON array and JSONL (newline-delimited JSON)
         with open(file_path, 'r', encoding='utf-8') as f:
-            records = json.load(f)
+            content = f.read()
+            # Remove null bytes which can cause issues with PostgreSQL
+            content = content.replace('\x00', '')
+            
+            # First, try to parse as standard JSON array
+            try:
+                records = json.loads(content)
+                # Ensure it's a list
+                if not isinstance(records, list):
+                    records = [records]
+            except json.JSONDecodeError:
+                # If that fails, try parsing as JSONL (one JSON object per line)
+                records = []
+                for line_num, line in enumerate(content.strip().split('\n'), 1):
+                    line = line.strip()
+                    if line:  # Skip empty lines
+                        try:
+                            record = json.loads(line)
+                            records.append(record)
+                        except json.JSONDecodeError as e:
+                            print(f"Warning: Could not parse line {line_num}: {e}")
+                            continue
+                
+                if not records:
+                    raise ValueError("Could not parse any valid JSON records from file")
 
         # 4. Prepare data for batch insertion
         print(f"Detected {len(records)} records. Starting import...")
@@ -95,7 +123,8 @@ def load_data():
                 r.get('Degree') if isinstance(r.get('Degree'), str) else None,
                 r.get('LLM Generated Program'),
                 r.get('LLM Generated University'),
-                json.dumps(r)
+                # Clean the JSON string to remove null bytes before storing
+                json.dumps(r).replace('\x00', '').replace('\\u0000', '')
             )
             data_to_insert.append(row)
 

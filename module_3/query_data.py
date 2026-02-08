@@ -4,7 +4,8 @@ from psycopg2.extras import RealDictCursor
 def get_db_connection():
     """Create and return a database connection"""
     conn_params = {
-        "dbname": "gradcafe",
+        # "dbname": "gradcafe",
+        "dbname": "gradcafe_sample",
         "user": "fadetoblack",
         "host": "localhost"
     }
