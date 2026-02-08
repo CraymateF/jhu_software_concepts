@@ -349,5 +349,5 @@ if __name__ == "__main__":
         print(f"\n{'='*80}")
         print(f"QUESTION: {result['question']}")
         print(f"{'='*80}")
-        print(f"QUERY:\n{result['query']}")
+        # print(f"QUERY:\n{result['query']}")
         print(f"\nANSWER: {result['answer']}")
