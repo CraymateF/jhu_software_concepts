@@ -1,19 +1,21 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
-def get_db_connection():
+def get_db_connection(dbname=None):
     """Create and return a database connection"""
+    if dbname is None:
+        dbname = "gradcafe_sample"
+    
     conn_params = {
-        # "dbname": "gradcafe",
-        "dbname": "gradcafe_sample",
+        "dbname": dbname,
         "user": "fadetoblack",
         "host": "localhost"
     }
     return psycopg2.connect(**conn_params)
 
-def question_1():
+def question_1(dbname=None):
     """How many entries do you have in your database who have applied for Fall 2026?"""
-    conn = get_db_connection()
+    conn = get_db_connection(dbname)
     cur = conn.cursor()
     
     query = """
@@ -34,15 +36,15 @@ def question_1():
         "answer": result[0]
     }
 
-def question_2():
+def question_2(dbname=None):
     """What percentage of entries are from international students (not American or Other)?"""
-    conn = get_db_connection()
+    conn = get_db_connection(dbname)
     cur = conn.cursor()
     
     query = """
         SELECT 
             ROUND(
-                (COUNT(*) FILTER (WHERE us_or_international = 'International') * 100.0 / COUNT(*)),
+                (COUNT(*) FILTER (WHERE us_or_international = 'International') * 100.0 / NULLIF(COUNT(*), 0)),
                 2
             ) as percentage
         FROM gradcafe_main
@@ -58,12 +60,12 @@ def question_2():
     return {
         "question": "What percentage of entries are from international students?",
         "query": query.strip(),
-        "answer": f"{result[0]}%"
+        "answer": f"{result[0]}%" if result[0] is not None else "N/A"
     }
 
-def question_3():
+def question_3(dbname=None):
     """What is the average GPA, GRE, GRE V, GRE AW of applicants who provide these metrics?"""
-    conn = get_db_connection()
+    conn = get_db_connection(dbname)
     cur = conn.cursor()
     
     query = """
@@ -93,9 +95,9 @@ def question_3():
         }
     }
 
-def question_4():
+def question_4(dbname=None):
     """What is the average GPA of American students in Fall 2026?"""
-    conn = get_db_connection()
+    conn = get_db_connection(dbname)
     cur = conn.cursor()
     
     query = """
@@ -118,15 +120,15 @@ def question_4():
         "answer": result[0]
     }
 
-def question_5():
+def question_5(dbname=None):
     """What percent of entries for Fall 2026 are Acceptances?"""
-    conn = get_db_connection()
+    conn = get_db_connection(dbname)
     cur = conn.cursor()
     
     query = """
         SELECT 
             ROUND(
-                (COUNT(*) FILTER (WHERE status = 'Accepted') * 100.0 / COUNT(*)),
+                (COUNT(*) FILTER (WHERE status = 'Accepted') * 100.0 / NULLIF(COUNT(*), 0)),
                 2
             ) as percentage
         FROM gradcafe_main
@@ -143,12 +145,12 @@ def question_5():
     return {
         "question": "What percent of entries for Fall 2026 are Acceptances?",
         "query": query.strip(),
-        "answer": f"{result[0]}%"
+        "answer": f"{result[0]}%" if result[0] is not None else "N/A"
     }
 
-def question_6():
+def question_6(dbname=None):
     """What is the average GPA of applicants who applied for Fall 2026 who are Acceptances?"""
-    conn = get_db_connection()
+    conn = get_db_connection(dbname)
     cur = conn.cursor()
     
     query = """
@@ -171,9 +173,9 @@ def question_6():
         "answer": result[0]
     }
 
-def question_7():
+def question_7(dbname=None):
     """How many entries are from applicants who applied to JHU for a masters degree in Computer Science?"""
-    conn = get_db_connection()
+    conn = get_db_connection(dbname)
     cur = conn.cursor()
     
     query = """
@@ -196,9 +198,9 @@ def question_7():
         "answer": result[0]
     }
 
-def question_8():
+def question_8(dbname=None):
     """How many entries from 2026 are acceptances from applicants who applied to Georgetown/MIT/Stanford/CMU for PhD in CS?"""
-    conn = get_db_connection()
+    conn = get_db_connection(dbname)
     cur = conn.cursor()
     
     query = """
@@ -228,9 +230,9 @@ def question_8():
         "answer": result[0]
     }
 
-def question_9():
+def question_9(dbname=None):
     """Do the numbers for question 8 change if you use LLM Generated Fields?"""
-    conn = get_db_connection()
+    conn = get_db_connection(dbname)
     cur = conn.cursor()
     
     query = """
@@ -260,15 +262,15 @@ def question_9():
         "answer": result[0]
     }
 
-def question_10():
+def question_10(dbname=None):
     """Additional Question 1: What is the acceptance rate for PhD programs in Computer Science for Fall 2026?"""
-    conn = get_db_connection()
+    conn = get_db_connection(dbname)
     cur = conn.cursor()
     
     query = """
         SELECT 
             ROUND(
-                (COUNT(*) FILTER (WHERE status = 'Accepted') * 100.0 / COUNT(*)),
+                (COUNT(*) FILTER (WHERE status = 'Accepted') * 100.0 / NULLIF(COUNT(*), 0)),
                 2
             ) as acceptance_rate
         FROM gradcafe_main
@@ -287,12 +289,12 @@ def question_10():
     return {
         "question": "What is the acceptance rate for PhD programs in Computer Science for Fall 2026?",
         "query": query.strip(),
-        "answer": f"{result[0]}%" if result[0] else "N/A"
+        "answer": f"{result[0]}%" if result[0] is not None else "N/A"
     }
 
-def question_11():
+def question_11(dbname=None):
     """Additional Question 2: Which university has the highest average GPA for accepted students?"""
-    conn = get_db_connection()
+    conn = get_db_connection(dbname)
     cur = conn.cursor()
     
     query = """
@@ -322,20 +324,20 @@ def question_11():
         "answer": results
     }
 
-def run_all_queries():
+def run_all_queries(dbname=None):
     """Run all queries and return results"""
     results = {
-        "q1": question_1(),
-        "q2": question_2(),
-        "q3": question_3(),
-        "q4": question_4(),
-        "q5": question_5(),
-        "q6": question_6(),
-        "q7": question_7(),
-        "q8": question_8(),
-        "q9": question_9(),
-        "q10": question_10(),
-        "q11": question_11()
+        "q1": question_1(dbname),
+        "q2": question_2(dbname),
+        "q3": question_3(dbname),
+        "q4": question_4(dbname),
+        "q5": question_5(dbname),
+        "q6": question_6(dbname),
+        "q7": question_7(dbname),
+        "q8": question_8(dbname),
+        "q9": question_9(dbname),
+        "q10": question_10(dbname),
+        "q11": question_11(dbname)
     }
     return results
 

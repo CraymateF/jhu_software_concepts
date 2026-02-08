@@ -55,6 +55,48 @@ header h1 {
 .subtitle {
     font-size: 1.2em;
     opacity: 0.9;
+    margin-bottom: 15px;
+}
+
+.database-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+
+.db-label {
+    opacity: 0.8;
+    font-weight: 500;
+}
+
+.db-name {
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+.header-right {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.switch-db-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.switch-db-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: white;
+    color: white;
 }
 
 .data-controls {

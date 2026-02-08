@@ -13,8 +13,16 @@
                 <div class="header-left">
                     <h1>GradCafe Database Analysis</h1>
                     <p class="subtitle">Graduate School Admissions Data Insights</p>
+                    <div class="database-indicator">
+                        <span class="db-label">Current Database:</span>
+                        <span class="db-name">{{ db_info[current_db].display_name }}</span>
+                    </div>
                 </div>
                 <div class="header-right">
+                    <button id="switchDatabaseBtn" class="control-btn switch-db-btn" title="Switch between Full Dataset and Sample Dataset">
+                        <span class="btn-icon">🔄</span>
+                        <span class="btn-text">Switch Database</span>
+                    </button>
                     <button id="updateAnalysisBtn" class="control-btn update-btn" title="Refresh the page to display the most up-to-date analysis with the latest data from the database">
                         <span class="btn-icon">🔄</span>
                         <span class="btn-text">Update Analysis</span>
@@ -282,13 +290,14 @@
         // Pull Data button functionality
         document.getElementById('pullDataBtn').addEventListener('click', async function() {
             const btn = this;
+            const currentDb = '{{ current_db }}';
             btn.disabled = true;
             
             // Show status message
             const statusDiv = document.getElementById('statusMessage');
             const statusText = document.getElementById('statusText');
             statusDiv.style.display = 'block';
-            statusText.textContent = 'Starting data scraping...';
+            statusText.textContent = 'Starting data scraping for ' + currentDb + '...';
             
             try {
                 const response = await fetch('/pull_data', {
@@ -296,7 +305,10 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ max_pages: 2 })
+                    body: JSON.stringify({ 
+                        max_pages: 2,
+                        dbname: currentDb
+                    })
                 });
                 
                 const data = await response.json();
@@ -321,6 +333,17 @@
             }
         });
         
+        // Switch Database button functionality
+        document.getElementById('switchDatabaseBtn').addEventListener('click', function() {
+            const currentDb = '{{ current_db }}';
+            const targetDb = currentDb === 'gradcafe' ? 'gradcafe_sample' : 'gradcafe';
+            const targetName = targetDb === 'gradcafe' ? 'My Dataset (Module 2)' : 'Provided Dataset (Module 3)';
+            
+            if (confirm('Switch to ' + targetName + '?\n\nThis will reload the page with data from a different database.')) {
+                window.location.href = '/?db=' + targetDb;
+            }
+        });
+        
         // Update Analysis button functionality
         document.getElementById('updateAnalysisBtn').addEventListener('click', async function() {
             const btn = this;
@@ -332,7 +355,7 @@
                 const statusData = await statusResponse.json();
                 
                 if (statusData.is_running) {
-                    alert('⚠️ Cannot update analysis while data pull is in progress.\\n\\nPlease wait for the scraping to complete, then try again.');
+                    alert('⚠️ Cannot update analysis while data pull is in progress.\n\nPlease wait for the scraping to complete, then try again.');
                     return;
                 }
                 
@@ -374,7 +397,7 @@
                         if (status.records_added > 0) {
                             statusText.textContent = '✅ ' + status.status_message;
                             setTimeout(() => {
-                                if (confirm('🎉 New data has been added to the database!\\n\\n' + status.records_added + ' new records were added.\\n\\nWould you like to refresh the page to see the updated analysis?')) {
+                                if (confirm('🎉 New data has been added to the database!\n\n' + status.records_added + ' new records were added.\n\nWould you like to refresh the page to see the updated analysis?')) {
                                     window.location.reload();
                                 } else {
                                     document.getElementById('statusMessage').style.display = 'none';
