@@ -96,7 +96,7 @@ sudo apt-get install postgresql postgresql-contrib
 sudo systemctl start postgresql
 
 # Create PostgreSQL user (if needed)
-createuser -s fadetoblack  # Replace with your username
+createuser -s username  # Replace with your username
 ```
 
 ### 5. Set Up Databases
@@ -255,38 +255,6 @@ Check scraping progress
   ```
 
 ## 🛠️ Development
-
-### Adding New Queries
-
-1. Add function to `query_data.py`:
-```python
-def question_12(dbname=None):
-    """Your question description"""
-    conn = get_db_connection(dbname)
-    cur = conn.cursor()
-    
-    query = """
-        SELECT ...
-        FROM gradcafe_main
-        WHERE ...
-    """
-    
-    cur.execute(query)
-    result = cur.fetchone()
-    
-    cur.close()
-    conn.close()
-    
-    return {
-        "question": "Your question text",
-        "query": query.strip(),
-        "answer": result[0]
-    }
-```
-
-2. Add to `run_all_queries()` in same file
-3. Add display section in `templates/results.html`
-
 ### Manual Data Loading
 
 Load specific data into a specific database:
@@ -322,30 +290,6 @@ lsof -ti:8080 | xargs kill -9
 python -m flask run --port 8081
 ```
 
-### Database Connection Errors
-```bash
-# Check PostgreSQL is running
-pg_isready
-
-# Start PostgreSQL
-brew services start postgresql  # macOS
-sudo systemctl start postgresql # Linux
-```
-
-### Missing Python Packages
-```bash
-pip install -r requirements.txt
-```
-
-### Empty Query Results
-- Ensure database is populated: `python setup_databases.py`
-- Check database has data: `psql gradcafe -c "SELECT COUNT(*) FROM gradcafe_main;"`
-- Verify you're querying the correct database
-
-### Division by Zero Errors
-- These are now handled with `NULLIF()` in queries
-- Returns "N/A" for empty datasets
-- Update to latest code if still seeing errors
 
 ## 📝 Notes
 
@@ -366,6 +310,6 @@ This project is created for educational purposes as part of JHU Software Concept
 ---
 
 **Course**: JHU Software Concepts  
-**Module**: Module 3 - Database Integration  
-**Author**: FadeToBlack  
+**Module**: Module 3 - 
+**Author**: Zhendong Zhang
 **Date**: February 2026

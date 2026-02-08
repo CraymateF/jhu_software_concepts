@@ -1,0 +1,14 @@
+# Flask Web Framework
+Flask==3.0.0
+
+# PostgreSQL Database Adapter
+psycopg2-binary==2.9.9
+
+# Web Scraping Dependencies (from module_2)
+beautifulsoup4==4.12.3
+
+# LLM Processing Dependencies (from module_2)
+huggingface_hub>=0.23.0
+llama-cpp-python>=0.2.90,<0.3.0
+
+# Python version requirement: 3.10+
