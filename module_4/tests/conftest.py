@@ -4,6 +4,7 @@ Pytest configuration and shared fixtures for Module 4 tests.
 import pytest
 import sys
 import os
+import psycopg2
 
 # Add module_4/src to Python path so tests can import modules
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
@@ -42,3 +43,67 @@ def app():
 def client(app):
     """Create a test client for the Flask app."""
     return app.test_client()
+
+
+@pytest.fixture
+def test_db():
+    """Create and setup a test database connection."""
+    # Use DATABASE_URL from environment or default to test database
+    db_url = os.getenv('DATABASE_URL', 'postgresql://fadetoblack@localhost/gradcafe_test')
+    
+    # Parse connection string
+    if db_url.startswith('postgresql://'):
+        db_url = db_url.replace('postgresql://', '')
+    
+    # Simple parsing (username@host/dbname)
+    if '@' in db_url:
+        user_part, host_part = db_url.split('@')
+        user = user_part
+        if '/' in host_part:
+            host, dbname = host_part.split('/')
+        else:
+            host = host_part
+            dbname = 'gradcafe_test'
+    else:
+        user = 'fadetoblack'
+        host = 'localhost'
+        dbname = 'gradcafe_test'
+    
+    conn_params = {
+        "dbname": dbname,
+        "user": user,
+        "host": host
+    }
+    
+    conn = psycopg2.connect(**conn_params)
+    
+    # Setup: Create table
+    cur = conn.cursor()
+    cur.execute("DROP TABLE IF EXISTS gradcafe_main;")
+    cur.execute("""
+        CREATE TABLE gradcafe_main (
+            p_id SERIAL PRIMARY KEY,
+            program TEXT,
+            comments TEXT,
+            date_added DATE,
+            url TEXT UNIQUE,
+            status TEXT,
+            term TEXT,
+            us_or_international TEXT,
+            gpa FLOAT,
+            gre FLOAT,
+            gre_v FLOAT,
+            gre_aw FLOAT,
+            degree TEXT,
+            llm_generated_program TEXT,
+            llm_generated_university TEXT,
+            raw_data JSONB
+        );
+    """)
+    conn.commit()
+    cur.close()
+    
+    yield conn
+    
+    # Teardown
+    conn.close()
