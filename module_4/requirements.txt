@@ -1,0 +1,23 @@
+# Flask Web Framework
+Flask==3.0.0
+
+# PostgreSQL Database Adapter
+psycopg2-binary==2.9.9
+
+# Web Scraping Dependencies
+beautifulsoup4==4.12.3
+lxml==5.1.0
+
+# LLM Processing Dependencies (from module_2)
+huggingface_hub>=0.23.0
+llama-cpp-python>=0.2.90,<0.3.0
+
+# Testing Dependencies
+pytest==7.4.3
+pytest-cov==4.1.0
+
+# Documentation Dependencies
+sphinx==7.2.6
+sphinx-rtd-theme==2.0.0
+
+# Python version requirement: 3.10+
