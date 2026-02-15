@@ -42,3 +42,7 @@ Thumbs.db
 module_2/models/
 models/
 *.gguf
+
+# Sphinx build output
+module_4/docs/_build/
+_build/
