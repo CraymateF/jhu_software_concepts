@@ -127,4 +127,7 @@ JHU Software Concepts - Module 4
 
 ## Author
 
-JHU Student - February 2026
+Zhendong Zhang - 8A80D7
+
+## Read the Docs Host:
+Vist 'https://jhu-software-projects.readthedocs.io/en/latest/'
