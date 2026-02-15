@@ -11,6 +11,7 @@ import tempfile
 from unittest.mock import Mock, patch, MagicMock, call
 import threading
 import time
+from conftest import get_test_db_params
 
 
 @pytest.mark.db
@@ -123,12 +124,8 @@ def test_get_existing_urls():
     from data_updater import get_existing_urls
     import psycopg2
     
-    # Create test database and insert data
-    conn_params = {
-        "dbname": 'gradcafe_test',
-        "user": "fadetoblack",
-        "host": "localhost"
-    }
+    # Get database connection parameters
+    conn_params = get_test_db_params()
     
     try:
         conn = psycopg2.connect(**conn_params)

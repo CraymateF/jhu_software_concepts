@@ -4,6 +4,8 @@ Additional tests to improve code coverage.
 These tests cover edge cases and alternative code paths.
 """
 import pytest
+import psycopg2
+from conftest import get_test_db_params
 
 
 @pytest.mark.web
@@ -170,8 +172,7 @@ def test_load_data_with_jsonl_format():
     try:
         load_data(dbname='gradcafe_test', file_path=temp_file)
         
-        import psycopg2
-        conn = psycopg2.connect(dbname='gradcafe_test', user='fadetoblack', host='localhost')
+        conn = psycopg2.connect(**get_test_db_params())
         cur = conn.cursor()
         
         cur.execute("SELECT COUNT(*) FROM gradcafe_main WHERE url IN ('http://jsonl1.com', 'http://jsonl2.com');")

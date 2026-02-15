@@ -7,35 +7,13 @@ import pytest
 import psycopg2
 import os
 from psycopg2.extras import execute_values
+from conftest import get_test_db_params
 
 
 @pytest.fixture
 def populated_test_db():
     """Create a test database with sample data."""
-    db_url = os.getenv('DATABASE_URL', 'postgresql://fadetoblack@localhost/gradcafe_test')
-    
-    if db_url.startswith('postgresql://'):
-        db_url = db_url.replace('postgresql://', '')
-    
-    if '@' in db_url:
-        user_part, host_part = db_url.split('@')
-        user = user_part
-        if '/' in host_part:
-            host, dbname = host_part.split('/')
-        else:
-            host = host_part
-            dbname = 'gradcafe_test'
-    else:
-        user = 'fadetoblack'
-        host = 'localhost'
-        dbname = 'gradcafe_test'
-    
-    conn_params = {
-        "dbname": dbname,
-        "user": user,
-        "host": host
-    }
-    
+    conn_params = get_test_db_params()
     conn = psycopg2.connect(**conn_params)
     
     # Setup: Create table and insert test data

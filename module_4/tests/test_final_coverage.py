@@ -8,6 +8,7 @@ import tempfile
 import os
 from unittest.mock import patch, MagicMock
 import psycopg2
+from conftest import get_test_db_params
 
 from data_updater import extract_numeric, add_new_records_to_db
 from load_data import load_data
@@ -62,7 +63,7 @@ class TestFinalCoverage:
             load_data(dbname='gradcafe_test', file_path=temp_file)
             
             # Verify data was loaded with None for date
-            conn = psycopg2.connect(dbname='gradcafe_test', user='fadetoblack', host='localhost')
+            conn = psycopg2.connect(**get_test_db_params())
             cur = conn.cursor()
             cur.execute("SELECT date_added FROM gradcafe_main WHERE url = 'http://invalid-date.com'")
             date_added = cur.fetchone()[0]
@@ -90,7 +91,7 @@ class TestFinalCoverage:
             load_data(dbname='gradcafe_test', file_path=temp_file)
             
             # Verify None was stored for these fields
-            conn = psycopg2.connect(dbname='gradcafe_test', user='fadetoblack', host='localhost')
+            conn = psycopg2.connect(**get_test_db_params())
             cur = conn.cursor()
             cur.execute("SELECT gpa, gre FROM gradcafe_main WHERE url = 'http://non-numeric.com'")
             gpa, gre = cur.fetchone()

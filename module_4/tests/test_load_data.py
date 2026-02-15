@@ -9,6 +9,7 @@ import json
 import tempfile
 import os
 from unittest.mock import patch, MagicMock
+from conftest import get_test_db_params
 
 
 @pytest.mark.db
@@ -45,7 +46,7 @@ def test_load_data_creates_table():
         load_data(dbname='gradcafe_test', file_path=temp_file)
         
         # Verify table exists and has data
-        conn = psycopg2.connect(dbname='gradcafe_test', user='fadetoblack', host='localhost')
+        conn = psycopg2.connect(**get_test_db_params())
         cur = conn.cursor()
         
         cur.execute("SELECT COUNT(*) FROM gradcafe_main;")
@@ -92,7 +93,7 @@ def test_parse_date_in_load_data():
     try:
         load_data(dbname='gradcafe_test', file_path=temp_file)
         
-        conn = psycopg2.connect(dbname='gradcafe_test', user='fadetoblack', host='localhost')
+        conn = psycopg2.connect(**get_test_db_params())
         cur = conn.cursor()
         
         cur.execute("SELECT date_added FROM gradcafe_main WHERE url = 'http://unique-test.com';")
@@ -184,7 +185,7 @@ class TestLoadDataJSONParsing:
             load_data(dbname='gradcafe_test', file_path=temp_file)
             
             # Verify data was loaded
-            conn = psycopg2.connect(dbname='gradcafe_test', user='fadetoblack', host='localhost')
+            conn = psycopg2.connect(**get_test_db_params())
             cur = conn.cursor()
             cur.execute("SELECT COUNT(*) FROM gradcafe_main")
             count = cur.fetchone()[0]
@@ -208,7 +209,7 @@ class TestLoadDataJSONParsing:
             load_data(dbname='gradcafe_test', file_path=temp_file)
             
             # Verify valid data was loaded (invalid line skipped)
-            conn = psycopg2.connect(dbname='gradcafe_test', user='fadetoblack', host='localhost')
+            conn = psycopg2.connect(**get_test_db_params())
             cur = conn.cursor()
             cur.execute("SELECT COUNT(*) FROM gradcafe_main")
             count = cur.fetchone()[0]
@@ -252,7 +253,7 @@ class TestLoadDataJSONParsing:
             load_data(dbname='gradcafe_test', file_path=temp_file)
             
             # Verify data was loaded
-            conn = psycopg2.connect(dbname='gradcafe_test', user='fadetoblack', host='localhost')
+            conn = psycopg2.connect(**get_test_db_params())
             cur = conn.cursor()
             cur.execute("SELECT COUNT(*) FROM gradcafe_main")
             count = cur.fetchone()[0]
@@ -278,7 +279,7 @@ class TestLoadDataJSONParsing:
             load_data(dbname='gradcafe_test', file_path=temp_file)
             
             # Verify it was converted to a list and loaded
-            conn = psycopg2.connect(dbname='gradcafe_test', user='fadetoblack', host='localhost')
+            conn = psycopg2.connect(**get_test_db_params())
             cur = conn.cursor()
             cur.execute("SELECT COUNT(*) FROM gradcafe_main")
             count = cur.fetchone()[0]
@@ -320,7 +321,7 @@ class TestLoadDataOldFormat:
             load_data(dbname='gradcafe_test', file_path=temp_file)
             
             # Verify status is 'Accepted'
-            conn = psycopg2.connect(dbname='gradcafe_test', user='fadetoblack', host='localhost')
+            conn = psycopg2.connect(**get_test_db_params())
             cur = conn.cursor()
             cur.execute("SELECT status FROM gradcafe_main WHERE url = 'http://mit1.com'")
             status = cur.fetchone()[0]
@@ -357,7 +358,7 @@ class TestLoadDataOldFormat:
             load_data(dbname='gradcafe_test', file_path=temp_file)
             
             # Verify status is 'Rejected'
-            conn = psycopg2.connect(dbname='gradcafe_test', user='fadetoblack', host='localhost')
+            conn = psycopg2.connect(**get_test_db_params())
             cur = conn.cursor()
             cur.execute("SELECT status FROM gradcafe_main WHERE url = 'http://stanford1.com'")
             status = cur.fetchone()[0]
@@ -387,7 +388,7 @@ class TestLoadDataOldFormat:
             load_data(dbname='gradcafe_test', file_path=temp_file)
             
             # Verify status is None
-            conn = psycopg2.connect(dbname='gradcafe_test', user='fadetoblack', host='localhost')
+            conn = psycopg2.connect(**get_test_db_params())
             cur = conn.cursor()
             cur.execute("SELECT status FROM gradcafe_main WHERE url = 'http://berkeley1.com'")
             status = cur.fetchone()[0]
@@ -427,7 +428,7 @@ class TestLoadDataOldFormat:
             load_data(dbname='gradcafe_test', file_path=temp_file)
             
             # Verify programs were combined correctly
-            conn = psycopg2.connect(dbname='gradcafe_test', user='fadetoblack', host='localhost')
+            conn = psycopg2.connect(**get_test_db_params())
             cur = conn.cursor()
             
             cur.execute("SELECT program FROM gradcafe_main WHERE url = 'http://test1.com'")
@@ -553,7 +554,7 @@ class TestLoadDataHelperFunctions:
             load_data(dbname='gradcafe_test', file_path=temp_file)
             
             # Verify numeric extraction worked
-            conn = psycopg2.connect(dbname='gradcafe_test', user='fadetoblack', host='localhost')
+            conn = psycopg2.connect(**get_test_db_params())
             cur = conn.cursor()
             cur.execute("SELECT gpa, gre FROM gradcafe_main WHERE url = 'http://numeric.com'")
             gpa, gre = cur.fetchone()
@@ -581,7 +582,7 @@ class TestLoadDataHelperFunctions:
             load_data(dbname='gradcafe_test', file_path=temp_file)
             
             # Verify None was stored for invalid values
-            conn = psycopg2.connect(dbname='gradcafe_test', user='fadetoblack', host='localhost')
+            conn = psycopg2.connect(**get_test_db_params())
             cur = conn.cursor()
             cur.execute("SELECT gpa, gre FROM gradcafe_main WHERE url = 'http://invalid-numeric.com'")
             gpa, gre = cur.fetchone()
