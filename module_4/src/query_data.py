@@ -7,7 +7,7 @@ def get_db_connection(dbname=None):
     if dbname is None:
         dbname = "gradcafe_sample"
     
-    # Parse DATABASE_URL or use defaults
+    # Parse DATABASE_URL to get credentials, but always use the dbname parameter
     db_url = os.getenv('DATABASE_URL', f'postgresql://fadetoblack@localhost/{dbname}')
     
     # Parse connection string  
@@ -23,19 +23,18 @@ def get_db_connection(dbname=None):
         else:
             user = user_part
             password = None
+        # Extract host, ignore database name from URL (use parameter instead)
         if '/' in host_part:
-            host, db = host_part.split('/', 1)
+            host, _ = host_part.split('/', 1)  # Ignore DB from URL
         else:
             host = host_part
-            db = dbname
     else:
         user = 'fadetoblack'
         password = None
         host = 'localhost'
-        db = dbname
     
     conn_params = {
-        "dbname": db,
+        "dbname": dbname,  # Always use the parameter
         "user": user,
         "host": host
     }

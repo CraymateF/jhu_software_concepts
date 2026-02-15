@@ -7,6 +7,7 @@ import os
 
 def get_db_params(dbname='gradcafe_sample'):
     """Parse DATABASE_URL or return default connection parameters"""
+    # Always use the provided dbname parameter, don't override from URL
     db_url = os.getenv('DATABASE_URL', f'postgresql://fadetoblack@localhost/{dbname}')
     
     # Parse connection string
@@ -22,19 +23,18 @@ def get_db_params(dbname='gradcafe_sample'):
         else:
             user = user_part
             password = None
+        # Extract host, ignore database name from URL (use parameter instead)
         if '/' in host_part:
-            host, db = host_part.split('/', 1)
+            host, _ = host_part.split('/', 1)  # Ignore DB from URL
         else:
             host = host_part
-            db = dbname
     else:
         user = 'fadetoblack'
         password = None
         host = 'localhost'
-        db = dbname
     
     conn_params = {
-        "dbname": db,
+        "dbname": dbname,  # Always use the parameter
         "user": user,
         "host": host
     }
