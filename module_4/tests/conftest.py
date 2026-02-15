@@ -5,10 +5,13 @@ import pytest
 import sys
 import os
 import psycopg2
-from db_helpers import get_test_db_params
 
 # Add module_4/src to Python path so tests can import modules
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+# Add tests directory to Python path so we can import db_helpers
+sys.path.insert(0, os.path.dirname(__file__))
+
+from db_helpers import get_test_db_params
 
 
 @pytest.fixture
