@@ -11,7 +11,7 @@ import tempfile
 from unittest.mock import Mock, patch, MagicMock, call
 import threading
 import time
-from conftest import get_test_db_params
+from db_helpers import get_test_db_params
 
 
 @pytest.mark.db

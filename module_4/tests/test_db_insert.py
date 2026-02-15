@@ -10,7 +10,7 @@ import pytest
 import psycopg2
 import os
 from datetime import datetime
-from conftest import get_test_db_params
+from db_helpers import get_test_db_params
 
 
 @pytest.fixture

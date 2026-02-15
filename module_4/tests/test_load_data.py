@@ -9,7 +9,7 @@ import json
 import tempfile
 import os
 from unittest.mock import patch, MagicMock
-from conftest import get_test_db_params
+from db_helpers import get_test_db_params
 
 
 @pytest.mark.db

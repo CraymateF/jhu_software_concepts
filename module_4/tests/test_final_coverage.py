@@ -8,7 +8,7 @@ import tempfile
 import os
 from unittest.mock import patch, MagicMock
 import psycopg2
-from conftest import get_test_db_params
+from db_helpers import get_test_db_params
 
 from data_updater import extract_numeric, add_new_records_to_db
 from load_data import load_data

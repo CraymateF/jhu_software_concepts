@@ -5,7 +5,7 @@ These tests cover edge cases and alternative code paths.
 """
 import pytest
 import psycopg2
-from conftest import get_test_db_params
+from db_helpers import get_test_db_params
 
 
 @pytest.mark.web
