@@ -130,4 +130,4 @@ JHU Software Concepts - Module 4
 Zhendong Zhang - 8A80D7
 
 ## Read the Docs Host:
-Vist 'https://jhu-software-projects.readthedocs.io/en/latest/'
+Visit: https://jhu-software-projects.readthedocs.io/en/latest/
