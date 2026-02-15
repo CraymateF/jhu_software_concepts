@@ -1,0 +1,779 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference &mdash; GradCafe Analysis Application 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Testing Guide" href="testing.html" />
+    <link rel="prev" title="Architecture" href="architecture.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GradCafe Analysis Application
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview &amp; Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#flask-application-app-py">Flask Application (app.py)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#application-factory">Application Factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#route-handlers">Route Handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#query-module-query-data-py">Query Module (query_data.py)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#database-connection">Database Connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#query-functions">Query Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-loader-load-data-py">Data Loader (load_data.py)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#main-functions">Main Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-updater-data-updater-py">Data Updater (data_updater.py)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#helper-functions">Helper Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#database-operations">Database Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scraping-workflow">Scraping Workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-module_2_code.scrape">Scraper Module (scrape.py)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module_2_code.scrape.GradCafeScraper"><code class="docutils literal notranslate"><span class="pre">GradCafeScraper</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module_2_code.scrape.GradCafeScraper.__init__"><code class="docutils literal notranslate"><span class="pre">GradCafeScraper.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module_2_code.scrape.GradCafeScraper.scrape_data"><code class="docutils literal notranslate"><span class="pre">GradCafeScraper.scrape_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module_2_code.scrape.GradCafeScraper.save_data"><code class="docutils literal notranslate"><span class="pre">GradCafeScraper.save_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module_2_code.scrape.GradCafeScraper.load_data"><code class="docutils literal notranslate"><span class="pre">GradCafeScraper.load_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module_2_code.scrape.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gradcafescraper-class">GradCafeScraper Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">GradCafeScraper</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-module_2_code.clean">Cleaner Module (clean.py)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module_2_code.clean.GradCafeDataCleaner"><code class="docutils literal notranslate"><span class="pre">GradCafeDataCleaner</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module_2_code.clean.GradCafeDataCleaner.__init__"><code class="docutils literal notranslate"><span class="pre">GradCafeDataCleaner.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module_2_code.clean.GradCafeDataCleaner.clean_data"><code class="docutils literal notranslate"><span class="pre">GradCafeDataCleaner.clean_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module_2_code.clean.GradCafeDataCleaner.load_data"><code class="docutils literal notranslate"><span class="pre">GradCafeDataCleaner.load_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module_2_code.clean.GradCafeDataCleaner.save_data"><code class="docutils literal notranslate"><span class="pre">GradCafeDataCleaner.save_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module_2_code.clean.apply_llm_standardization"><code class="docutils literal notranslate"><span class="pre">apply_llm_standardization()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module_2_code.clean.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gradcafedatacleaner-class">GradCafeDataCleaner Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id7"><code class="docutils literal notranslate"><span class="pre">GradCafeDataCleaner</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#llm-functions">LLM Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id12"><code class="docutils literal notranslate"><span class="pre">apply_llm_standardization()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#database-setup-setup-databases-py">Database Setup (setup_databases.py)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#return-value-conventions">Return Value Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#error-handling">Error Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GradCafe Analysis Application</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h1>
+<p>This section provides detailed API documentation for the main modules of the GradCafe Analysis Application.</p>
+<section id="flask-application-app-py">
+<h2>Flask Application (app.py)<a class="headerlink" href="#flask-application-app-py" title="Link to this heading"></a></h2>
+<section id="application-factory">
+<h3>Application Factory<a class="headerlink" href="#application-factory" title="Link to this heading"></a></h3>
+<p>The application factory pattern allows dependency injection for testing.</p>
+<p><strong>Parameters</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">query_func</span></code> (callable, optional): Custom query function for testing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scraper_func</span></code> (callable, optional): Custom scraper function for testing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status_func</span></code> (callable, optional): Custom status function for testing</p></li>
+</ul>
+<p><strong>Returns</strong>: Flask application instance</p>
+<p><strong>Example</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">app</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_app</span>
+
+<span class="c1"># Production</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">create_app</span><span class="p">()</span>
+
+<span class="c1"># Testing with mocks</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">mock_query</span><span class="p">(</span><span class="n">dbname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;q1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="s2">&quot;Test&quot;</span><span class="p">,</span> <span class="s2">&quot;answer&quot;</span><span class="p">:</span> <span class="mi">42</span><span class="p">}}</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">create_app</span><span class="p">(</span><span class="n">query_func</span><span class="o">=</span><span class="n">mock_query</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="route-handlers">
+<h3>Route Handlers<a class="headerlink" href="#route-handlers" title="Link to this heading"></a></h3>
+<p>The following routes are available:</p>
+<dl>
+<dt><strong>GET /</strong> or <strong>GET /analysis</strong></dt><dd><p>Display the main analysis page with all query results.</p>
+<p><strong>Query Parameters</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">db</span></code> (optional): Database name (default: <code class="docutils literal notranslate"><span class="pre">gradcafe_sample</span></code>)</p></li>
+</ul>
+<p><strong>Returns</strong>: HTML page with analysis results</p>
+<p><strong>Example</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:8080/
+curl<span class="w"> </span>http://localhost:8080/analysis?db<span class="o">=</span>gradcafe_test
+</pre></div>
+</div>
+</dd>
+<dt><strong>POST /pull-data</strong> or <strong>POST /pull_data</strong></dt><dd><p>Trigger data scraping from GradCafe.</p>
+<p><strong>Request Body</strong> (JSON):</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;dbname&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;gradcafe_sample&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;max_pages&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Responses</strong>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">200</span> <span class="pre">OK</span></code>: Scraping started successfully</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;started&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Scraping initiated&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">409</span> <span class="pre">Conflict</span></code>: Scraping already in progress</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;busy&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Scraping already in progress&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</dd>
+<dt><strong>POST /update-analysis</strong></dt><dd><p>Request to update analysis (refresh page with latest data).</p>
+<p><strong>Responses</strong>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">200</span> <span class="pre">OK</span></code>: Ready to update</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Analysis ready to update&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p><a href="#id1"><span class="problematic" id="id2">``</span></a>409 Conflict**: Scraping in progress, cannot update</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;busy&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Cannot update while scraping in progress&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</dd>
+<dt><strong>GET /scraping_status</strong></dt><dd><p>Check the current status of scraping operations.</p>
+<p><strong>Response</strong> (JSON):</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;is_running&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;status_message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Ready&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;last_run&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-02-14T10:30:00&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;records_added&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+</section>
+<section id="query-module-query-data-py">
+<h2>Query Module (query_data.py)<a class="headerlink" href="#query-module-query-data-py" title="Link to this heading"></a></h2>
+<section id="database-connection">
+<h3>Database Connection<a class="headerlink" href="#database-connection" title="Link to this heading"></a></h3>
+</section>
+<section id="query-functions">
+<h3>Query Functions<a class="headerlink" href="#query-functions" title="Link to this heading"></a></h3>
+<p>All query functions follow a consistent pattern and return a dictionary with:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">question</span></code>: The question being answered</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">query</span></code>: The SQL query executed</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">answer</span></code>: The result (format varies by question)</p></li>
+</ul>
+</section>
+</section>
+<section id="data-loader-load-data-py">
+<h2>Data Loader (load_data.py)<a class="headerlink" href="#data-loader-load-data-py" title="Link to this heading"></a></h2>
+<section id="main-functions">
+<h3>Main Functions<a class="headerlink" href="#main-functions" title="Link to this heading"></a></h3>
+</section>
+</section>
+<section id="data-updater-data-updater-py">
+<h2>Data Updater (data_updater.py)<a class="headerlink" href="#data-updater-data-updater-py" title="Link to this heading"></a></h2>
+<section id="helper-functions">
+<h3>Helper Functions<a class="headerlink" href="#helper-functions" title="Link to this heading"></a></h3>
+</section>
+<section id="database-operations">
+<h3>Database Operations<a class="headerlink" href="#database-operations" title="Link to this heading"></a></h3>
+</section>
+<section id="scraping-workflow">
+<h3>Scraping Workflow<a class="headerlink" href="#scraping-workflow" title="Link to this heading"></a></h3>
+</section>
+</section>
+<section id="module-module_2_code.scrape">
+<span id="scraper-module-scrape-py"></span><h2>Scraper Module (scrape.py)<a class="headerlink" href="#module-module_2_code.scrape" title="Link to this heading"></a></h2>
+<p>Grad Cafe Web Scraper Module</p>
+<p>This module provides functionality to scrape graduate admissions data from The Grad Cafe.
+It uses urllib for HTTP requests and BeautifulSoup for HTML parsing.</p>
+<p>Author: Student
+Date: 2026-02-01</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="module_2_code.scrape.GradCafeScraper">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">module_2_code.scrape.</span></span><span class="sig-name descname"><span class="pre">GradCafeScraper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://www.thegradcafe.com/survey/index.php'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/module_2_code/scrape.html#GradCafeScraper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_2_code.scrape.GradCafeScraper" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class to scrape graduate admissions data from The Grad Cafe website.</p>
+<p>This scraper extracts applicant data including program, university, status,
+scores, and other relevant information from applicant postings.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="module_2_code.scrape.GradCafeScraper.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://www.thegradcafe.com/survey/index.php'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/module_2_code/scrape.html#GradCafeScraper.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_2_code.scrape.GradCafeScraper.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize the scraper with the base URL of Grad Cafe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>base_url</strong> – The base URL for Grad Cafe survey</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_2_code.scrape.GradCafeScraper.scrape_data">
+<span class="sig-name descname"><span class="pre">scrape_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_pages</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/module_2_code/scrape.html#GradCafeScraper.scrape_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_2_code.scrape.GradCafeScraper.scrape_data" title="Link to this definition"></a></dt>
+<dd><p>Scrape applicant data from Grad Cafe.</p>
+<p>This method fetches multiple pages of applicant postings and extracts
+structured data from each entry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>max_pages</strong> – Maximum number of pages to scrape (None for all available)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of dictionaries containing applicant data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_2_code.scrape.GradCafeScraper.save_data">
+<span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'raw_data.json'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/module_2_code/scrape.html#GradCafeScraper.save_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_2_code.scrape.GradCafeScraper.save_data" title="Link to this definition"></a></dt>
+<dd><p>Save scraped data to a JSON file in sample_data.json format.</p>
+<p>Format:
+{</p>
+<blockquote>
+<div><p>“university”: “University Name”,
+“program”: “Program Name”,
+“status”: “Accepted|Rejected|Wait listed”,
+“term”: “Date or semester info”,
+“date_added”: “Added on YYYY-MM-DD”,
+“url”: “URL to Grad Cafe entry”,
+“US/International”: “American|International”,
+“Degree”: “Masters|PhD|etc”,
+“GPA”: “GPA X.XX”,
+“comments”: “User comments”</p>
+</div></blockquote>
+<p>}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> – Output filename</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if successful, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_2_code.scrape.GradCafeScraper.load_data">
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/module_2_code/scrape.html#GradCafeScraper.load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_2_code.scrape.GradCafeScraper.load_data" title="Link to this definition"></a></dt>
+<dd><p>Load previously scraped data from a JSON file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> – Input filename</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if successful, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="module_2_code.scrape.main">
+<span class="sig-prename descclassname"><span class="pre">module_2_code.scrape.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/module_2_code/scrape.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_2_code.scrape.main" title="Link to this definition"></a></dt>
+<dd><p>Main entry point for the scraper.</p>
+</dd></dl>
+
+<section id="gradcafescraper-class">
+<h3>GradCafeScraper Class<a class="headerlink" href="#gradcafescraper-class" title="Link to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="id0">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">module_2_code.scrape.</span></span><span class="sig-name descname"><span class="pre">GradCafeScraper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://www.thegradcafe.com/survey/index.php'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/module_2_code/scrape.html#GradCafeScraper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>A class to scrape graduate admissions data from The Grad Cafe website.</p>
+<p>This scraper extracts applicant data including program, university, status,
+scores, and other relevant information from applicant postings.</p>
+<p>Main class for scraping GradCafe website.</p>
+<p><strong>Key Methods</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">scrape_data(max_pages=None)</span></code>: Scrape multiple pages</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scrape_page(page_num)</span></code>: Scrape a single page</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parse_result_row(row)</span></code>: Parse a table row into a dictionary</p></li>
+</ul>
+<p><strong>Example</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">module_2_code.scrape</span><span class="w"> </span><span class="kn">import</span> <span class="n">GradCafeScraper</span>
+
+<span class="n">scraper</span> <span class="o">=</span> <span class="n">GradCafeScraper</span><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">scraper</span><span class="o">.</span><span class="n">scrape_data</span><span class="p">(</span><span class="n">max_pages</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Scraped </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> results&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://www.thegradcafe.com/survey/index.php'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/module_2_code/scrape.html#GradCafeScraper.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd><p>Initialize the scraper with the base URL of Grad Cafe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>base_url</strong> – The base URL for Grad Cafe survey</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">scrape_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_pages</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/module_2_code/scrape.html#GradCafeScraper.scrape_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd><p>Scrape applicant data from Grad Cafe.</p>
+<p>This method fetches multiple pages of applicant postings and extracts
+structured data from each entry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>max_pages</strong> – Maximum number of pages to scrape (None for all available)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of dictionaries containing applicant data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'raw_data.json'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/module_2_code/scrape.html#GradCafeScraper.save_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd><p>Save scraped data to a JSON file in sample_data.json format.</p>
+<p>Format:
+{</p>
+<blockquote>
+<div><p>“university”: “University Name”,
+“program”: “Program Name”,
+“status”: “Accepted|Rejected|Wait listed”,
+“term”: “Date or semester info”,
+“date_added”: “Added on YYYY-MM-DD”,
+“url”: “URL to Grad Cafe entry”,
+“US/International”: “American|International”,
+“Degree”: “Masters|PhD|etc”,
+“GPA”: “GPA X.XX”,
+“comments”: “User comments”</p>
+</div></blockquote>
+<p>}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> – Output filename</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if successful, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/module_2_code/scrape.html#GradCafeScraper.load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd><p>Load previously scraped data from a JSON file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> – Input filename</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if successful, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="module-module_2_code.clean">
+<span id="cleaner-module-clean-py"></span><h2>Cleaner Module (clean.py)<a class="headerlink" href="#module-module_2_code.clean" title="Link to this heading"></a></h2>
+<p>Data Cleaning Module for Grad Cafe Data</p>
+<p>This module provides functionality to clean and standardize raw Grad Cafe data.
+For LLM-based standardization, see llm_hosting/app.py.</p>
+<p>Author: Student
+Date: 2026-02-01</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="module_2_code.clean.GradCafeDataCleaner">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">module_2_code.clean.</span></span><span class="sig-name descname"><span class="pre">GradCafeDataCleaner</span></span><a class="reference internal" href="_modules/module_2_code/clean.html#GradCafeDataCleaner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_2_code.clean.GradCafeDataCleaner" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class to clean and standardize graduate admissions data from Grad Cafe.</p>
+<p>Performs data validation and standardization.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="module_2_code.clean.GradCafeDataCleaner.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/module_2_code/clean.html#GradCafeDataCleaner.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_2_code.clean.GradCafeDataCleaner.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize the data cleaner.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_2_code.clean.GradCafeDataCleaner.clean_data">
+<span class="sig-name descname"><span class="pre">clean_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'applicant_data.json'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/module_2_code/clean.html#GradCafeDataCleaner.clean_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_2_code.clean.GradCafeDataCleaner.clean_data" title="Link to this definition"></a></dt>
+<dd><p>Load, clean, and save applicant data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_file</strong> – Path to raw JSON data file</p></li>
+<li><p><strong>output_file</strong> – Path to save cleaned JSON data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of cleaned data dictionaries</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_2_code.clean.GradCafeDataCleaner.load_data">
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/module_2_code/clean.html#GradCafeDataCleaner.load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_2_code.clean.GradCafeDataCleaner.load_data" title="Link to this definition"></a></dt>
+<dd><p>Load raw data from JSON file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> – Input filename</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if successful, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="module_2_code.clean.GradCafeDataCleaner.save_data">
+<span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/module_2_code/clean.html#GradCafeDataCleaner.save_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_2_code.clean.GradCafeDataCleaner.save_data" title="Link to this definition"></a></dt>
+<dd><p>Save cleaned data to JSON file.
+Filters out None/null values and 0/0.0 score values.
+Formats field names (underscore -&gt; space, capitalize each word, GRE/GPA all caps).
+Reorders fields for better organization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Data to save</p></li>
+<li><p><strong>filename</strong> – Output filename</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if successful, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="module_2_code.clean.apply_llm_standardization">
+<span class="sig-prename descclassname"><span class="pre">module_2_code.clean.</span></span><span class="sig-name descname"><span class="pre">apply_llm_standardization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/module_2_code/clean.html#apply_llm_standardization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_2_code.clean.apply_llm_standardization" title="Link to this definition"></a></dt>
+<dd><p>Apply LLM-based standardization to program/university names.</p>
+<p>This function standardizes abbreviated or combined program/university names
+using a local LLM and adds two new fields:
+- ‘llm-generated-program’: Standardized program name
+- ‘llm-generated-university’: Standardized university name</p>
+<p>This requires llm_hosting dependencies to be installed.
+If dependencies are missing, returns False without error.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_file</strong> – Path to JSON file with cleaned applicant data</p></li>
+<li><p><strong>output_file</strong> – Path to save standardized output (defaults to input_file)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if successful, False if dependencies missing or error occurred</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">clean</span><span class="w"> </span><span class="kn">import</span> <span class="n">apply_llm_standardization</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">apply_llm_standardization</span><span class="p">(</span><span class="s1">&#39;applicant_data.json&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="module_2_code.clean.main">
+<span class="sig-prename descclassname"><span class="pre">module_2_code.clean.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/module_2_code/clean.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#module_2_code.clean.main" title="Link to this definition"></a></dt>
+<dd><p>Main entry point for the data cleaner.</p>
+</dd></dl>
+
+<section id="gradcafedatacleaner-class">
+<h3>GradCafeDataCleaner Class<a class="headerlink" href="#gradcafedatacleaner-class" title="Link to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="id7">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">module_2_code.clean.</span></span><span class="sig-name descname"><span class="pre">GradCafeDataCleaner</span></span><a class="reference internal" href="_modules/module_2_code/clean.html#GradCafeDataCleaner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dd><p>A class to clean and standardize graduate admissions data from Grad Cafe.</p>
+<p>Performs data validation and standardization.</p>
+<p>Main class for cleaning and standardizing scraped data.</p>
+<p><strong>Key Methods</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">clean_data(input_file,</span> <span class="pre">output_file=None)</span></code>: Clean data from JSON file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">normalize_date(date_str)</span></code>: Standardize date formats</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">normalize_numeric(value)</span></code>: Extract and validate numeric values</p></li>
+</ul>
+<p><strong>Example</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">module_2_code.clean</span><span class="w"> </span><span class="kn">import</span> <span class="n">GradCafeDataCleaner</span>
+
+<span class="n">cleaner</span> <span class="o">=</span> <span class="n">GradCafeDataCleaner</span><span class="p">()</span>
+<span class="n">cleaned</span> <span class="o">=</span> <span class="n">cleaner</span><span class="o">.</span><span class="n">clean_data</span><span class="p">(</span><span class="s2">&quot;raw_data.json&quot;</span><span class="p">,</span> <span class="s2">&quot;clean_data.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/module_2_code/clean.html#GradCafeDataCleaner.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dd><p>Initialize the data cleaner.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">clean_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'applicant_data.json'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/module_2_code/clean.html#GradCafeDataCleaner.clean_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<dd><p>Load, clean, and save applicant data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_file</strong> – Path to raw JSON data file</p></li>
+<li><p><strong>output_file</strong> – Path to save cleaned JSON data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of cleaned data dictionaries</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/module_2_code/clean.html#GradCafeDataCleaner.load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
+<dd><p>Load raw data from JSON file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> – Input filename</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if successful, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/module_2_code/clean.html#GradCafeDataCleaner.save_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
+<dd><p>Save cleaned data to JSON file.
+Filters out None/null values and 0/0.0 score values.
+Formats field names (underscore -&gt; space, capitalize each word, GRE/GPA all caps).
+Reorders fields for better organization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Data to save</p></li>
+<li><p><strong>filename</strong> – Output filename</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if successful, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="llm-functions">
+<h3>LLM Functions<a class="headerlink" href="#llm-functions" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-prename descclassname"><span class="pre">module_2_code.clean.</span></span><span class="sig-name descname"><span class="pre">apply_llm_standardization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/module_2_code/clean.html#apply_llm_standardization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
+<dd><p>Apply LLM-based standardization to program/university names.</p>
+<p>This function standardizes abbreviated or combined program/university names
+using a local LLM and adds two new fields:
+- ‘llm-generated-program’: Standardized program name
+- ‘llm-generated-university’: Standardized university name</p>
+<p>This requires llm_hosting dependencies to be installed.
+If dependencies are missing, returns False without error.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_file</strong> – Path to JSON file with cleaned applicant data</p></li>
+<li><p><strong>output_file</strong> – Path to save standardized output (defaults to input_file)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if successful, False if dependencies missing or error occurred</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">clean</span><span class="w"> </span><span class="kn">import</span> <span class="n">apply_llm_standardization</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">apply_llm_standardization</span><span class="p">(</span><span class="s1">&#39;applicant_data.json&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Applies LLM-based standardization to program and university names.</p>
+<p><strong>Parameters</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">input_file</span></code> (str): Path to cleaned data JSON</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_file</span></code> (str): Path for LLM-enhanced output</p></li>
+</ul>
+<p><strong>Returns</strong>: bool - True if successful</p>
+</dd></dl>
+
+</section>
+</section>
+<section id="database-setup-setup-databases-py">
+<h2>Database Setup (setup_databases.py)<a class="headerlink" href="#database-setup-setup-databases-py" title="Link to this heading"></a></h2>
+<section id="utility-functions">
+<h3>Utility Functions<a class="headerlink" href="#utility-functions" title="Link to this heading"></a></h3>
+<p>Functions for creating and managing PostgreSQL databases and schema.</p>
+<p><strong>Example</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">setup_databases</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_database</span><span class="p">,</span> <span class="n">create_schema</span>
+
+<span class="n">create_database</span><span class="p">(</span><span class="s2">&quot;gradcafe_sample&quot;</span><span class="p">)</span>
+<span class="n">create_schema</span><span class="p">(</span><span class="s2">&quot;gradcafe_sample&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="return-value-conventions">
+<h2>Return Value Conventions<a class="headerlink" href="#return-value-conventions" title="Link to this heading"></a></h2>
+<p>All query functions return dictionaries with these keys:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">question</span></code>: Human-readable question text</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">query</span></code>: SQL statement that was executed</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">answer</span></code>: Query result in appropriate format:</p>
+<ul>
+<li><p>Scalar: int or float</p></li>
+<li><p>Percentage: str formatted as “XX.XX%”</p></li>
+<li><p>Dictionary: dict with named fields</p></li>
+<li><p>Table: list of lists</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h2>
+<p>All database functions handle errors gracefully:</p>
+<ul class="simple">
+<li><p>Connection errors return None or empty sets</p></li>
+<li><p>Query errors return default values</p></li>
+<li><p>Scraping errors update global status with error message</p></li>
+</ul>
+<p><strong>Example</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">query_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">question_1</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">question_1</span><span class="p">(</span><span class="s2">&quot;nonexistent_db&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Query failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="s2">&quot;answer&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="architecture.html" class="btn btn-neutral float-left" title="Architecture" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="testing.html" class="btn btn-neutral float-right" title="Testing Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, JHU Software Concepts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
