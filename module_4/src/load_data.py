@@ -3,6 +3,45 @@ import psycopg2
 from psycopg2.extras import execute_values
 from datetime import datetime
 import sys
+import os
+
+def get_db_params(dbname='gradcafe_sample'):
+    """Parse DATABASE_URL or return default connection parameters"""
+    db_url = os.getenv('DATABASE_URL', f'postgresql://fadetoblack@localhost/{dbname}')
+    
+    # Parse connection string
+    if db_url.startswith('postgresql://'):
+        db_url = db_url.replace('postgresql://', '')
+    
+    # Parse username:password@host/dbname
+    if '@' in db_url:
+        user_part, host_part = db_url.split('@', 1)
+        # Extract password if present
+        if ':' in user_part:
+            user, password = user_part.split(':', 1)
+        else:
+            user = user_part
+            password = None
+        if '/' in host_part:
+            host, db = host_part.split('/', 1)
+        else:
+            host = host_part
+            db = dbname
+    else:
+        user = 'fadetoblack'
+        password = None
+        host = 'localhost'
+        db = dbname
+    
+    conn_params = {
+        "dbname": db,
+        "user": user,
+        "host": host
+    }
+    if password:
+        conn_params["password"] = password
+    
+    return conn_params
 
 def load_data(dbname=None, file_path=None):
     """
@@ -19,11 +58,7 @@ def load_data(dbname=None, file_path=None):
     if file_path is None:
         file_path = 'module_3/sample_data/llm_extend_applicant_data.json'
     
-    conn_params = {
-        "dbname": dbname,
-        "user": "fadetoblack", 
-        "host": "localhost"
-    }
+    conn_params = get_db_params(dbname)
 
     conn = None
     try:

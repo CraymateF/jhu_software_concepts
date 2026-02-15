@@ -1,16 +1,47 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
+import os
 
 def get_db_connection(dbname=None):
     """Create and return a database connection"""
     if dbname is None:
         dbname = "gradcafe_sample"
     
+    # Parse DATABASE_URL or use defaults
+    db_url = os.getenv('DATABASE_URL', f'postgresql://fadetoblack@localhost/{dbname}')
+    
+    # Parse connection string  
+    if db_url.startswith('postgresql://'):
+        db_url = db_url.replace('postgresql://', '')
+    
+    # Parse username:password@host/dbname
+    if '@' in db_url:
+        user_part, host_part = db_url.split('@', 1)
+        # Extract password if present
+        if ':' in user_part:
+            user, password = user_part.split(':', 1)
+        else:
+            user = user_part
+            password = None
+        if '/' in host_part:
+            host, db = host_part.split('/', 1)
+        else:
+            host = host_part
+            db = dbname
+    else:
+        user = 'fadetoblack'
+        password = None
+        host = 'localhost'
+        db = dbname
+    
     conn_params = {
-        "dbname": dbname,
-        "user": "fadetoblack",
-        "host": "localhost"
+        "dbname": db,
+        "user": user,
+        "host": host
     }
+    if password:
+        conn_params["password"] = password
+    
     return psycopg2.connect(**conn_params)
 
 def question_1(dbname=None):
