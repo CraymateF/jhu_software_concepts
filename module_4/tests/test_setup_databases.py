@@ -26,36 +26,27 @@ def test_run_command_handles_existing_database():
     # Get postgres credentials from DATABASE_URL if available
     db_url = os.getenv('DATABASE_URL', '')
     if 'postgres:postgres@' in db_url:
-        # GitHub Actions environment
-        user_flag = '-U postgres'
+        # GitHub Actions environment - use TCP connection
+        user_flag = ['-U', 'postgres', '-h', 'localhost']
         env_password = 'postgres'
     else:
         # Local environment
-        user_flag = ''
+        user_flag = []
         env_password = None
     
     # Cleanup first if exists (directly using subprocess to handle errors)
     env = os.environ.copy()
     if env_password:
         env['PGPASSWORD'] = env_password
-    cmd_parts = ['dropdb']
-    if user_flag:
-        cmd_parts.extend(['-U', 'postgres'])
-    cmd_parts.append('test_temp_db')
+    cmd_parts = ['dropdb'] + user_flag + ['test_temp_db']
     subprocess.run(cmd_parts, env=env, capture_output=True)  # Ignore result
     
     # Create the database - this should succeed
-    cmd_parts = ['createdb']
-    if user_flag:
-        cmd_parts.extend(['-U', 'postgres'])
-    cmd_parts.append('test_temp_db')
+    cmd_parts = ['createdb'] + user_flag + ['test_temp_db']
     result1 = subprocess.run(cmd_parts, env=env, capture_output=True)
     assert result1.returncode == 0, f"Create failed: {result1.stderr.decode()}"
     
     # Cleanup - this should succeed
-    cmd_parts = ['dropdb']
-    if user_flag:
-        cmd_parts.extend(['-U', 'postgres'])
-    cmd_parts.append('test_temp_db')
+    cmd_parts = ['dropdb'] + user_flag + ['test_temp_db']
     result2 = subprocess.run(cmd_parts, env=env, capture_output=True)
     assert result2.returncode == 0, f"Drop failed: {result2.stderr.decode()}"
