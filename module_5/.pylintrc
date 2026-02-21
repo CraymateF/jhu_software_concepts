@@ -1,0 +1,19 @@
+[MASTER]
+# Add module_2_code to the path for imports
+init-hook='import sys; import os; sys.path.append(os.path.join(os.path.dirname(__file__), "src", "module_2_code"))'
+
+[MESSAGES CONTROL]
+# Disable specific checks that are not applicable to this project
+disable=
+    duplicate-code,
+    import-error
+
+[FORMAT]
+max-line-length=120
+
+[DESIGN]
+# Relax some design constraints for data processing functions
+max-locals=50
+max-statements=120
+max-branches=20
+max-attributes=15

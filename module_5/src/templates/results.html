@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GradCafe Database Query Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <div class="header-left">
+                    <h1>GradCafe Database Analysis</h1>
+                    <p class="subtitle">Graduate School Admissions Data Insights</p>
+                    <div class="database-indicator">
+                        <span class="db-label">Current Database:</span>
+                        <span class="db-name">{{ db_info[current_db].display_name }}</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button id="switchDatabaseBtn" class="control-btn switch-db-btn" data-testid="switch-database-btn" title="Switch between Full Dataset and Sample Dataset">
+                        <span class="btn-icon">🔄</span>
+                        <span class="btn-text">Switch Database</span>
+                    </button>
+                    <button id="updateAnalysisBtn" class="control-btn update-btn" data-testid="update-analysis-btn" title="Refresh the page to display the most up-to-date analysis with the latest data from the database">
+                        <span class="btn-icon">🔄</span>
+                        <span class="btn-text">Update Analysis</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="data-controls">
+                <button id="pullDataBtn" class="pull-data-btn" data-testid="pull-data-btn">
+                    <span class="btn-icon">📥</span>
+                    <span class="btn-text">Pull Data</span>
+                </button>
+                <p class="control-description">
+                    <strong>Pull Data:</strong> Automatically scrape the latest graduate admissions data from GradCafe website and add new entries to the database. 
+                    This process runs in the background and may take a few minutes.
+                </p>
+            </div>
+            
+            <div id="statusMessage" class="status-message" style="display: none;">
+                <div class="status-content">
+                    <span class="status-icon">⏳</span>
+                    <span id="statusText">Ready</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="results-grid">
+            <!-- Question 1 -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>Question 1</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q1.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-label-prefix">Answer:</span>
+                        <span class="answer-value">{{ results.q1.answer }}</span>
+                        <span class="answer-label">entries</span>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q1.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>Question 2</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q2.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q2.answer }}</span>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q2.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>Question 3</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q3.question }}</p>
+                    <div class="stats-grid">
+                        <div class="stat">
+                            <span class="stat-label">Avg GPA</span>
+                            <span class="stat-value">{{ results.q3.answer.avg_gpa }}</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Avg GRE</span>
+                            <span class="stat-value">{{ results.q3.answer.avg_gre }}</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Avg GRE V</span>
+                            <span class="stat-value">{{ results.q3.answer.avg_gre_v }}</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Avg GRE AW</span>
+                            <span class="stat-value">{{ results.q3.answer.avg_gre_aw }}</span>
+                        </div>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q3.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>Question 4</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q4.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q4.answer }}</span>
+                        <span class="answer-label">GPA</span>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q4.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>Question 5</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q5.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q5.answer }}</span>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q5.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>Question 6</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q6.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q6.answer }}</span>
+                        <span class="answer-label">GPA</span>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q6.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>Question 7</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q7.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q7.answer }}</span>
+                        <span class="answer-label">entries</span>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q7.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>Question 8</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q8.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q8.answer }}</span>
+                        <span class="answer-label">acceptances</span>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q8.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>Question 9</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q9.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q9.answer }}</span>
+                        <span class="answer-label">acceptances (using LLM fields)</span>
+                    </div>
+                    <p class="comparison">Original count (Q8): {{ results.q8.answer }}</p>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q9.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 10 (Additional Question 1) -->
+            <div class="result-card additional">
+                <div class="card-header">
+                    <h2>Additional Question 1</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q10.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q10.answer }}</span>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q10.query }}</pre>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 11 (Additional Question 2) -->
+            <div class="result-card additional full-width">
+                <div class="card-header">
+                    <h2>Additional Question 2</h2>
+                </div>
+                <div class="card-body">
+                    <p class="question">{{ results.q11.question }}</p>
+                    <div class="table-container">
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>University</th>
+                                    <th>Average GPA</th>
+                                    <th>Number of Acceptances</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in results.q11.answer %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ row[0] }}</td>
+                                    <td>{{ row[1] }}</td>
+                                    <td>{{ row[2] }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <details>
+                        <summary>View SQL Query</summary>
+                        <pre class="query">{{ results.q11.query }}</pre>
+                    </details>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Data Source: GradCafe Database | JHU Software Concepts Module 3</p>
+        </footer>
+    </div>
+    
+    <script>
+        let statusCheckInterval = null;
+        
+        // Pull Data button functionality
+        document.getElementById('pullDataBtn').addEventListener('click', async function() {
+            const btn = this;
+            const currentDb = '{{ current_db }}';
+            btn.disabled = true;
+            
+            // Show status message
+            const statusDiv = document.getElementById('statusMessage');
+            const statusText = document.getElementById('statusText');
+            statusDiv.style.display = 'block';
+            statusText.textContent = 'Starting data scraping for ' + currentDb + '...';
+            
+            try {
+                const response = await fetch('/pull_data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        max_pages: 2,
+                        dbname: currentDb
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusText.textContent = 'Scraping in progress...';
+                    // Start polling for status updates
+                    startStatusPolling();
+                } else {
+                    statusText.textContent = data.message;
+                    btn.disabled = false;
+                    setTimeout(() => {
+                        statusDiv.style.display = 'none';
+                    }, 3000);
+                }
+            } catch (error) {
+                statusText.textContent = 'Error starting scraper: ' + error.message;
+                btn.disabled = false;
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 3000);
+            }
+        });
+        
+        // Switch Database button functionality
+        document.getElementById('switchDatabaseBtn').addEventListener('click', function() {
+            const currentDb = '{{ current_db }}';
+            const targetDb = currentDb === 'gradcafe' ? 'gradcafe_sample' : 'gradcafe';
+            const targetName = targetDb === 'gradcafe' ? 'My Dataset (Module 2)' : 'Provided Dataset (Module 3)';
+            
+            if (confirm('Switch to ' + targetName + '?\n\nThis will reload the page with data from a different database.')) {
+                window.location.href = '/?db=' + targetDb;
+            }
+        });
+        
+        // Update Analysis button functionality
+        document.getElementById('updateAnalysisBtn').addEventListener('click', async function() {
+            const btn = this;
+            const originalHTML = btn.innerHTML;
+            
+            // Check if scraping is running
+            try {
+                const statusResponse = await fetch('/scraping_status');
+                const statusData = await statusResponse.json();
+                
+                if (statusData.is_running) {
+                    alert('⚠️ Cannot update analysis while data pull is in progress.\n\nPlease wait for the scraping to complete, then try again.');
+                    return;
+                }
+                
+                btn.disabled = true;
+                btn.innerHTML = '<span class="btn-icon">⏳</span><span class="btn-text">Updating...</span>';
+                
+                // Reload the page to get fresh data
+                window.location.reload();
+                
+            } catch (error) {
+                alert('Error updating analysis: ' + error.message);
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
+        });
+        
+        // Poll for scraping status updates
+        function startStatusPolling() {
+            if (statusCheckInterval) {
+                clearInterval(statusCheckInterval);
+            }
+            
+            statusCheckInterval = setInterval(async () => {
+                try {
+                    const response = await fetch('/scraping_status');
+                    const status = await response.json();
+                    
+                    const statusText = document.getElementById('statusText');
+                    statusText.textContent = status.status_message;
+                    
+                    if (!status.is_running) {
+                        clearInterval(statusCheckInterval);
+                        statusCheckInterval = null;
+                        
+                        // Re-enable pull data button
+                        document.getElementById('pullDataBtn').disabled = false;
+                        
+                        // Show completion message
+                        if (status.records_added > 0) {
+                            statusText.textContent = '✅ ' + status.status_message;
+                            setTimeout(() => {
+                                if (confirm('🎉 New data has been added to the database!\n\n' + status.records_added + ' new records were added.\n\nWould you like to refresh the page to see the updated analysis?')) {
+                                    window.location.reload();
+                                } else {
+                                    document.getElementById('statusMessage').style.display = 'none';
+                                }
+                            }, 2000);
+                        } else {
+                            setTimeout(() => {
+                                document.getElementById('statusMessage').style.display = 'none';
+                            }, 5000);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error checking status:', error);
+                }
+            }, 2000); // Check every 2 seconds
+        }
+        
+        // Check initial status on page load
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch('/scraping_status');
+                const status = await response.json();
+                
+                if (status.is_running) {
+                    const statusDiv = document.getElementById('statusMessage');
+                    const statusText = document.getElementById('statusText');
+                    statusDiv.style.display = 'block';
+                    statusText.textContent = status.status_message;
+                    document.getElementById('pullDataBtn').disabled = true;
+                    startStatusPolling();
+                }
+            } catch (error) {
+                console.error('Error checking initial status:', error);
+            }
+        });
+    </script>
+</body>
+</html>

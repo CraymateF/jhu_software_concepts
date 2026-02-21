@@ -1,0 +1,36 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.2, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/fadetoblack/repo/jhu_software_concepts/module_4
+configfile: pytest.ini
+plugins: anyio-4.12.1, cov-7.0.0
+collected 100 items
+
+tests/test_analysis_format.py ....                                       [  4%]
+tests/test_buttons.py .......                                            [ 11%]
+tests/test_coverage_improvements.py ........                             [ 19%]
+tests/test_data_updater.py ................................              [ 51%]
+tests/test_db_insert.py .....                                            [ 56%]
+tests/test_final_coverage.py ....                                        [ 60%]
+tests/test_flask_page.py ...Starting Grad Cafe scraper...
+Scraping page 0: https://www.thegradcafe.com/survey/index.php?page=0
+..                                           [ 65%]
+tests/test_integration_end_to_end.py ....                                [ 69%]
+tests/test_load_data.py ...................                              [ 88%]
+tests/test_query_connection.py .                                         [ 89%]
+tests/test_query_functions.py .........                                  [ 98%]
+tests/test_setup_databases.py ..                                         [100%]
+
+================================ tests coverage ================================
+_______________ coverage: platform darwin, python 3.13.2-final-0 _______________
+
+Name                  Stmts   Miss  Cover   Missing
+---------------------------------------------------
+src/__init__.py           0      0   100%
+src/app.py               47      0   100%
+src/data_updater.py     193      0   100%
+src/load_data.py        132      0   100%
+src/query_data.py       109      0   100%
+---------------------------------------------------
+TOTAL                   481      0   100%
+Required test coverage of 100% reached. Total coverage: 100.00%
+============================= 100 passed in 1.82s ==============================

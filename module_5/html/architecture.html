@@ -1,0 +1,372 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Architecture &mdash; GradCafe Analysis Application 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="api.html" />
+    <link rel="prev" title="Overview &amp; Setup" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GradCafe Analysis Application
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview &amp; Setup</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#system-architecture">System Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#architectural-layers">Architectural Layers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#web-layer">Web Layer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#etl-layer">ETL Layer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#database-layer">Database Layer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#design-patterns">Design Patterns</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#application-factory-pattern">Application Factory Pattern</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dependency-injection">Dependency Injection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#repository-pattern">Repository Pattern</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#background-processing">Background Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-flow">Data Flow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pull-data-flow">Pull Data Flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#update-analysis-flow">Update Analysis Flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#query-flow">Query Flow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#operational-notes">Operational Notes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#busy-state-policy">Busy-State Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#idempotency-strategy">Idempotency Strategy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#uniqueness-keys">Uniqueness Keys</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#scalability-considerations">Scalability Considerations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#current-limitations">Current Limitations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#future-improvements">Future Improvements</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GradCafe Analysis Application</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Architecture</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/architecture.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="architecture">
+<h1>Architecture<a class="headerlink" href="#architecture" title="Link to this heading"></a></h1>
+<section id="system-architecture">
+<h2>System Architecture<a class="headerlink" href="#system-architecture" title="Link to this heading"></a></h2>
+<p>The GradCafe Analysis Application follows a three-tier architecture:</p>
+<img alt="Architecture Diagram" class="align-center" src="_static/architecture_diagram.png" />
+<p>(Note: Create an architecture diagram showing Web → ETL → Database layers)</p>
+</section>
+<section id="architectural-layers">
+<h2>Architectural Layers<a class="headerlink" href="#architectural-layers" title="Link to this heading"></a></h2>
+<section id="web-layer">
+<h3>Web Layer<a class="headerlink" href="#web-layer" title="Link to this heading"></a></h3>
+<p><strong>Responsibility</strong>: Handle HTTP requests, render templates, manage user interactions</p>
+<p><strong>Components</strong>:</p>
+<ul class="simple">
+<li><p><strong>Flask Application</strong> (<code class="docutils literal notranslate"><span class="pre">app.py</span></code>): Main application factory and route handlers</p></li>
+<li><p><strong>Templates</strong> (<code class="docutils literal notranslate"><span class="pre">templates/</span></code>): Jinja2 HTML templates for rendering</p></li>
+<li><p><strong>Static Assets</strong> (<code class="docutils literal notranslate"><span class="pre">static/</span></code>): CSS, JavaScript, images</p></li>
+</ul>
+<p><strong>Key Features</strong>:</p>
+<ul class="simple">
+<li><p>RESTful API endpoints for data operations</p></li>
+<li><p>Server-side rendering with Jinja2</p></li>
+<li><p>AJAX support for asynchronous operations</p></li>
+<li><p>Busy-state management to prevent concurrent operations</p></li>
+</ul>
+<p><strong>Routes</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/</span></code> or <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/analysis</span></code>: Display analysis page</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/pull-data</span></code>: Trigger data scraping</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/update-analysis</span></code>: Refresh analysis</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/scraping_status</span></code>: Check scraping status</p></li>
+</ul>
+</section>
+<section id="etl-layer">
+<h3>ETL Layer<a class="headerlink" href="#etl-layer" title="Link to this heading"></a></h3>
+<p><strong>Responsibility</strong>: Extract, Transform, and Load data from GradCafe website</p>
+<p><strong>Components</strong>:</p>
+<ul class="simple">
+<li><p><strong>Scraper</strong> (<code class="docutils literal notranslate"><span class="pre">module_2_code/scrape.py</span></code>): Web scraping logic</p></li>
+<li><p><strong>Cleaner</strong> (<code class="docutils literal notranslate"><span class="pre">module_2_code/clean.py</span></code>): Data cleaning and standardization</p></li>
+<li><p><strong>Data Updater</strong> (<code class="docutils literal notranslate"><span class="pre">data_updater.py</span></code>): Orchestrates scraping and database updates</p></li>
+<li><p><strong>Loader</strong> (<code class="docutils literal notranslate"><span class="pre">load_data.py</span></code>): Batch data loading utilities</p></li>
+</ul>
+<p><strong>ETL Pipeline</strong>:</p>
+<ol class="arabic simple">
+<li><p><strong>Extract</strong>: Scrape data from GradCafe using BeautifulSoup</p></li>
+<li><p><strong>Transform</strong>: Clean and standardize fields (dates, GPAs, GRE scores)</p></li>
+<li><p><strong>Load</strong>: Insert into PostgreSQL with duplicate detection</p></li>
+</ol>
+<p><strong>Data Quality</strong>:</p>
+<ul class="simple">
+<li><p>URL-based uniqueness constraint prevents duplicates</p></li>
+<li><p>NUL character removal for PostgreSQL compatibility</p></li>
+<li><p>Date format standardization</p></li>
+<li><p>Numeric value extraction and validation</p></li>
+</ul>
+</section>
+<section id="database-layer">
+<h3>Database Layer<a class="headerlink" href="#database-layer" title="Link to this heading"></a></h3>
+<p><strong>Responsibility</strong>: Persist and query admissions data</p>
+<p><strong>Components</strong>:</p>
+<ul class="simple">
+<li><p><strong>Query Module</strong> (<code class="docutils literal notranslate"><span class="pre">query_data.py</span></code>): Parameterized SQL queries</p></li>
+<li><p><strong>PostgreSQL Database</strong>: Relational storage with JSONB support</p></li>
+<li><p><strong>Setup Module</strong> (<code class="docutils literal notranslate"><span class="pre">setup_databases.py</span></code>): Schema initialization</p></li>
+</ul>
+<p><strong>Schema Design</strong>:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">gradcafe_main</span></code> table uses:</p>
+<ul class="simple">
+<li><p><strong>p_id</strong>: Auto-incrementing primary key</p></li>
+<li><p><strong>url</strong>: Unique constraint for idempotency</p></li>
+<li><p><strong>raw_data</strong>: JSONB field for flexibility</p></li>
+<li><p><strong>Indexes</strong>: On frequently queried fields (term, status, university)</p></li>
+</ul>
+<p><strong>Query Functions</strong>:</p>
+<p>Each query function returns a dictionary with:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">question</span></code>: Human-readable question text</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">query</span></code>: SQL statement executed</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">answer</span></code>: Query result (scalar, dict, or list)</p></li>
+</ul>
+</section>
+</section>
+<section id="design-patterns">
+<h2>Design Patterns<a class="headerlink" href="#design-patterns" title="Link to this heading"></a></h2>
+<section id="application-factory-pattern">
+<h3>Application Factory Pattern<a class="headerlink" href="#application-factory-pattern" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">create_app()</span></code> factory allows dependency injection for testing:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">create_app</span><span class="p">(</span><span class="n">query_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scraper_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">status_func</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="c1"># Create Flask app with injected dependencies</span>
+    <span class="c1"># Enables mocking in tests</span>
+</pre></div>
+</div>
+</section>
+<section id="dependency-injection">
+<h3>Dependency Injection<a class="headerlink" href="#dependency-injection" title="Link to this heading"></a></h3>
+<p>All external dependencies (database, scraper, queries) can be injected:</p>
+<ul class="simple">
+<li><p>Facilitates unit testing without real database/network</p></li>
+<li><p>Allowsswapping implementations (e.g., test vs. production)</p></li>
+<li><p>Improves testability and modularity</p></li>
+</ul>
+</section>
+<section id="repository-pattern">
+<h3>Repository Pattern<a class="headerlink" href="#repository-pattern" title="Link to this heading"></a></h3>
+<p>Database access is abstracted through query functions:</p>
+<ul class="simple">
+<li><p>Single responsibility: each function handles one query</p></li>
+<li><p>Consistent return format (dict with question/query/answer)</p></li>
+<li><p>Easy to test and modify</p></li>
+</ul>
+</section>
+<section id="background-processing">
+<h3>Background Processing<a class="headerlink" href="#background-processing" title="Link to this heading"></a></h3>
+<p>Scraping runs in a separate thread:</p>
+<ul class="simple">
+<li><p>Non-blocking: users can continue browsing</p></li>
+<li><p>Status tracking: global state shows progress</p></li>
+<li><p>Busy gating: prevents concurrent scrapes</p></li>
+</ul>
+</section>
+</section>
+<section id="data-flow">
+<h2>Data Flow<a class="headerlink" href="#data-flow" title="Link to this heading"></a></h2>
+<section id="pull-data-flow">
+<h3>Pull Data Flow<a class="headerlink" href="#pull-data-flow" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>User clicks “Pull Data” button</p></li>
+<li><p>AJAX POST to <code class="docutils literal notranslate"><span class="pre">/pull-data</span></code></p></li>
+<li><p>Backend checks if scraping already in progress</p></li>
+<li><p>If free, starts background thread:</p>
+<ol class="loweralpha simple">
+<li><p>Scrape GradCafe pages</p></li>
+<li><p>Clean and standardize data</p></li>
+<li><p>Check for existing URLs</p></li>
+<li><p>Insert new records to database</p></li>
+</ol>
+</li>
+<li><p>Return success response</p></li>
+<li><p>Frontend polls <code class="docutils literal notranslate"><span class="pre">/scraping_status</span></code> for updates</p></li>
+</ol>
+</section>
+<section id="update-analysis-flow">
+<h3>Update Analysis Flow<a class="headerlink" href="#update-analysis-flow" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>User clicks “Update Analysis” button</p></li>
+<li><p>AJAX POST to <code class="docutils literal notranslate"><span class="pre">/update-analysis</span></code></p></li>
+<li><p>Backend checks if scraping in progress</p></li>
+<li><p>If free, return success</p></li>
+<li><p>Frontend reloads page to fetch latest data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/analysis</span></code> queries database and renders results</p></li>
+</ol>
+</section>
+<section id="query-flow">
+<h3>Query Flow<a class="headerlink" href="#query-flow" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Route handler calls <code class="docutils literal notranslate"><span class="pre">run_all_queries()</span></code></p></li>
+<li><p>Each query function:</p>
+<ol class="loweralpha simple">
+<li><p>Connects to database</p></li>
+<li><p>Executes SQL</p></li>
+<li><p>Formats result</p></li>
+<li><p>Returns dict</p></li>
+</ol>
+</li>
+<li><p>Template renders results with HTML</p></li>
+</ol>
+</section>
+</section>
+<section id="operational-notes">
+<h2>Operational Notes<a class="headerlink" href="#operational-notes" title="Link to this heading"></a></h2>
+<section id="busy-state-policy">
+<h3>Busy-State Policy<a class="headerlink" href="#busy-state-policy" title="Link to this heading"></a></h3>
+<p>To ensure data consistency:</p>
+<ul class="simple">
+<li><p>Only one scraping operation allowed at a time</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/update-analysis</span></code> blocked during scraping</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/pull-data</span></code> blocked if already scraping</p></li>
+<li><p>Enforced via global <code class="docutils literal notranslate"><span class="pre">scraping_status</span></code> variable</p></li>
+</ul>
+<p><strong>HTTP Status Codes</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">200</span></code>: Success</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">409</span> <span class="pre">Conflict</span></code>: Busy, try again later</p></li>
+</ul>
+</section>
+<section id="idempotency-strategy">
+<h3>Idempotency Strategy<a class="headerlink" href="#idempotency-strategy" title="Link to this heading"></a></h3>
+<p>Duplicate prevention via:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">url</span></code> field has UNIQUE constraint</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_existing_urls()</span></code> checks before insert</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ON</span> <span class="pre">CONFLICT</span></code> handling (if implemented)</p></li>
+</ul>
+<p><strong>Result</strong>: Running pull-data multiple times with same data won’t create duplicates</p>
+</section>
+<section id="uniqueness-keys">
+<h3>Uniqueness Keys<a class="headerlink" href="#uniqueness-keys" title="Link to this heading"></a></h3>
+<p>Primary uniqueness identifier: <strong>url</strong></p>
+<ul class="simple">
+<li><p>Each GradCafe post has unique URL</p></li>
+<li><p>Used to detect and skip duplicates</p></li>
+<li><p>Ensures data integrity across multiple pulls</p></li>
+</ul>
+</section>
+</section>
+<section id="scalability-considerations">
+<h2>Scalability Considerations<a class="headerlink" href="#scalability-considerations" title="Link to this heading"></a></h2>
+<section id="current-limitations">
+<h3>Current Limitations<a class="headerlink" href="#current-limitations" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Single-threaded scraping</p></li>
+<li><p>Global state for busy tracking</p></li>
+<li><p>In-memory status (lost on restart)</p></li>
+<li><p>Blocking database queries</p></li>
+</ul>
+</section>
+<section id="future-improvements">
+<h3>Future Improvements<a class="headerlink" href="#future-improvements" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Message queue (Celery) for task management</p></li>
+<li><p>Redis for distributed state</p></li>
+<li><p>Connection pooling for database</p></li>
+<li><p>Async/await for non-blocking queries</p></li>
+<li><p>Pagination for large result sets</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="overview.html" class="btn btn-neutral float-left" title="Overview &amp; Setup" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, JHU Software Concepts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

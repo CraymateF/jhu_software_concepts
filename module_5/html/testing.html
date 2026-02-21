@@ -1,0 +1,840 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Testing Guide &mdash; GradCafe Analysis Application 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="API Reference" href="api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GradCafe Analysis Application
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview &amp; Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Testing Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#test-organization">Test Organization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#test-markers">Test Markers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#running-tests">Running Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#run-all-tests">Run All Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-specific-test-categories">Run Specific Test Categories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-multiple-categories">Run Multiple Categories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-with-coverage">Run with Coverage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#verbose-output">Verbose Output</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#test-files">Test Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#test-suite-structure">Test Suite Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-flask-page-py">test_flask_page.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-buttons-py">test_buttons.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-analysis-format-py">test_analysis_format.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-db-insert-py">test_db_insert.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-integration-end-to-end-py">test_integration_end_to_end.py</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#shared-fixtures-conftest-py">Shared Fixtures (conftest.py)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#app-fixture">app Fixture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#client-fixture">client Fixture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-db-fixture">test_db Fixture</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#test-doubles-and-mocking">Test Doubles and Mocking</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mock-object-examples">Mock Object Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spy-pattern">Spy Pattern</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#html-selectors">HTML Selectors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#test-selector-conventions">Test Selector Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#coverage-requirements">Coverage Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#coverage-requirement">100% Coverage Requirement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#excluded-files">Excluded Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coverage-report-formats">Coverage Report Formats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#writing-new-tests">Writing New Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#debugging-failed-tests">Debugging Failed Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#continuous-integration">Continuous Integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#github-actions-workflow">GitHub Actions Workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#local-ci-simulation">Local CI Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GradCafe Analysis Application</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Testing Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/testing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="testing-guide">
+<h1>Testing Guide<a class="headerlink" href="#testing-guide" title="Link to this heading"></a></h1>
+<p>This guide covers how to run tests, understand test organization, and use test doubles/fixtures provided by the test suite.</p>
+<section id="test-organization">
+<h2>Test Organization<a class="headerlink" href="#test-organization" title="Link to this heading"></a></h2>
+<p>The test suite is organized into five categories using pytest markers. All 100 tests have markers - no unmarked tests are allowed.</p>
+<section id="test-markers">
+<h3>Test Markers<a class="headerlink" href="#test-markers" title="Link to this heading"></a></h3>
+<p>All tests must be marked with one or more of the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">web</span>        <span class="c1"># Flask route/page tests (5 tests)</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">buttons</span>    <span class="c1"># Button endpoints &amp; busy-state behavior (7 tests)</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">analysis</span>   <span class="c1"># Formatting/rounding of analysis output (4 tests)</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">db</span>         <span class="c1"># Database schema/inserts/selects (60+ tests)</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">integration</span>  <span class="c1"># End-to-end flows (4 tests)</span>
+</pre></div>
+</div>
+<p><strong>Total</strong>: 100 tests with 100% code coverage</p>
+</section>
+</section>
+<section id="running-tests">
+<h2>Running Tests<a class="headerlink" href="#running-tests" title="Link to this heading"></a></h2>
+<section id="run-all-tests">
+<h3>Run All Tests<a class="headerlink" href="#run-all-tests" title="Link to this heading"></a></h3>
+<p>Execute the entire test suite (required command per project policy):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>module_4
+pytest<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;web or buttons or analysis or db or integration&quot;</span>
+</pre></div>
+</div>
+<p><strong>Expected output</strong>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>============================= test session starts ==============================
+100 passed in 1.77s
+================================ tests coverage ================================
+Name                  Stmts   Miss  Cover
+---------------------------------------------------
+src/__init__.py           0      0   100%
+src/app.py               47      0   100%
+src/data_updater.py     193      0   100%
+src/load_data.py        132      0   100%
+src/query_data.py       109      0   100%
+---------------------------------------------------
+TOTAL                   481      0   100%
+Required test coverage of 100% reached. Total coverage: 100.00%
+</pre></div>
+</div>
+</section>
+<section id="run-specific-test-categories">
+<h3>Run Specific Test Categories<a class="headerlink" href="#run-specific-test-categories" title="Link to this heading"></a></h3>
+<p>Run only web tests:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-m<span class="w"> </span>web<span class="w"> </span>-v
+</pre></div>
+</div>
+<p>Run only button tests:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-m<span class="w"> </span>buttons<span class="w"> </span>-v
+</pre></div>
+</div>
+<p>Run only analysis formatting tests:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-m<span class="w"> </span>analysis<span class="w"> </span>-v
+</pre></div>
+</div>
+<p>Run only database tests:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-m<span class="w"> </span>db<span class="w"> </span>-v
+</pre></div>
+</div>
+<p>Run only integration tests:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-m<span class="w"> </span>integration<span class="w"> </span>-v
+</pre></div>
+</div>
+</section>
+<section id="run-multiple-categories">
+<h3>Run Multiple Categories<a class="headerlink" href="#run-multiple-categories" title="Link to this heading"></a></h3>
+<p>Combine markers using boolean expressions:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;web or buttons&quot;</span>
+pytest<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;db and not integration&quot;</span>
+pytest<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;(web or buttons) and not integration&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="run-with-coverage">
+<h3>Run with Coverage<a class="headerlink" href="#run-with-coverage" title="Link to this heading"></a></h3>
+<p>Generate coverage report (enforces 100% requirement):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>--cov<span class="o">=</span>src<span class="w"> </span>--cov-report<span class="o">=</span>term-missing
+</pre></div>
+</div>
+<p>The test suite is configured to fail if coverage is below 100%:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="c1"># pytest.ini</span>
+<span class="k">[pytest]</span>
+<span class="na">addopts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">--cov=src --cov-report=term-missing --cov-fail-under=100</span>
+</pre></div>
+</div>
+<p>Generate HTML coverage report:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>--cov<span class="o">=</span>src<span class="w"> </span>--cov-report<span class="o">=</span>html
+open<span class="w"> </span>htmlcov/index.html<span class="w">  </span><span class="c1"># macOS</span>
+xdg-open<span class="w"> </span>htmlcov/index.html<span class="w">  </span><span class="c1"># Linux</span>
+</pre></div>
+</div>
+</section>
+<section id="verbose-output">
+<h3>Verbose Output<a class="headerlink" href="#verbose-output" title="Link to this heading"></a></h3>
+<p>For detailed test output with test names:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-v<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;web or buttons or analysis or db or integration&quot;</span>
+</pre></div>
+</div>
+<p>Show stdout/print statements:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-s<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;web or buttons or analysis or db or integration&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="test-files">
+<h2>Test Files<a class="headerlink" href="#test-files" title="Link to this heading"></a></h2>
+<section id="test-suite-structure">
+<h3>Test Suite Structure<a class="headerlink" href="#test-suite-structure" title="Link to this heading"></a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>module_4/
+├── tests/
+│   ├── __init__.py
+│   ├── conftest.py                      # Shared fixtures
+│   ├── test_flask_page.py               # @pytest.mark.web
+│   ├── test_buttons.py                  # @pytest.mark.buttons
+│   ├── test_analysis_format.py          # @pytest.mark.analysis
+│   ├── test_db_insert.py                # @pytest.mark.db
+│   ├── test_integration_end_to_end.py   # @pytest.mark.integration
+│   ├── test_data_updater.py             # @pytest.mark.db
+│   ├── test_data_updater_complete.py    # @pytest.mark.db, integration
+│   ├── test_load_data.py                # @pytest.mark.db
+│   ├── test_load_data_complete.py       # @pytest.mark.db
+│   ├── test_query_functions.py          # @pytest.mark.db
+│   ├── test_query_connection.py         # @pytest.mark.db
+│   ├── test_coverage_improvements.py    # @pytest.mark.db, web
+│   ├── test_setup_databases.py          # @pytest.mark.db
+│   └── test_final_coverage.py           # @pytest.mark.db
+└── pytest.ini                           # Pytest configuration
+</pre></div>
+</div>
+</section>
+<section id="test-flask-page-py">
+<h3>test_flask_page.py<a class="headerlink" href="#test-flask-page-py" title="Link to this heading"></a></h3>
+<p><strong>Markers</strong>: <code class="docutils literal notranslate"><span class="pre">&#64;pytest.mark.web</span></code></p>
+<p><strong>Purpose</strong>: Verify Flask routes and page rendering</p>
+<p><strong>Tests</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">test_app_factory_creates_app</span></code>: App factory pattern works</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_app_has_all_required_routes</span></code>: All routes registered</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_analysis_page_returns_200</span></code>: GET /analysis succeeds</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_analysis_page_contains_required_buttons</span></code>: Buttons present in HTML</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_analysis_page_text_contains_analysis_and_answer</span></code>: Labels present</p></li>
+</ul>
+<p><strong>Selectors Used</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># HTML data-testid attributes</span>
+<span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data-testid&quot;</span><span class="p">:</span> <span class="s2">&quot;pull-data-btn&quot;</span><span class="p">})</span>
+<span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data-testid&quot;</span><span class="p">:</span> <span class="s2">&quot;update-analysis-btn&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p><strong>Fixtures Used</strong>: <code class="docutils literal notranslate"><span class="pre">app</span></code>, <code class="docutils literal notranslate"><span class="pre">client</span></code></p>
+<p><strong>Example</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">web</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_analysis_page_contains_required_buttons</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/analysis&#39;</span><span class="p">)</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
+
+    <span class="n">pull_btn</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data-testid&quot;</span><span class="p">:</span> <span class="s2">&quot;pull-data-btn&quot;</span><span class="p">})</span>
+    <span class="k">assert</span> <span class="n">pull_btn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</section>
+<section id="test-buttons-py">
+<h3>test_buttons.py<a class="headerlink" href="#test-buttons-py" title="Link to this heading"></a></h3>
+<p><strong>Markers</strong>: <code class="docutils literal notranslate"><span class="pre">&#64;pytest.mark.buttons</span></code></p>
+<p><strong>Purpose</strong>: Test button endpoints and busy-state management</p>
+<p><strong>Tests</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">test_pull_data_returns_200</span></code>: POST /pull-data succeeds</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_pull_data_triggers_loader</span></code>: Scraper function called</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_update_analysis_returns_200_when_not_busy</span></code>: POST /update-analysis when free</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_update_analysis_returns_409_when_busy</span></code>: Returns conflict when scraping</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_update_analysis_performs_no_update_when_busy</span></code>: No database changes when busy</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_pull_data_returns_409_when_already_scraping</span></code>: Prevents concurrent scraping</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_both_pull_data_routes_work</span></code>: Both /pull-data and /pull_data work</p></li>
+</ul>
+<p><strong>Test Doubles Used</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Mock scraper to avoid network calls</span>
+<span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s1">&#39;app.start_scraping&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">mock_scraper</span><span class="p">:</span>
+    <span class="n">mock_scraper</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/pull-data&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Busy-State Testing</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simulate scraping in progress</span>
+<span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s1">&#39;app.get_scraping_status&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">mock_status</span><span class="p">:</span>
+    <span class="n">mock_status</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;is_running&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/update-analysis&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">409</span>
+</pre></div>
+</div>
+<p><strong>Fixtures Used</strong>: <code class="docutils literal notranslate"><span class="pre">app</span></code>, <code class="docutils literal notranslate"><span class="pre">client</span></code></p>
+</section>
+<section id="test-analysis-format-py">
+<h3>test_analysis_format.py<a class="headerlink" href="#test-analysis-format-py" title="Link to this heading"></a></h3>
+<p><strong>Markers</strong>: <code class="docutils literal notranslate"><span class="pre">&#64;pytest.mark.analysis</span></code></p>
+<p><strong>Purpose</strong>: Verify percentage formatting and label consistency</p>
+<p><strong>Tests</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">test_page_includes_answers_label</span></code>: “Answer:” labels present</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_percentages_formatted_with_two_decimals</span></code>: XX.XX% format</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_all_percentages_have_consistent_format</span></code>: No variations</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_analysis_items_have_proper_labeling</span></code>: Structured output</p></li>
+</ul>
+<p><strong>Regex Pattern Used</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+<span class="n">percentage_pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\d+\.\d</span><span class="si">{2}</span><span class="s1">%&#39;</span>
+<span class="n">percentages</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">percentage_pattern</span><span class="p">,</span> <span class="n">html</span><span class="p">)</span>
+
+<span class="c1"># Verify all match</span>
+<span class="k">for</span> <span class="n">pct</span> <span class="ow">in</span> <span class="n">percentages</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^\d+\.\d</span><span class="si">{2}</span><span class="s1">%$&#39;</span><span class="p">,</span> <span class="n">pct</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Fixtures Used</strong>: <code class="docutils literal notranslate"><span class="pre">app</span></code>, <code class="docutils literal notranslate"><span class="pre">client</span></code></p>
+</section>
+<section id="test-db-insert-py">
+<h3>test_db_insert.py<a class="headerlink" href="#test-db-insert-py" title="Link to this heading"></a></h3>
+<p><strong>Markers</strong>: <code class="docutils literal notranslate"><span class="pre">&#64;pytest.mark.db</span></code></p>
+<p><strong>Purpose</strong>: Verify database schema, inserts, and idempotency</p>
+<p><strong>Tests</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">test_insert_on_pull_creates_new_rows</span></code>: Records inserted</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_duplicate_rows_do_not_create_duplicates</span></code>: URL uniqueness</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_query_function_returns_dict_with_expected_keys</span></code>: Return format</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_database_schema_has_required_fields</span></code>: All Module 3 fields present</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_query_handles_empty_database</span></code>: Graceful handling of empty data</p></li>
+</ul>
+<p><strong>Fixtures Used</strong>: <code class="docutils literal notranslate"><span class="pre">test_db</span></code></p>
+<p><strong>Database Setup</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_db</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create and setup a test database connection.&quot;&quot;&quot;</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+        <span class="n">dbname</span><span class="o">=</span><span class="s2">&quot;gradcafe_test&quot;</span><span class="p">,</span>
+        <span class="n">user</span><span class="o">=</span><span class="s2">&quot;fadetoblack&quot;</span><span class="p">,</span>
+        <span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Setup: Create table</span>
+    <span class="n">cur</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DROP TABLE IF EXISTS gradcafe_main;&quot;</span><span class="p">)</span>
+    <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;CREATE TABLE gradcafe_main (...);&quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="k">yield</span> <span class="n">conn</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="test-integration-end-to-end-py">
+<h3>test_integration_end_to_end.py<a class="headerlink" href="#test-integration-end-to-end-py" title="Link to this heading"></a></h3>
+<p><strong>Markers</strong>: <code class="docutils literal notranslate"><span class="pre">&#64;pytest.mark.integration</span></code></p>
+<p><strong>Purpose</strong>: Test complete workflows from start to finish</p>
+<p><strong>Tests</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">test_end_to_end_pull_update_render</span></code>: Full data flow</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_multiple_pulls_maintain_consistency</span></code>: Idempotency across pulls</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_scraping_status_tracking</span></code>: Status updates correctly</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_error_recovery</span></code>: System recovers from failures</p></li>
+</ul>
+<p><strong>Fixtures Used</strong>: <code class="docutils literal notranslate"><span class="pre">app</span></code>, <code class="docutils literal notranslate"><span class="pre">client</span></code>, <code class="docutils literal notranslate"><span class="pre">test_db</span></code></p>
+<p><strong>Workflow Testing</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Pull data</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/pull-data&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;dbname&quot;</span><span class="p">:</span> <span class="s2">&quot;gradcafe_test&quot;</span><span class="p">})</span>
+<span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+
+<span class="c1"># 2. Wait for completion (or mock)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="c1"># 3. Update analysis</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/update-analysis&#39;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+
+<span class="c1"># 4. Verify render</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/analysis&#39;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="sa">b</span><span class="s1">&#39;Answer:&#39;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="shared-fixtures-conftest-py">
+<h2>Shared Fixtures (conftest.py)<a class="headerlink" href="#shared-fixtures-conftest-py" title="Link to this heading"></a></h2>
+<p>All fixtures are defined in <code class="docutils literal notranslate"><span class="pre">tests/conftest.py</span></code> for shared access across test files.</p>
+<section id="app-fixture">
+<h3>app Fixture<a class="headerlink" href="#app-fixture" title="Link to this heading"></a></h3>
+<p>Creates a test Flask application with mocked dependencies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">app</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a test Flask app instance.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">app</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_app</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">mock_query</span><span class="p">(</span><span class="n">dbname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;q1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;question&#39;</span><span class="p">:</span> <span class="s1">&#39;Test Q1&#39;</span><span class="p">,</span> <span class="s1">&#39;answer&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span>
+            <span class="s1">&#39;q2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;question&#39;</span><span class="p">:</span> <span class="s1">&#39;Test Q2&#39;</span><span class="p">,</span> <span class="s1">&#39;answer&#39;</span><span class="p">:</span> <span class="s1">&#39;50.00%&#39;</span><span class="p">},</span>
+            <span class="c1"># ... all 11 queries</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">mock_status</span><span class="p">():</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;is_running&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;status_message&#39;</span><span class="p">:</span> <span class="s1">&#39;Ready&#39;</span><span class="p">}</span>
+
+    <span class="n">app</span> <span class="o">=</span> <span class="n">create_app</span><span class="p">(</span><span class="n">query_func</span><span class="o">=</span><span class="n">mock_query</span><span class="p">,</span> <span class="n">status_func</span><span class="o">=</span><span class="n">mock_status</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;TESTING&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">app</span>
+</pre></div>
+</div>
+<p><strong>Usage</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">web</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_something</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">app</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">assert</span> <span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;TESTING&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</section>
+<section id="client-fixture">
+<h3>client Fixture<a class="headerlink" href="#client-fixture" title="Link to this heading"></a></h3>
+<p>Creates a test client for making HTTP requests:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">client</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a test client for the Flask app.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">app</span><span class="o">.</span><span class="n">test_client</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Usage</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">web</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_route</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/analysis&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/pull-data&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;max_pages&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s1">&#39;ok&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</section>
+<section id="test-db-fixture">
+<h3>test_db Fixture<a class="headerlink" href="#test-db-fixture" title="Link to this heading"></a></h3>
+<p>Creates a fresh test database for each test:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_db</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create and setup a test database connection.&quot;&quot;&quot;</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+        <span class="n">dbname</span><span class="o">=</span><span class="s2">&quot;gradcafe_test&quot;</span><span class="p">,</span>
+        <span class="n">user</span><span class="o">=</span><span class="s2">&quot;fadetoblack&quot;</span><span class="p">,</span>
+        <span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Setup: Drop and create fresh table</span>
+    <span class="n">cur</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DROP TABLE IF EXISTS gradcafe_main;&quot;</span><span class="p">)</span>
+    <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CREATE TABLE gradcafe_main (</span>
+<span class="s2">            p_id SERIAL PRIMARY KEY,</span>
+<span class="s2">            program TEXT,</span>
+<span class="s2">            comments TEXT,</span>
+<span class="s2">            date_added DATE,</span>
+<span class="s2">            url TEXT UNIQUE,</span>
+<span class="s2">            status TEXT,</span>
+<span class="s2">            term TEXT,</span>
+<span class="s2">            us_or_international TEXT,</span>
+<span class="s2">            gpa FLOAT,</span>
+<span class="s2">            gre FLOAT,</span>
+<span class="s2">            gre_v FLOAT,</span>
+<span class="s2">            gre_aw FLOAT,</span>
+<span class="s2">            degree TEXT,</span>
+<span class="s2">            llm_generated_program TEXT,</span>
+<span class="s2">            llm_generated_university TEXT,</span>
+<span class="s2">            raw_data JSONB</span>
+<span class="s2">        );</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+    <span class="n">cur</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">yield</span> <span class="n">conn</span>
+
+    <span class="c1"># Teardown</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Usage</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">db</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_database_operation</span><span class="p">(</span><span class="n">test_db</span><span class="p">):</span>
+    <span class="n">cur</span> <span class="o">=</span> <span class="n">test_db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO gradcafe_main (url) VALUES (&#39;http://test.com&#39;)&quot;</span><span class="p">)</span>
+    <span class="n">test_db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM gradcafe_main&quot;</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="test-doubles-and-mocking">
+<h2>Test Doubles and Mocking<a class="headerlink" href="#test-doubles-and-mocking" title="Link to this heading"></a></h2>
+<section id="mock-object-examples">
+<h3>Mock Object Examples<a class="headerlink" href="#mock-object-examples" title="Link to this heading"></a></h3>
+<p><strong>Mock Query Functions</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">unittest.mock</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mock</span><span class="p">,</span> <span class="n">patch</span><span class="p">,</span> <span class="n">MagicMock</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">mock_query</span><span class="p">(</span><span class="n">dbname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;q1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;question&#39;</span><span class="p">:</span> <span class="s1">&#39;Q1&#39;</span><span class="p">,</span> <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="s1">&#39;SELECT 1&#39;</span><span class="p">,</span> <span class="s1">&#39;answer&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span>
+        <span class="s1">&#39;q2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;question&#39;</span><span class="p">:</span> <span class="s1">&#39;Q2&#39;</span><span class="p">,</span> <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="s1">&#39;SELECT 2&#39;</span><span class="p">,</span> <span class="s1">&#39;answer&#39;</span><span class="p">:</span> <span class="s1">&#39;50.00%&#39;</span><span class="p">},</span>
+    <span class="p">}</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">create_app</span><span class="p">(</span><span class="n">query_func</span><span class="o">=</span><span class="n">mock_query</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Mock Scraper</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s1">&#39;data_updater.GradCafeScraper&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">mock_scraper_class</span><span class="p">:</span>
+    <span class="n">mock_scraper</span> <span class="o">=</span> <span class="n">MagicMock</span><span class="p">()</span>
+    <span class="n">mock_scraper</span><span class="o">.</span><span class="n">scrape_data</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">&#39;University&#39;</span><span class="p">:</span> <span class="s1">&#39;MIT&#39;</span><span class="p">,</span> <span class="s1">&#39;Program&#39;</span><span class="p">:</span> <span class="s1">&#39;CS&#39;</span><span class="p">,</span> <span class="s1">&#39;Url&#39;</span><span class="p">:</span> <span class="s1">&#39;http://test.com&#39;</span><span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">mock_scraper_class</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock_scraper</span>
+
+    <span class="c1"># Now scraping will use the mock</span>
+    <span class="n">scrape_and_update_background</span><span class="p">(</span><span class="n">dbname</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">max_pages</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Mock Database Connection</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s1">&#39;query_data.psycopg2.connect&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">mock_connect</span><span class="p">:</span>
+    <span class="n">mock_conn</span> <span class="o">=</span> <span class="n">MagicMock</span><span class="p">()</span>
+    <span class="n">mock_cur</span> <span class="o">=</span> <span class="n">MagicMock</span><span class="p">()</span>
+    <span class="n">mock_cur</span><span class="o">.</span><span class="n">fetchone</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,)</span>
+    <span class="n">mock_conn</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock_cur</span>
+    <span class="n">mock_connect</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock_conn</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">question_1</span><span class="p">(</span><span class="s2">&quot;test_db&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;answer&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">100</span>
+</pre></div>
+</div>
+</section>
+<section id="spy-pattern">
+<h3>Spy Pattern<a class="headerlink" href="#spy-pattern" title="Link to this heading"></a></h3>
+<p>Verify functions were called with correct arguments:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s1">&#39;app.start_scraping&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">mock_scraper</span><span class="p">:</span>
+    <span class="n">mock_scraper</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+
+    <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/pull-data&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;dbname&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;max_pages&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
+
+    <span class="c1"># Verify called with correct args</span>
+    <span class="n">mock_scraper</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="n">dbname</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">max_pages</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="html-selectors">
+<h2>HTML Selectors<a class="headerlink" href="#html-selectors" title="Link to this heading"></a></h2>
+<section id="test-selector-conventions">
+<h3>Test Selector Conventions<a class="headerlink" href="#test-selector-conventions" title="Link to this heading"></a></h3>
+<p>All interactive elements use <code class="docutils literal notranslate"><span class="pre">data-testid</span></code> attributes for testing:</p>
+<p><strong>Buttons</strong>:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">button</span> <span class="na">data-testid</span><span class="o">=</span><span class="s">&quot;pull-data-btn&quot;</span><span class="p">&gt;</span>Pull Data<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">button</span> <span class="na">data-testid</span><span class="o">=</span><span class="s">&quot;update-analysis-btn&quot;</span><span class="p">&gt;</span>Update Analysis<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p><strong>Finding with BeautifulSoup</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">bs4</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeautifulSoup</span>
+
+<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
+<span class="n">pull_btn</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data-testid&quot;</span><span class="p">:</span> <span class="s2">&quot;pull-data-btn&quot;</span><span class="p">})</span>
+<span class="n">update_btn</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data-testid&quot;</span><span class="p">:</span> <span class="s2">&quot;update-analysis-btn&quot;</span><span class="p">})</span>
+
+<span class="k">assert</span> <span class="n">pull_btn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<span class="k">assert</span> <span class="n">pull_btn</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;Pull Data&quot;</span>
+</pre></div>
+</div>
+<p><strong>CSS Selectors</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># By data-testid</span>
+<span class="n">btn</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">select_one</span><span class="p">(</span><span class="s1">&#39;[data-testid=&quot;pull-data-btn&quot;]&#39;</span><span class="p">)</span>
+
+<span class="c1"># By class</span>
+<span class="n">answer_divs</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;.analysis-answer&#39;</span><span class="p">)</span>
+
+<span class="c1"># By tag and attribute</span>
+<span class="n">buttons</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;button[data-testid]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="coverage-requirements">
+<h2>Coverage Requirements<a class="headerlink" href="#coverage-requirements" title="Link to this heading"></a></h2>
+<section id="coverage-requirement">
+<h3>100% Coverage Requirement<a class="headerlink" href="#coverage-requirement" title="Link to this heading"></a></h3>
+<p>The project enforces 100% code coverage across all source modules:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="c1"># pytest.ini</span>
+<span class="k">[pytest]</span>
+<span class="na">addopts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">--cov=src --cov-report=term-missing --cov-fail-under=100</span>
+</pre></div>
+</div>
+<p><strong>Coverage by Module</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">src/app.py</span></code>: 100% (47 statements)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/query_data.py</span></code>: 100% (109 statements)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/data_updater.py</span></code>: 100% (193 statements)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/load_data.py</span></code>: 100% (132 statements)</p></li>
+<li><p><strong>TOTAL</strong>: 100% (481 statements)</p></li>
+</ul>
+</section>
+<section id="excluded-files">
+<h3>Excluded Files<a class="headerlink" href="#excluded-files" title="Link to this heading"></a></h3>
+<p>The following are excluded from coverage:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="c1"># .coveragerc</span>
+<span class="k">[run]</span>
+<span class="na">omit</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="na">*/module_2_code/*</span>
+<span class="w">    </span><span class="na">*/setup_databases.py</span>
+<span class="w">    </span><span class="na">*/tests/*</span>
+<span class="w">    </span><span class="na">*/__pycache__/*</span>
+</pre></div>
+</div>
+</section>
+<section id="coverage-report-formats">
+<h3>Coverage Report Formats<a class="headerlink" href="#coverage-report-formats" title="Link to this heading"></a></h3>
+<p><strong>Terminal output</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>--cov<span class="o">=</span>src<span class="w"> </span>--cov-report<span class="o">=</span>term
+</pre></div>
+</div>
+<p><strong>HTML report for browser viewing</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>--cov<span class="o">=</span>src<span class="w"> </span>--cov-report<span class="o">=</span>html
+open<span class="w"> </span>htmlcov/index.html
+</pre></div>
+</div>
+<p><strong>XML for CI/CD tools</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>--cov<span class="o">=</span>src<span class="w"> </span>--cov-report<span class="o">=</span>xml
+</pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<section id="writing-new-tests">
+<h3>Writing New Tests<a class="headerlink" href="#writing-new-tests" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p><strong>Always add a marker</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">db</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_my_new_feature</span><span class="p">():</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Use descriptive names</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_pull_data_returns_409_when_already_scraping</span><span class="p">():</span>
+    <span class="k">pass</span>
+
+<span class="c1"># Bad</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_1</span><span class="p">():</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Arrange-Act-Assert pattern</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">test_something</span><span class="p">():</span>
+    <span class="c1"># Arrange</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">}</span>
+
+    <span class="c1"># Act</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># Assert</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;success&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Use fixtures over setup/teardown</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sample_data</span><span class="p">():</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;data&quot;</span><span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_with_data</span><span class="p">(</span><span class="n">sample_data</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">sample_data</span><span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;data&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Mock external dependencies</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@patch</span><span class="p">(</span><span class="s1">&#39;module.external_api_call&#39;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_feature</span><span class="p">(</span><span class="n">mock_api</span><span class="p">):</span>
+    <span class="n">mock_api</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;ok&quot;</span><span class="p">}</span>
+    <span class="c1"># Test without hitting real API</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="debugging-failed-tests">
+<h3>Debugging Failed Tests<a class="headerlink" href="#debugging-failed-tests" title="Link to this heading"></a></h3>
+<p><strong>Run single test</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>tests/test_file.py::test_specific_function<span class="w"> </span>-v
+</pre></div>
+</div>
+<p><strong>Show print statements</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-s<span class="w"> </span>tests/test_file.py::test_specific_function
+</pre></div>
+</div>
+<p><strong>Drop into debugger on failure</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>--pdb<span class="w"> </span>tests/test_file.py
+</pre></div>
+</div>
+<p><strong>Show locals on failure</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-l<span class="w"> </span>tests/test_file.py
+</pre></div>
+</div>
+</section>
+</section>
+<section id="continuous-integration">
+<h2>Continuous Integration<a class="headerlink" href="#continuous-integration" title="Link to this heading"></a></h2>
+<section id="github-actions-workflow">
+<h3>GitHub Actions Workflow<a class="headerlink" href="#github-actions-workflow" title="Link to this heading"></a></h3>
+<p>The project includes a CI/CD workflow that runs all tests:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Tests</span>
+
+<span class="nt">on</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">push</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pull_request</span><span class="p p-Indicator">]</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">test</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+
+<span class="w">    </span><span class="nt">services</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">postgres</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:14</span>
+<span class="w">        </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+<span class="w">        </span><span class="nt">options</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;-</span>
+<span class="w">          </span><span class="no">--health-cmd pg_isready</span>
+<span class="w">          </span><span class="no">--health-interval 10s</span>
+<span class="w">          </span><span class="no">--health-timeout 5s</span>
+<span class="w">          </span><span class="no">--health-retries 5</span>
+
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v2</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v2</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.13&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install dependencies</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">cd module_4</span>
+<span class="w">          </span><span class="no">pip install -r requirements.txt</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run tests</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">cd module_4</span>
+<span class="w">          </span><span class="no">pytest -m &quot;web or buttons or analysis or db or integration&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="local-ci-simulation">
+<h3>Local CI Simulation<a class="headerlink" href="#local-ci-simulation" title="Link to this heading"></a></h3>
+<p>Simulate CI environment locally:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clean environment</span>
+python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>fresh_venv
+<span class="nb">source</span><span class="w"> </span>fresh_venv/bin/activate
+
+<span class="c1"># Install dependencies</span>
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+
+<span class="c1"># Run tests like CI does</span>
+pytest<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;web or buttons or analysis or db or integration&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<p>After reading this guide:</p>
+<ol class="arabic simple">
+<li><p>Run the test suite: <code class="docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">-m</span> <span class="pre">&quot;web</span> <span class="pre">or</span> <span class="pre">buttons</span> <span class="pre">or</span> <span class="pre">analysis</span> <span class="pre">or</span> <span class="pre">db</span> <span class="pre">or</span> <span class="pre">integration&quot;</span></code></p></li>
+<li><p>Review <a class="reference internal" href="api.html"><span class="doc">API Reference</span></a> for module documentation</p></li>
+<li><p>Explore <a class="reference internal" href="architecture.html"><span class="doc">Architecture</span></a> for system design</p></li>
+<li><p>Check test files in <code class="docutils literal notranslate"><span class="pre">tests/</span></code> directory for examples</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, JHU Software Concepts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

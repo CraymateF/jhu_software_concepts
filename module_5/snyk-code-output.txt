@@ -1,0 +1,11 @@
+
+ ERROR   Snyk Code is not enabled (SNYK-CODE-0005)
+         This error occurs when Snyk Code is not enabled for the current Organization.  
+         Activate Snyk Code and try again..                                             
+                                                                                        
+           Snyk Code is not supported for your current organization: `craymatef`.       
+
+Status:  403 Forbidden 
+Docs:    https://docs.snyk.io/scan-with-snyk/error-catalog#snyk-code-0005 
+                                                                          
+ID:      urn:snyk:interaction:d7e7f2e2-52f8-4937-8364-7b84b77144b7 

@@ -1,0 +1,572 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overview &amp; Setup &mdash; GradCafe Analysis Application 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Architecture" href="architecture.html" />
+    <link rel="prev" title="Welcome to GradCafe Analysis Application Documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GradCafe Analysis Application
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview &amp; Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#project-structure">Project Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#system-requirements">System Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-dependencies">Python Dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#database-url-optional">DATABASE_URL (Optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pythonpath-optional">PYTHONPATH (Optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flask-env-optional">FLASK_ENV (Optional)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-application">Running the Application</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#development-mode">Development Mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#production-mode">Production Mode</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#database-setup">Database Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-tests">Running Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#run-all-tests">Run All Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-with-coverage-report">Run with Coverage Report</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-specific-test-categories">Run Specific Test Categories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#verbose-output">Verbose Output</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#database-connection-issues">Database Connection Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#port-already-in-use">Port Already in Use</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#import-errors">Import Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-database-missing">Test Database Missing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scraping-fails">Scraping Fails</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#useful-commands">Useful Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#database-management">Database Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#development-workflow">Development Workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GradCafe Analysis Application</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Overview &amp; Setup</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/overview.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="overview-setup">
+<h1>Overview &amp; Setup<a class="headerlink" href="#overview-setup" title="Link to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>The GradCafe Analysis Application is a Flask-based web application that provides analysis and insights from graduate school admissions data scraped from GradCafe. The application allows users to:</p>
+<ul class="simple">
+<li><p>View statistical analysis of admissions data (11 analytical queries)</p></li>
+<li><p>Pull new data from GradCafe website (automated scraping)</p></li>
+<li><p>Update analysis with the latest database information</p></li>
+<li><p>Query data across multiple metrics (GPA, GRE scores, acceptance rates, universities)</p></li>
+</ul>
+</section>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Web Interface</strong>: Clean, responsive UI with AJAX-powered controls</p></li>
+<li><p><strong>Data Scraping</strong>: Automated scraping with BeautifulSoup4</p></li>
+<li><p><strong>ETL Pipeline</strong>: Extract, Transform, Load with data cleaning and validation</p></li>
+<li><p><strong>Database Integration</strong>: PostgreSQL with JSONB support</p></li>
+<li><p><strong>Real-time Updates</strong>: Background processing with status tracking</p></li>
+<li><p><strong>Statistical Analysis</strong>: 11 queries covering key admissions metrics</p></li>
+<li><p><strong>100% Test Coverage</strong>: Comprehensive test suite with pytest</p></li>
+</ul>
+</section>
+<section id="project-structure">
+<h2>Project Structure<a class="headerlink" href="#project-structure" title="Link to this heading"></a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>module_4/
+├── src/                     # Application source code
+│   ├── app.py              # Flask application factory
+│   ├── query_data.py       # Database queries
+│   ├── data_updater.py     # Scraping orchestration
+│   ├── load_data.py        # Batch data loader
+│   ├── setup_databases.py  # Database schema setup
+│   ├── module_2_code/      # ETL modules from Module 2
+│   │   ├── scrape.py       # GradCafe scraper
+│   │   └── clean.py        # Data cleaning
+│   ├── templates/          # Jinja2 templates
+│   └── static/             # CSS, JS, images
+├── tests/                   # Test suite (100% coverage)
+│   ├── conftest.py         # Shared fixtures
+│   ├── test_flask_page.py  # Web tests
+│   ├── test_buttons.py     # Button tests
+│   ├── test_analysis_format.py
+│   ├── test_db_insert.py
+│   ├── test_integration_end_to_end.py
+│   ├── test_data_updater_complete.py
+│   ├── test_load_data_complete.py
+│   ├── test_query_connection.py
+│   └── test_final_coverage.py
+├── docs/                    # Sphinx documentation
+├── pytest.ini              # Pytest configuration
+├── requirements.txt        # Python dependencies
+└── README.md               # Project overview
+</pre></div>
+</div>
+</section>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
+<section id="system-requirements">
+<h3>System Requirements<a class="headerlink" href="#system-requirements" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Python</strong>: 3.8 or higher (tested with 3.13.2)</p></li>
+<li><p><strong>PostgreSQL</strong>: 12 or higher</p></li>
+<li><p><strong>Memory</strong>: 2GB RAM minimum</p></li>
+<li><p><strong>Network</strong>: Internet connection required for scraping</p></li>
+<li><p><strong>OS</strong>: macOS, Linux, or Windows with WSL</p></li>
+</ul>
+</section>
+<section id="python-dependencies">
+<h3>Python Dependencies<a class="headerlink" href="#python-dependencies" title="Link to this heading"></a></h3>
+<p>Install all dependencies using pip:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>module_4
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+<p>Core packages:</p>
+<ul class="simple">
+<li><p><strong>Flask</strong> &gt;= 3.0.0 - Web framework</p></li>
+<li><p><strong>psycopg2-binary</strong> &gt;= 2.9.0 - PostgreSQL adapter</p></li>
+<li><p><strong>beautifulsoup4</strong> &gt;= 4.9.0 - HTML parsing for scraping</p></li>
+<li><p><strong>lxml</strong> &gt;= 4.6.0 - XML/HTML parser backend</p></li>
+<li><p><strong>requests</strong> &gt;= 2.31.0 - HTTP library</p></li>
+</ul>
+<p>Development packages:</p>
+<ul class="simple">
+<li><p><strong>pytest</strong> &gt;= 9.0.0 - Testing framework</p></li>
+<li><p><strong>pytest-cov</strong> &gt;= 7.0.0 - Coverage reporting</p></li>
+<li><p><strong>pytest-mock</strong> &gt;= 3.12.0 - Mocking support</p></li>
+</ul>
+</section>
+</section>
+<section id="environment-variables">
+<h2>Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading"></a></h2>
+<p>The application uses the following environment variables:</p>
+<section id="database-url-optional">
+<h3>DATABASE_URL (Optional)<a class="headerlink" href="#database-url-optional" title="Link to this heading"></a></h3>
+<p>PostgreSQL connection string. Format:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">DATABASE_URL</span><span class="o">=</span><span class="s2">&quot;postgresql://username@host/database_name&quot;</span>
+</pre></div>
+</div>
+<p><strong>Default</strong>: <code class="docutils literal notranslate"><span class="pre">postgresql://fadetoblack&#64;localhost/gradcafe_sample</span></code></p>
+<p><strong>Usage in code</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">db_url</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;DATABASE_URL&#39;</span><span class="p">,</span> <span class="s1">&#39;postgresql://user@localhost/dbname&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="pythonpath-optional">
+<h3>PYTHONPATH (Optional)<a class="headerlink" href="#pythonpath-optional" title="Link to this heading"></a></h3>
+<p>Add src directory to Python path:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PYTHONPATH</span><span class="si">}</span><span class="s2">:</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/module_4/src&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="flask-env-optional">
+<h3>FLASK_ENV (Optional)<a class="headerlink" href="#flask-env-optional" title="Link to this heading"></a></h3>
+<p>Set development or production mode:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">FLASK_ENV</span><span class="o">=</span>development<span class="w">  </span><span class="c1"># Enable debug mode</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLASK_ENV</span><span class="o">=</span>production<span class="w">   </span><span class="c1"># Disable debug mode</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p><strong>Clone and Install</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>&lt;repository-url&gt;
+<span class="nb">cd</span><span class="w"> </span>jhu_software_concepts/module_4
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</li>
+<li><p><strong>Set up PostgreSQL</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create databases</span>
+createdb<span class="w"> </span>gradcafe_sample
+createdb<span class="w"> </span>gradcafe_test<span class="w">  </span><span class="c1"># For testing</span>
+
+<span class="c1"># Initialize schema</span>
+<span class="nb">cd</span><span class="w"> </span>src
+python<span class="w"> </span>setup_databases.py
+</pre></div>
+</div>
+</li>
+<li><p><strong>Load sample data</strong> (optional):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>load_data.py<span class="w"> </span>gradcafe_sample<span class="w"> </span>sample_data/llm_extend_applicant_data.json
+</pre></div>
+</div>
+</li>
+<li><p><strong>Run the application</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>app.py
+</pre></div>
+</div>
+</li>
+<li><p><strong>Access the web interface</strong>:</p>
+<p>Open <code class="docutils literal notranslate"><span class="pre">http://localhost:8080</span></code> in your browser</p>
+</li>
+</ol>
+</section>
+<section id="running-the-application">
+<h2>Running the Application<a class="headerlink" href="#running-the-application" title="Link to this heading"></a></h2>
+<section id="development-mode">
+<h3>Development Mode<a class="headerlink" href="#development-mode" title="Link to this heading"></a></h3>
+<p><strong>Step 1</strong>: Set up your database:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>createdb<span class="w"> </span>gradcafe_sample
+<span class="nb">cd</span><span class="w"> </span>module_4/src
+python<span class="w"> </span>setup_databases.py
+</pre></div>
+</div>
+<p><strong>Step 2</strong>: (Optional) Set environment variables:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">DATABASE_URL</span><span class="o">=</span><span class="s2">&quot;postgresql://username@localhost/gradcafe_sample&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLASK_ENV</span><span class="o">=</span>development
+</pre></div>
+</div>
+<p><strong>Step 3</strong>: Start the Flask application:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>app.py
+</pre></div>
+</div>
+<p>You should see:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>* Running on http://127.0.0.1:8080
+* Debug mode: on
+</pre></div>
+</div>
+<p><strong>Step 4</strong>: Access the application at <code class="docutils literal notranslate"><span class="pre">http://localhost:8080</span></code></p>
+</section>
+<section id="production-mode">
+<h3>Production Mode<a class="headerlink" href="#production-mode" title="Link to this heading"></a></h3>
+<p>For production deployment, use a WSGI server like Gunicorn:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install Gunicorn</span>
+pip<span class="w"> </span>install<span class="w"> </span>gunicorn
+
+<span class="c1"># Run with 4 worker processes</span>
+<span class="nb">cd</span><span class="w"> </span>module_4/src
+gunicorn<span class="w"> </span>-w<span class="w"> </span><span class="m">4</span><span class="w"> </span>-b<span class="w"> </span><span class="m">0</span>.0.0.0:8080<span class="w"> </span>app:app
+
+<span class="c1"># Or with timeout settings</span>
+gunicorn<span class="w"> </span>-w<span class="w"> </span><span class="m">4</span><span class="w"> </span>-b<span class="w"> </span><span class="m">0</span>.0.0.0:8080<span class="w"> </span>--timeout<span class="w"> </span><span class="m">120</span><span class="w"> </span>app:app
+</pre></div>
+</div>
+<p><strong>Production checklist</strong>:</p>
+<ul class="simple">
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">FLASK_ENV=production</span></code></p></li>
+<li><p>Use a reverse proxy (nginx/Apache)</p></li>
+<li><p>Enable HTTPS</p></li>
+<li><p>Configure logging</p></li>
+<li><p>Set up monitoring</p></li>
+<li><p>Use connection pooling for database</p></li>
+</ul>
+</section>
+</section>
+<section id="database-setup">
+<h2>Database Setup<a class="headerlink" href="#database-setup" title="Link to this heading"></a></h2>
+<p>The application requires PostgreSQL with the following database schema:</p>
+<p><strong>gradcafe_main</strong> table structure:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">gradcafe_main</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">p_id</span><span class="w"> </span><span class="nb">SERIAL</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">program</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">comments</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">date_added</span><span class="w"> </span><span class="nb">DATE</span><span class="p">,</span>
+<span class="w">    </span><span class="n">url</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">UNIQUE</span><span class="p">,</span><span class="w">          </span><span class="c1">-- Ensures idempotency</span>
+<span class="w">    </span><span class="n">status</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w">              </span><span class="c1">-- Accepted/Rejected/Interview/Wait listed</span>
+<span class="w">    </span><span class="n">term</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w">                </span><span class="c1">-- e.g., &quot;Fall 2026&quot;</span>
+<span class="w">    </span><span class="n">us_or_international</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">gpa</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">gre</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">gre_v</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">gre_aw</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">degree</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w">              </span><span class="c1">-- PhD/Masters</span>
+<span class="w">    </span><span class="n">llm_generated_program</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">llm_generated_university</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">raw_data</span><span class="w"> </span><span class="n">JSONB</span><span class="w">            </span><span class="c1">-- Original JSON data</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<p><strong>Automatic Setup</strong>:</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">setup_databases.py</span></code> to automatically create the required schema:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>module_4/src
+python<span class="w"> </span>setup_databases.py
+</pre></div>
+</div>
+<p>This creates both <code class="docutils literal notranslate"><span class="pre">gradcafe_sample</span></code> (production) and <code class="docutils literal notranslate"><span class="pre">gradcafe_test</span></code> (testing) databases.</p>
+</section>
+<section id="running-tests">
+<h2>Running Tests<a class="headerlink" href="#running-tests" title="Link to this heading"></a></h2>
+<p>The test suite uses pytest with 100% code coverage requirement.</p>
+<section id="run-all-tests">
+<h3>Run All Tests<a class="headerlink" href="#run-all-tests" title="Link to this heading"></a></h3>
+<p>Execute the entire test suite (100 tests):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>module_4
+pytest<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;web or buttons or analysis or db or integration&quot;</span>
+</pre></div>
+</div>
+<p><strong>Expected output</strong>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>100 passed in 1.77s
+Required test coverage of 100% reached. Total coverage: 100.00%
+</pre></div>
+</div>
+</section>
+<section id="run-with-coverage-report">
+<h3>Run with Coverage Report<a class="headerlink" href="#run-with-coverage-report" title="Link to this heading"></a></h3>
+<p>Generate detailed coverage report:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>--cov<span class="o">=</span>src<span class="w"> </span>--cov-report<span class="o">=</span>term-missing
+</pre></div>
+</div>
+<p>Generate HTML coverage report:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>--cov<span class="o">=</span>src<span class="w"> </span>--cov-report<span class="o">=</span>html
+open<span class="w"> </span>htmlcov/index.html<span class="w">  </span><span class="c1"># macOS</span>
+<span class="c1"># or</span>
+xdg-open<span class="w"> </span>htmlcov/index.html<span class="w">  </span><span class="c1"># Linux</span>
+</pre></div>
+</div>
+</section>
+<section id="run-specific-test-categories">
+<h3>Run Specific Test Categories<a class="headerlink" href="#run-specific-test-categories" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-m<span class="w"> </span>web<span class="w">           </span><span class="c1"># Web interface tests (5 tests)</span>
+pytest<span class="w"> </span>-m<span class="w"> </span>buttons<span class="w">       </span><span class="c1"># Button functionality (7 tests)</span>
+pytest<span class="w"> </span>-m<span class="w"> </span>analysis<span class="w">      </span><span class="c1"># Analysis formatting (4 tests)</span>
+pytest<span class="w"> </span>-m<span class="w"> </span>db<span class="w">            </span><span class="c1"># Database operations (25+ tests)</span>
+pytest<span class="w"> </span>-m<span class="w"> </span>integration<span class="w">   </span><span class="c1"># End-to-end flows (4 tests)</span>
+</pre></div>
+</div>
+</section>
+<section id="verbose-output">
+<h3>Verbose Output<a class="headerlink" href="#verbose-output" title="Link to this heading"></a></h3>
+<p>For detailed test output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-v<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;web or buttons or analysis or db or integration&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="database-connection-issues">
+<h3>Database Connection Issues<a class="headerlink" href="#database-connection-issues" title="Link to this heading"></a></h3>
+<p>If you encounter connection errors:</p>
+<ol class="arabic">
+<li><p><strong>Verify PostgreSQL is running</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pg_isready
+<span class="c1"># Expected: /tmp:5432 - accepting connections</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Check your DATABASE_URL</strong> environment variable:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="nv">$DATABASE_URL</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Ensure the database exists</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>psql<span class="w"> </span>-l<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>gradcafe
+</pre></div>
+</div>
+</li>
+<li><p><strong>Verify user permissions</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>psql<span class="w"> </span>gradcafe_sample
+<span class="c1"># Should connect without errors</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Test connection with Python</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">psycopg2</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+    <span class="n">dbname</span><span class="o">=</span><span class="s2">&quot;gradcafe_sample&quot;</span><span class="p">,</span>
+    <span class="n">user</span><span class="o">=</span><span class="s2">&quot;yourusername&quot;</span><span class="p">,</span>
+    <span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span>
+<span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Connection successful!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="port-already-in-use">
+<h3>Port Already in Use<a class="headerlink" href="#port-already-in-use" title="Link to this heading"></a></h3>
+<p>If port 8080 is already in use, modify in <code class="docutils literal notranslate"><span class="pre">app.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s1">&#39;0.0.0.0&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8081</span><span class="p">)</span>  <span class="c1"># Change port</span>
+</pre></div>
+</div>
+</section>
+<section id="import-errors">
+<h3>Import Errors<a class="headerlink" href="#import-errors" title="Link to this heading"></a></h3>
+<p>Ensure you’re running from the correct directory and Python path is set:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>module_4/src
+<span class="nb">export</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PYTHONPATH</span><span class="si">}</span><span class="s2">:</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">&quot;</span>
+python<span class="w"> </span>app.py
+</pre></div>
+</div>
+</section>
+<section id="test-database-missing">
+<h3>Test Database Missing<a class="headerlink" href="#test-database-missing" title="Link to this heading"></a></h3>
+<p>If tests fail with “database does not exist”:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>createdb<span class="w"> </span>gradcafe_test
+<span class="c1"># Tests will create the schema automatically</span>
+</pre></div>
+</div>
+</section>
+<section id="scraping-fails">
+<h3>Scraping Fails<a class="headerlink" href="#scraping-fails" title="Link to this heading"></a></h3>
+<p>If scraping encounters errors:</p>
+<ol class="arabic simple">
+<li><p><strong>Check internet connection</strong></p></li>
+<li><p><strong>Verify GradCafe is accessible</strong>: Visit <a class="reference external" href="https://www.thegradcafe.com/">https://www.thegradcafe.com/</a></p></li>
+<li><p><strong>Check robots.txt compliance</strong>: The scraper respects robots.txt</p></li>
+<li><p><strong>Rate limiting</strong>: The scraper includes delays between requests</p></li>
+</ol>
+</section>
+</section>
+<section id="useful-commands">
+<h2>Useful Commands<a class="headerlink" href="#useful-commands" title="Link to this heading"></a></h2>
+<section id="database-management">
+<h3>Database Management<a class="headerlink" href="#database-management" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># List all databases</span>
+psql<span class="w"> </span>-l
+
+<span class="c1"># Connect to database</span>
+psql<span class="w"> </span>gradcafe_sample
+
+<span class="c1"># Count records</span>
+psql<span class="w"> </span>gradcafe_sample<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;SELECT COUNT(*) FROM gradcafe_main;&quot;</span>
+
+<span class="c1"># Drop and recreate database</span>
+dropdb<span class="w"> </span>gradcafe_sample
+createdb<span class="w"> </span>gradcafe_sample
+python<span class="w"> </span>setup_databases.py
+</pre></div>
+</div>
+</section>
+<section id="development-workflow">
+<h3>Development Workflow<a class="headerlink" href="#development-workflow" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Activate virtual environment</span>
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+
+<span class="c1"># Run tests before committing</span>
+pytest<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;web or buttons or analysis or db or integration&quot;</span>
+
+<span class="c1"># Check coverage</span>
+pytest<span class="w"> </span>--cov<span class="o">=</span>src<span class="w"> </span>--cov-report<span class="o">=</span>term
+
+<span class="c1"># Run Flask in debug mode</span>
+<span class="nb">cd</span><span class="w"> </span>src<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>python<span class="w"> </span>app.py
+
+<span class="c1"># Load fresh data</span>
+python<span class="w"> </span>load_data.py<span class="w"> </span>gradcafe_sample<span class="w"> </span>sample_data/llm_extend_applicant_data.json
+</pre></div>
+</div>
+</section>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<p>After installation:</p>
+<ol class="arabic simple">
+<li><p>Read the <a class="reference internal" href="architecture.html"><span class="doc">Architecture</span></a> guide to understand system design</p></li>
+<li><p>Explore the <a class="reference internal" href="api.html"><span class="doc">API Reference</span></a> reference for module documentation</p></li>
+<li><p>Review the <a class="reference internal" href="testing.html"><span class="doc">Testing Guide</span></a> guide for test development</p></li>
+<li><p>Check <code class="docutils literal notranslate"><span class="pre">README.md</span></code> for assignment-specific requirements</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to GradCafe Analysis Application Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="architecture.html" class="btn btn-neutral float-right" title="Architecture" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, JHU Software Concepts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

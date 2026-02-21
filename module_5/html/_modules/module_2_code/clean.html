@@ -1,0 +1,516 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>module_2_code.clean &mdash; GradCafe Analysis Application 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            GradCafe Analysis Application
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview &amp; Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GradCafe Analysis Application</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">module_2_code.clean</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for module_2_code.clean</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Data Cleaning Module for Grad Cafe Data</span>
+
+<span class="sd">This module provides functionality to clean and standardize raw Grad Cafe data.</span>
+<span class="sd">For LLM-based standardization, see llm_hosting/app.py.</span>
+
+<span class="sd">Author: Student</span>
+<span class="sd">Date: 2026-02-01</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span>
+
+
+<div class="viewcode-block" id="GradCafeDataCleaner">
+<a class="viewcode-back" href="../../api.html#module_2_code.clean.GradCafeDataCleaner">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GradCafeDataCleaner</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class to clean and standardize graduate admissions data from Grad Cafe.</span>
+<span class="sd">    </span>
+<span class="sd">    Performs data validation and standardization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="GradCafeDataCleaner.__init__">
+<a class="viewcode-back" href="../../api.html#module_2_code.clean.GradCafeDataCleaner.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the data cleaner.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+        
+<div class="viewcode-block" id="GradCafeDataCleaner.clean_data">
+<a class="viewcode-back" href="../../api.html#module_2_code.clean.GradCafeDataCleaner.clean_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clean_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;applicant_data.json&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load, clean, and save applicant data.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            input_file: Path to raw JSON data file</span>
+<span class="sd">            output_file: Path to save cleaned JSON data</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            List of cleaned data dictionaries</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading data from </span><span class="si">{</span><span class="n">input_file</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">input_file</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cleaning </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> entries...&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Apply basic cleaning to all entries</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_clean_entry</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After basic cleaning: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> entries&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Save cleaned data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cleaning complete. Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> entries to </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span></div>
+
+    
+<div class="viewcode-block" id="GradCafeDataCleaner.load_data">
+<a class="viewcode-back" href="../../api.html#module_2_code.clean.GradCafeDataCleaner.load_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load raw data from JSON file.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            filename: Input filename</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            True if successful, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> entries&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error loading data: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+<div class="viewcode-block" id="GradCafeDataCleaner.save_data">
+<a class="viewcode-back" href="../../api.html#module_2_code.clean.GradCafeDataCleaner.save_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save cleaned data to JSON file.</span>
+<span class="sd">        Filters out None/null values and 0/0.0 score values.</span>
+<span class="sd">        Formats field names (underscore -&gt; space, capitalize each word, GRE/GPA all caps).</span>
+<span class="sd">        Reorders fields for better organization.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            data: Data to save</span>
+<span class="sd">            filename: Output filename</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            True if successful, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Define desired field order for output</span>
+            <span class="n">field_order</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;university&#39;</span><span class="p">,</span> <span class="s1">&#39;program&#39;</span><span class="p">,</span> <span class="s1">&#39;degree&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;status&#39;</span><span class="p">,</span> <span class="s1">&#39;term&#39;</span><span class="p">,</span> <span class="s2">&quot;date_added&quot;</span><span class="p">,</span> <span class="s1">&#39;acceptance_date&#39;</span><span class="p">,</span> <span class="s1">&#39;rejection_date&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;GRE_General&#39;</span><span class="p">,</span> <span class="s1">&#39;GRE_Verbal&#39;</span><span class="p">,</span> <span class="s1">&#39;GRE_Quantitative&#39;</span><span class="p">,</span> <span class="s1">&#39;GRE_Analytical_Writing&#39;</span><span class="p">,</span> <span class="s1">&#39;GPA&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;degrees_country_of_origin&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;comments&#39;</span><span class="p">,</span> <span class="s1">&#39;comments_date&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;url&#39;</span><span class="p">,</span> <span class="s1">&#39;data_added_date&#39;</span><span class="p">,</span> <span class="s2">&quot;notes&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+            
+            <span class="c1"># Format and filter data</span>
+            <span class="n">cleaned_data</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="c1"># Filter out None values (null results not displayed)</span>
+                <span class="n">filtered</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="c1"># Skip 0/0.0 for score fields</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;GRE_Verbal&#39;</span><span class="p">,</span> <span class="s1">&#39;GRE_Quantitative&#39;</span><span class="p">,</span> <span class="s1">&#39;GRE_General&#39;</span><span class="p">,</span> <span class="s1">&#39;GRE_Analytical_Writing&#39;</span><span class="p">,</span> <span class="s1">&#39;GPA&#39;</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">):</span>
+                            <span class="k">continue</span>
+                    <span class="n">filtered</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+                
+                <span class="c1"># Reorder fields</span>
+                <span class="n">ordered</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">field_order</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">filtered</span><span class="p">:</span>
+                        <span class="n">ordered</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">filtered</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+                <span class="c1"># Add any remaining fields not in order list</span>
+                <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">filtered</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ordered</span><span class="p">:</span>
+                        <span class="n">ordered</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">filtered</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+                
+                <span class="c1"># Format field names</span>
+                <span class="n">formatted</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">ordered</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="c1"># Special handling for specific fields</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;degrees_country_of_origin&#39;</span><span class="p">:</span>
+                        <span class="n">formatted_key</span> <span class="o">=</span> <span class="s1">&#39;US/International&#39;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Replace underscores with spaces and capitalize</span>
+                        <span class="n">formatted_key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+                        <span class="c1"># Fix GRE and GPA capitalization</span>
+                        <span class="k">if</span> <span class="s1">&#39;Gre&#39;</span> <span class="ow">in</span> <span class="n">formatted_key</span><span class="p">:</span>
+                            <span class="n">formatted_key</span> <span class="o">=</span> <span class="n">formatted_key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Gre&#39;</span><span class="p">,</span> <span class="s1">&#39;GRE&#39;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="s1">&#39;Gpa&#39;</span> <span class="ow">in</span> <span class="n">formatted_key</span><span class="p">:</span>
+                            <span class="n">formatted_key</span> <span class="o">=</span> <span class="n">formatted_key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Gpa&#39;</span><span class="p">,</span> <span class="s1">&#39;GPA&#39;</span><span class="p">)</span>
+                    <span class="n">formatted</span><span class="p">[</span><span class="n">formatted_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                
+                <span class="n">cleaned_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">formatted</span><span class="p">)</span>
+            
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">cleaned_data</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">cleaned_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> entries to </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error saving data: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_clean_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply basic cleaning to a single entry.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            entry: Raw entry dictionary (may have formatted keys from scraper)</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Cleaned entry dictionary, or None if entry is invalid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Handle both formatted keys (from new scraper) and original keys (if re-running)</span>
+            <span class="c1"># Create a normalized key mapping</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="o">*</span><span class="n">possible_keys</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">possible_keys</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">entry</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            
+            <span class="n">cleaned</span> <span class="o">=</span> <span class="p">{}</span>
+            
+            <span class="c1"># Program name (may be &#39;program&#39; or &#39;Program&#39;)</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;program&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalize_text</span><span class="p">(</span><span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;program&#39;</span><span class="p">,</span> <span class="s1">&#39;Program&#39;</span><span class="p">))</span>
+            
+            <span class="c1"># University name (may be &#39;university&#39; or &#39;University&#39;)</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;university&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalize_text</span><span class="p">(</span><span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;university&#39;</span><span class="p">,</span> <span class="s1">&#39;University&#39;</span><span class="p">))</span>
+            
+            <span class="c1"># Status and dates</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;status&#39;</span><span class="p">,</span> <span class="s1">&#39;Applicant Status&#39;</span><span class="p">)</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;date_added&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;date_added&#39;</span><span class="p">,</span> <span class="s1">&#39;Date Addeda&#39;</span><span class="p">)</span>
+            
+            <span class="c1"># Comments</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;comments&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clean_comments</span><span class="p">(</span><span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;comments&#39;</span><span class="p">,</span> <span class="s1">&#39;Comments&#39;</span><span class="p">))</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;comments_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;comments_date&#39;</span><span class="p">,</span> <span class="s1">&#39;Comments Date&#39;</span><span class="p">)</span>
+            
+            <span class="c1"># Program timing</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;term&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;season&#39;</span><span class="p">,</span> <span class="s1">&#39;Term&#39;</span><span class="p">)</span>
+            
+            <span class="c1"># Acceptance/Rejection dates</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;acceptance_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;acceptance_date&#39;</span><span class="p">,</span> <span class="s1">&#39;Acceptance Date&#39;</span><span class="p">)</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;rejection_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;rejection_date&#39;</span><span class="p">,</span> <span class="s1">&#39;Rejection Date&#39;</span><span class="p">)</span>
+            
+            <span class="c1"># Degree type</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;degree&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;degree&#39;</span><span class="p">,</span> <span class="s1">&#39;Degree&#39;</span><span class="p">)</span>
+            
+            <span class="c1"># Scores (no boundary checks, keep as None if not provided)</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;GRE_Verbal&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;GRE_Verbal&#39;</span><span class="p">,</span> <span class="s1">&#39;GRE Verbal&#39;</span><span class="p">)</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;GRE_Quantitative&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;GRE_Quantitative&#39;</span><span class="p">,</span> <span class="s1">&#39;GRE Quantitative&#39;</span><span class="p">)</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;GRE_General&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;GRE_General&#39;</span><span class="p">,</span> <span class="s1">&#39;GRE General&#39;</span><span class="p">)</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;GRE_Analytical_Writing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;GRE_Analytical_Writing&#39;</span><span class="p">,</span> <span class="s1">&#39;GRE Analytical Writing&#39;</span><span class="p">)</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;GPA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;GPA&#39;</span><span class="p">,</span> <span class="s1">&#39;Gpa&#39;</span><span class="p">)</span>
+            
+            <span class="c1"># Student type</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;degrees_country_of_origin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;degrees_country_of_origin&#39;</span><span class="p">,</span> <span class="s1">&#39;Degrees Country Of Origin&#39;</span><span class="p">,</span> <span class="s1">&#39;US/International&#39;</span><span class="p">)</span>
+            
+            <span class="c1"># URL and metadata</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;url&#39;</span><span class="p">,</span> <span class="s1">&#39;Url&#39;</span><span class="p">)</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;data_added_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;data_added_date&#39;</span><span class="p">,</span> <span class="s1">&#39;Data Added Date&#39;</span><span class="p">)</span>
+            <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;notes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalize_text</span><span class="p">(</span><span class="n">get_value</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;notes&#39;</span><span class="p">,</span> <span class="s1">&#39;Notes&#39;</span><span class="p">))</span>
+            
+            <span class="k">return</span> <span class="n">cleaned</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error cleaning entry: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_normalize_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Normalize text by removing HTML, extra whitespace, and special characters.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            text: Raw text to normalize</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Normalized text or None if empty</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        
+        <span class="c1"># Remove HTML tags</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&lt;[^&gt;]+&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        
+        <span class="c1"># Normalize whitespace</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+        
+        <span class="c1"># Remove common HTML entities</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&amp;nbsp;&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&amp;amp;&#39;</span><span class="p">,</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&amp;quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&amp;apos;&#39;</span><span class="p">,</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_clean_comments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comments</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clean comment text, removing HTML and normalizing format.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            comments: Raw comment text</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Cleaned comments or None if empty</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">comments</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        
+        <span class="n">cleaned</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalize_text</span><span class="p">(</span><span class="n">comments</span><span class="p">)</span>
+        
+        <span class="c1"># Remove excessive punctuation</span>
+        <span class="k">if</span> <span class="n">cleaned</span><span class="p">:</span>
+            <span class="c1"># Keep reasonable length comments</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cleaned</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5000</span><span class="p">:</span>
+                <span class="n">cleaned</span> <span class="o">=</span> <span class="n">cleaned</span><span class="p">[:</span><span class="mi">5000</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span>
+        
+        <span class="k">return</span> <span class="n">cleaned</span></div>
+
+
+
+
+<div class="viewcode-block" id="apply_llm_standardization">
+<a class="viewcode-back" href="../../api.html#module_2_code.clean.apply_llm_standardization">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">apply_llm_standardization</span><span class="p">(</span><span class="n">input_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply LLM-based standardization to program/university names.</span>
+<span class="sd">    </span>
+<span class="sd">    This function standardizes abbreviated or combined program/university names</span>
+<span class="sd">    using a local LLM and adds two new fields:</span>
+<span class="sd">    - &#39;llm-generated-program&#39;: Standardized program name</span>
+<span class="sd">    - &#39;llm-generated-university&#39;: Standardized university name</span>
+<span class="sd">    </span>
+<span class="sd">    This requires llm_hosting dependencies to be installed.</span>
+<span class="sd">    If dependencies are missing, returns False without error.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        input_file: Path to JSON file with cleaned applicant data</span>
+<span class="sd">        output_file: Path to save standardized output (defaults to input_file)</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        True if successful, False if dependencies missing or error occurred</span>
+<span class="sd">        </span>
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; from clean import apply_llm_standardization</span>
+<span class="sd">        &gt;&gt;&gt; apply_llm_standardization(&#39;applicant_data.json&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+        
+        <span class="c1"># Add llm_hosting to path</span>
+        <span class="n">llm_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;llm_hosting&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">llm_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠️  llm_hosting folder not found&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">llm_dir</span><span class="p">))</span>
+        
+        <span class="c1"># Try to import LLM functions</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">app</span><span class="w"> </span><span class="kn">import</span> <span class="n">_call_llm</span>
+        <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;⚠️  LLM dependencies not installed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   To use LLM standardization, run:&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   pip install -r llm_hosting/requirements.txt&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="c1"># Load input data</span>
+        <span class="n">input_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">input_file</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">input_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: Input file not found: </span><span class="si">{</span><span class="n">input_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading </span><span class="si">{</span><span class="n">input_file</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Input must be a JSON array&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Applying LLM standardization to </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> entries...&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;(This may take several minutes depending on dataset size)&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Apply standardization to each entry</span>
+        <span class="n">standardized_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+            <span class="c1"># Get program and university from the entry</span>
+            <span class="c1"># Handle both formatted keys (&#39;Program&#39;, &#39;University&#39;) and internal keys</span>
+            <span class="n">program</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Program&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;program&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">university</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;University&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;university&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+            
+            <span class="c1"># Combine them as input to LLM (in case they&#39;re separated)</span>
+            <span class="n">program_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">program</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">university</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">program_text</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">):</span>
+                <span class="n">program_text</span> <span class="o">=</span> <span class="n">program_text</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            
+            <span class="c1"># Call LLM to standardize</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">_call_llm</span><span class="p">(</span><span class="n">program_text</span><span class="p">)</span>
+            
+            <span class="c1"># Add LLM-generated fields to entry (always present, even if empty)</span>
+            <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;LLM Generated Program&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;standardized_program&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;LLM Generated University&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;standardized_university&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+            
+            <span class="n">standardized_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+            
+            <span class="c1"># Progress indicator</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">50</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Processed </span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> entries...&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Determine output file</span>
+        <span class="k">if</span> <span class="n">output_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">output_file</span> <span class="o">=</span> <span class="n">input_file</span>
+        
+        <span class="n">output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">output_file</span>
+        
+        <span class="c1"># Save results</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">standardized_data</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ LLM standardization complete!&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Added &#39;LLM Generated Program&#39; and &#39;LLM Generated University&#39; fields&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Saved to: </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+        
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../api.html#module_2_code.clean.main">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main entry point for the data cleaner.&quot;&quot;&quot;</span>
+    <span class="n">cleaner</span> <span class="o">=</span> <span class="n">GradCafeDataCleaner</span><span class="p">()</span>
+    
+    <span class="c1"># Clean the raw data</span>
+    <span class="n">cleaner</span><span class="o">.</span><span class="n">clean_data</span><span class="p">(</span><span class="s1">&#39;applicant_data.json&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># Print summary statistics</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Cleaning Summary ===&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total entries cleaned: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">cleaner</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">apply_llm_standardization</span><span class="p">(</span><span class="s1">&#39;applicant_data.json&#39;</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="s1">&#39;llm_extend_applicant_data.json&#39;</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, JHU Software Concepts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
