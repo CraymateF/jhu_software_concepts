@@ -5,6 +5,7 @@ import json
 import os
 import sys
 from datetime import datetime
+from pathlib import Path
 
 import psycopg2
 from psycopg2.extras import execute_values
@@ -44,6 +45,13 @@ def load_data(dbname=None, file_path=None):
     if file_path is None:
         file_path = 'module_3/sample_data/llm_extend_applicant_data.json'
 
+    # Validate dbname to prevent SSRF - only alphanumeric and underscores
+    if not dbname.replace('_', '').isalnum():
+        raise ValueError(
+            f"Invalid database name: {dbname}. "
+            "Only alphanumeric characters and underscores are allowed."
+        )
+
     conn_params = get_db_params(dbname)
 
     conn = None
@@ -79,8 +87,20 @@ def load_data(dbname=None, file_path=None):
         print(f"Loading data from: {file_path}")
         print(f"Target database: {dbname}")
 
+        # Validate file path to prevent path traversal
+        abs_file_path = Path(file_path).resolve()
+        allowed_dirs = [
+            Path('module_3/sample_data').resolve(),
+            Path('sample_data').resolve(),
+            Path('.').resolve()
+        ]
+        if not any(abs_file_path.is_relative_to(d) for d in allowed_dirs):
+            raise ValueError(f"Access denied: {file_path} is outside allowed directories")
+        if not abs_file_path.exists():
+            raise FileNotFoundError(f"File not found: {file_path}")
+
         # Try to handle both standard JSON array and JSONL (newline-delimited JSON)
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(abs_file_path, 'r', encoding='utf-8') as f:
             content = f.read()
             # Remove null bytes which can cause issues with PostgreSQL
             content = content.replace('\x00', '')

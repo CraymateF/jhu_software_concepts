@@ -1,11 +1,49 @@
 
- ERROR   Snyk Code is not enabled (SNYK-CODE-0005)
-         This error occurs when Snyk Code is not enabled for the current Organization.  
-         Activate Snyk Code and try again..                                             
-                                                                                        
-           Snyk Code is not supported for your current organization: `craymatef`.       
+Testing /Users/fadetoblack/repo/jhu_software_concepts/module_5 ...
 
-Status:  403 Forbidden 
-Docs:    https://docs.snyk.io/scan-with-snyk/error-catalog#snyk-code-0005 
-                                                                          
-ID:      urn:snyk:interaction:d7e7f2e2-52f8-4937-8364-7b84b77144b7 
+Open Issues
+
+ ✗ [MEDIUM] Path Traversal
+   Finding ID: cc5b3d78-798f-4875-9feb-0e411f12d0ee
+   Path: src/load_data.py, line 103
+   Info: Unsanitized input from a command line argument flows into open, where it is used as a path. This may result in a Path Traversal vulnerability and allow an attacker to read arbitrary files.
+
+ ✗ [MEDIUM] Path Traversal
+   Finding ID: 22c1527c-c6c6-4d81-a1ab-1867d3d72487
+   Path: src/module_2_code/llm_hosting/app.py, line 313
+   Info: Unsanitized input from a command line argument flows into open, where it is used as a path. This may result in a Path Traversal vulnerability and allow an attacker to read arbitrary files.
+
+ ✗ [MEDIUM] Path Traversal
+   Finding ID: 41252069-0922-4957-a560-3dea35e5431a
+   Path: src/module_2_code/llm_hosting/app.py, line 331
+   Info: Unsanitized input from a command line argument flows into open, where it is used as a path. This may result in a Path Traversal vulnerability and allow an attacker to write arbitrary files.
+
+ ✗ [MEDIUM] Path Traversal
+   Finding ID: 7be5331b-dc60-4849-a533-8b2964fdbc17
+   Path: src/module_2_code/llm_hosting/app.py, line 342
+   Info: Unsanitized input from a command line argument flows into json.dump, where it is used as a path. This may result in a Path Traversal vulnerability and allow an attacker to write arbitrary files.
+
+ ✗ [MEDIUM] Server-Side Request Forgery (SSRF)
+   Finding ID: f90723f1-bca9-457e-952d-d9b4ca9dbe6f
+   Path: src/load_data.py, line 59
+   Info: Unsanitized input from a command line argument flows into psycopg2.connect, where it is used as an URL to perform a request. This may result in a Server Side Request Forgery vulnerability.
+
+
+
+╭────────────────────────────────────────────────────────────────────────────────╮
+│ Test Summary                                                                   │
+│                                                                                │
+│   Organization:      craymatef                                                 │
+│   Test type:         Static code analysis                                      │
+│   Project path:      /Users/fadetoblack/repo/jhu_software_concepts/module_5    │
+│                                                                                │
+│   Total issues:   5                                                            │
+│   Ignored issues: 0 [ 0 HIGH  0 MEDIUM  0 LOW ]                                │
+│   Open issues:    5 [ 0 HIGH  5 MEDIUM  0 LOW ]                                │
+╰────────────────────────────────────────────────────────────────────────────────╯
+    
+💡 Tip
+
+   To view ignored issues, use the --include-ignores option.
+                                                            
+

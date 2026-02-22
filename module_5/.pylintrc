@@ -13,7 +13,8 @@ max-line-length=120
 
 [DESIGN]
 # Relax some design constraints for data processing functions
+# Increased for security validation logic
 max-locals=50
-max-statements=120
-max-branches=20
+max-statements=130
+max-branches=25
 max-attributes=15

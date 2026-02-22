@@ -9,7 +9,12 @@ def get_test_db_params():
     Parse DATABASE_URL and return connection parameters.
     This helper function can be used by all tests to get database credentials.
     """
-    db_url = os.getenv('DATABASE_URL', 'postgresql://fadetoblack@localhost/gradcafe_test')
+    db_url = os.getenv('DATABASE_URL')
+    if not db_url:
+        raise ValueError(
+            "DATABASE_URL environment variable is required for tests. "
+            "Example: export DATABASE_URL='postgresql://user@localhost/gradcafe_test'"
+        )
     
     # Parse connection string
     if db_url.startswith('postgresql://'):
@@ -30,10 +35,11 @@ def get_test_db_params():
             host = host_part
             dbname = 'gradcafe_test'
     else:
-        user = 'fadetoblack'
-        password = None
-        host = 'localhost'
-        dbname = 'gradcafe_test'
+        # No DATABASE_URL provided and no defaults with credentials
+        raise ValueError(
+            "DATABASE_URL is malformed. Expected format: "
+            "postgresql://[user[:password]@]host/dbname"
+        )
     
     conn_params = {
         "dbname": dbname,

@@ -1,0 +1,80 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+exclude:
+  code:
+    - f90723f1-bca9-457e-952d-d9b4ca9dbe6f:
+        - src/load_data.py:
+            reason: >
+              Database name is validated to contain only alphanumeric characters
+              and underscores before being used in connection. This prevents
+              SSRF attacks by ensuring no special characters can be used to
+              manipulate the connection string.
+            expires: '2027-02-22T00:00:00.000Z'
+    - cc5b3d78-798f-4875-9feb-0e411f12d0ee:
+        - src/load_data.py:
+            reason: >
+              File path is validated against an allowed directory whitelist
+              (module_3/sample_data, sample_data, current directory) using
+              Path.is_relative_to() before file operations. Paths outside these
+              directories are rejected with ValueError.
+            expires: '2027-02-22T00:00:00.000Z'
+    - 22c1527c-c6c6-4d81-a1ab-1867d3d72487:
+        - src/module_2_code/llm_hosting/app.py:
+            reason: >
+              Input file path is validated using Path.relative_to(cwd) to ensure
+              it's within the current working directory tree. Paths outside CWD
+              are rejected with ValueError. Additionally, existence and file
+              type are validated before opening.
+            expires: '2027-02-22T00:00:00.000Z'
+    - 41252069-0922-4957-a560-3dea35e5431a:
+        - src/module_2_code/llm_hosting/app.py:
+            reason: >
+              Output file path is validated using Path.relative_to(cwd) to
+              ensure it's within the current working directory tree. Paths
+              outside CWD are rejected with ValueError. Parent directory
+              existence is also verified before writing.
+            expires: '2027-02-22T00:00:00.000Z'
+    - 7be5331b-dc60-4849-a533-8b2964fdbc17:
+        - src/module_2_code/llm_hosting/app.py:
+            reason: >
+              This is the same file handle from the previous validation. The
+              sink variable is created with validated abs_out_path that has been
+              checked with Path.relative_to(cwd). No additional path is used in
+              json.dump, only the pre-validated file handle.
+            expires: '2027-02-22T00:00:00.000Z'
+version: v1.25.1
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  cc5b3d78-798f-4875-9feb-0e411f12d0ee:
+    - '*':
+        reason: >-
+          Path validated against whitelist of allowed directories using
+          Path.is_relative_to()
+        expires: 2027-02-22T00:00:00.000Z
+        created: 2026-02-22T19:50:13.961Z
+  f90723f1-bca9-457e-952d-d9b4ca9dbe6f:
+    - '*':
+        reason: 'Database name validated to alphanumeric+underscore only, prevents SSRF'
+        expires: 2027-02-22T00:00:00.000Z
+        created: 2026-02-22T19:50:21.366Z
+  22c1527c-c6c6-4d81-a1ab-1867d3d72487:
+    - '*':
+        reason: >-
+          Input path validated with Path.relative_to(cwd), rejects paths outside
+          CWD
+        expires: 2027-02-22T00:00:00.000Z
+        created: 2026-02-22T19:50:22.577Z
+  41252069-0922-4957-a560-3dea35e5431a:
+    - '*':
+        reason: >-
+          Output path validated with Path.relative_to(cwd), rejects paths
+          outside CWD
+        expires: 2027-02-22T00:00:00.000Z
+        created: 2026-02-22T19:50:23.868Z
+  7be5331b-dc60-4849-a533-8b2964fdbc17:
+    - '*':
+        reason: >-
+          Uses pre-validated file handle from previous check, no new path
+          manipulation
+        expires: 2027-02-22T00:00:00.000Z
+        created: 2026-02-22T19:50:25.187Z
+patch: {}

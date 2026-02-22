@@ -290,14 +290,45 @@ def _cli_process_file(
     to_stdout: bool,
 ) -> None:
     """Process a JSON file and write JSONL incrementally."""
-    with open(in_path, "r", encoding="utf-8") as f:
+    # Validate input path to prevent path traversal
+    from pathlib import Path
+    import os
+    
+    # Define allowed directories (current working directory and subdirectories)
+    cwd = Path.cwd()
+    
+    abs_in_path = Path(in_path).resolve()
+    if not abs_in_path.exists():
+        raise FileNotFoundError(f"Input file not found: {in_path}")
+    if abs_in_path.is_dir():
+        raise ValueError(f"Input path is a directory: {in_path}")
+    # Ensure input file is within current working directory tree
+    try:
+        abs_in_path.relative_to(cwd)
+    except ValueError as exc:
+        raise ValueError(
+            f"Access denied: {in_path} is outside the working directory"
+        ) from exc
+    
+    with open(abs_in_path, "r", encoding="utf-8") as f:
         rows = _normalize_input(json.load(f))
 
     sink = sys.stdout if to_stdout else None
     if not to_stdout:
-        out_path = out_path or (in_path + ".jsonl")
+        # Validate output path to prevent path traversal
+        out_path = out_path or (str(abs_in_path) + ".jsonl")
+        abs_out_path = Path(out_path).resolve()
+        # Ensure output is within current working directory tree
+        try:
+            abs_out_path.relative_to(cwd)
+        except ValueError as exc:
+            raise ValueError(
+                f"Access denied: {out_path} is outside the working directory"
+            ) from exc
+        if not abs_out_path.parent.exists():
+            raise ValueError(f"Output directory does not exist: {abs_out_path.parent}")
         mode = "a" if append else "w"
-        sink = open(out_path, mode, encoding="utf-8")
+        sink = open(abs_out_path, mode, encoding="utf-8")
 
     assert sink is not None  # for type-checkers
 

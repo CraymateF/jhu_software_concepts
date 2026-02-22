@@ -8,6 +8,7 @@ This application provides a web interface to:
 
 The app uses dependency injection to allow testing with mock data sources.
 """
+import os
 from flask import Flask, render_template, jsonify, request
 from dotenv import load_dotenv
 from query_data import run_all_queries
@@ -124,4 +125,6 @@ def create_app(query_func=None, scraper_func=None, status_func=None, config=None
 application = create_app()
 
 if __name__ == '__main__':
-    application.run(debug=True, port=8080)
+    # Never use debug=True in production - use environment variable
+    debug_mode = os.getenv('FLASK_DEBUG', 'False').lower() == 'true'
+    application.run(debug=debug_mode, port=8080)
