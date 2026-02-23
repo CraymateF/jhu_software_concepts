@@ -83,6 +83,20 @@ pip install -e .
 pip install -e ".[dev]"
 ```
 
+### Why setup.py?
+
+The `setup.py` file makes this project **installable** as a Python package, providing several key benefits:
+
+1. **Dependency Management**: Declares all runtime and development dependencies in one place
+2. **Reproducible Environments**: Ensures consistent installations across different systems
+3. **Editable Mode**: Enables `pip install -e .` for development without manual PYTHONPATH configuration
+4. **Entry Points**: Allows creating command-line scripts (e.g., `gradcafe-app`, `gradcafe-setup`)
+5. **Package Distribution**: Makes the project pip-installable and potentially publishable to PyPI
+6. **Development Extras**: Separates dev/docs dependencies from runtime requirements
+7. **Metadata**: Documents project information (version, author, Python version requirements)
+
+This approach follows Python packaging best practices and makes the codebase more maintainable and distributable.
+
 Visit `http://localhost:8080` to access the application.
 
 ## Code Quality
