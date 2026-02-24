@@ -103,28 +103,18 @@ def load_data(dbname=None, file_path=None):  # pylint: disable=too-many-statemen
     conn_params = get_db_params(dbname)
 
     conn = None
+    cur = None
     try:
         conn = psycopg2.connect(**conn_params)
-        conn.autocommit = True  # Prevent transaction lock issues
         cur = conn.cursor()
 
-        # Terminate idle connections that might hold locks (test environments)
-        try:
-            cur.execute("""
-                SELECT pg_terminate_backend(pid)
-                FROM pg_stat_activity
-                WHERE datname = current_database()
-                  AND pid <> pg_backend_pid()
-                  AND state = 'idle';
-            """)
-        except psycopg2.Error:
-            pass  # Ignore if insufficient permissions
+        # Fail fast on lock waits instead of hanging CI jobs
+        cur.execute("SET lock_timeout = '5s';")
 
         # 2. Prepare table structure
         print("Cleaning up and preparing table schema...")
-        cur.execute("DROP TABLE IF EXISTS gradcafe_main CASCADE;")
         cur.execute("""
-            CREATE TABLE gradcafe_main (
+            CREATE TABLE IF NOT EXISTS gradcafe_main (
                 p_id SERIAL PRIMARY KEY,
                 program TEXT,
                 comments TEXT,
@@ -143,6 +133,7 @@ def load_data(dbname=None, file_path=None):  # pylint: disable=too-many-statemen
                 raw_data JSONB
             );
         """)
+        cur.execute("DELETE FROM gradcafe_main;")
 
         # 3. Load and parse JSON file
         print(f"Loading data from: {file_path}")
@@ -388,8 +379,9 @@ def load_data(dbname=None, file_path=None):  # pylint: disable=too-many-statemen
         if conn:
             conn.rollback()
     finally:
-        if conn:
+        if cur:
             cur.close()
+        if conn:
             conn.close()
 
 if __name__ == "__main__":
