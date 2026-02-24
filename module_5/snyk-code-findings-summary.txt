@@ -1,0 +1,50 @@
+Snyk Code Findings Summary
+Generated: 2026-02-23
+Project: /Users/fadetoblack/repo/jhu_software_concepts/module_5
+Command: snyk code test
+
+Overall Result
+- Total issues: 7
+- Open issues: 7
+- Severity breakdown: 0 HIGH, 5 MEDIUM, 2 LOW
+
+Findings
+1) [LOW] Use of Hardcoded Passwords
+   - File: tests/test_coverage_100_branches.py
+   - Lines: 40, 119
+   - Note: Detected hardcoded password-like values in test code.
+
+2) [MEDIUM] Path Traversal
+   - File: src/load_data.py
+   - Line: 167
+   - Note: CLI-controlled path flow into file open operation.
+
+3) [MEDIUM] Path Traversal
+   - File: src/module_2_code/llm_hosting/app.py
+   - Lines: 313, 331, 342
+   - Note: Path values may flow into file read/write/json operations.
+
+4) [MEDIUM] Server-Side Request Forgery (SSRF)
+   - File: src/load_data.py
+   - Line: 119
+   - Note: CLI-derived value flows into psycopg2.connect.
+
+Explanation
+- Hardcoded Passwords (LOW): Snyk found password-like text written directly in code. In this repo, those appear in test code, not production secrets, so this is low risk but still flagged as a bad pattern.
+- Path Traversal (MEDIUM): Snyk found places where input can influence file paths used by open/json operations. If input validation is weak, an attacker could try paths like ../../ to access files outside the intended folder.
+- SSRF (MEDIUM): Snyk found a path where input can influence connection targets. If untrusted input controls connection endpoints, it may be possible to make the app connect to internal/private services.
+- Why these appear: Static analysis tools are conservative. They report potentially dangerous data flow even when validation exists, so some findings are true risks while others are mitigated/false positives.
+
+Decisions & Justifications
+- [LOW] Hardcoded Passwords (tests/test_coverage_100_branches.py lines 40, 119): Accepted with justification.
+   Reason: values are test-only dummy strings, not production credentials or deployable secrets.
+
+- [MEDIUM] Path Traversal (src/load_data.py line 167): Mitigated.
+   Reason: file path handling is restricted by allowlist/boundary validation and intended directories.
+
+- [MEDIUM] Path Traversal (src/module_2_code/llm_hosting/app.py lines 313, 331, 342): Mitigated.
+   Reason: path usage is constrained by validation/working-directory controls; flagged by conservative static analysis.
+
+- [MEDIUM] SSRF (src/load_data.py line 119): Mitigated.
+   Reason: connection inputs are validated/constrained in application flow and not exposed as arbitrary outbound URL fetches.
+

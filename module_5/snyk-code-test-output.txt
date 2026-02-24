@@ -1,0 +1,59 @@
+
+Testing /Users/fadetoblack/repo/jhu_software_concepts/module_5 ...
+
+Open Issues
+
+ ✗ [LOW] Use of Hardcoded Passwords
+   Finding ID: f461a964-2ae1-48d5-82c5-35740634844c
+   Path: tests/test_coverage_100_branches.py, line 40
+   Info: Do not hardcode passwords in code. Found hardcoded password used in a dictionary key.
+
+ ✗ [LOW] Use of Hardcoded Passwords
+   Finding ID: 5c7ba1e2-2f95-424f-a779-43571806f407
+   Path: tests/test_coverage_100_branches.py, line 119
+   Info: Do not hardcode passwords in code. Found hardcoded password used in a dictionary key.
+
+ ✗ [MEDIUM] Path Traversal
+   Finding ID: cc5b3d78-798f-4875-9feb-0e411f12d0ee
+   Path: src/load_data.py, line 167
+   Info: Unsanitized input from a command line argument flows into open, where it is used as a path. This may result in a Path Traversal vulnerability and allow an attacker to read arbitrary files.
+
+ ✗ [MEDIUM] Path Traversal
+   Finding ID: 22c1527c-c6c6-4d81-a1ab-1867d3d72487
+   Path: src/module_2_code/llm_hosting/app.py, line 313
+   Info: Unsanitized input from a command line argument flows into open, where it is used as a path. This may result in a Path Traversal vulnerability and allow an attacker to read arbitrary files.
+
+ ✗ [MEDIUM] Path Traversal
+   Finding ID: 41252069-0922-4957-a560-3dea35e5431a
+   Path: src/module_2_code/llm_hosting/app.py, line 331
+   Info: Unsanitized input from a command line argument flows into open, where it is used as a path. This may result in a Path Traversal vulnerability and allow an attacker to write arbitrary files.
+
+ ✗ [MEDIUM] Path Traversal
+   Finding ID: 7be5331b-dc60-4849-a533-8b2964fdbc17
+   Path: src/module_2_code/llm_hosting/app.py, line 342
+   Info: Unsanitized input from a command line argument flows into json.dump, where it is used as a path. This may result in a Path Traversal vulnerability and allow an attacker to write arbitrary files.
+
+ ✗ [MEDIUM] Server-Side Request Forgery (SSRF)
+   Finding ID: f90723f1-bca9-457e-952d-d9b4ca9dbe6f
+   Path: src/load_data.py, line 119
+   Info: Unsanitized input from a command line argument flows into psycopg2.connect, where it is used as an URL to perform a request. This may result in a Server Side Request Forgery vulnerability.
+
+
+
+╭────────────────────────────────────────────────────────────────────────────────╮
+│ Test Summary                                                                   │
+│                                                                                │
+│   Organization:      craymatef                                                 │
+│   Test type:         Static code analysis                                      │
+│   Project path:      /Users/fadetoblack/repo/jhu_software_concepts/module_5    │
+│                                                                                │
+│   Total issues:   7                                                            │
+│   Ignored issues: 0 [ 0 HIGH  0 MEDIUM  0 LOW ]                                │
+│   Open issues:    7 [ 0 HIGH  5 MEDIUM  2 LOW ]                                │
+╰────────────────────────────────────────────────────────────────────────────────╯
+    
+💡 Tip
+
+   To view ignored issues, use the --include-ignores option.
+                                                            
+
