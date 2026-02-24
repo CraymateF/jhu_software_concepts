@@ -9,8 +9,7 @@ psycopg2-binary==2.9.9
 # Web Scraping Dependencies (from module_2)
 beautifulsoup4==4.12.3
 
-# LLM Processing Dependencies (from module_2)
-huggingface_hub>=0.23.0
-llama-cpp-python>=0.2.90,<0.3.0
+# Note: LLM dependencies removed - only used in legacy module_2_code
+# Install separately if needed: llama-cpp-python>=0.2.90
 
 # Python version requirement: 3.10+

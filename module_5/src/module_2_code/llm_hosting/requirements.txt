@@ -1,4 +1,4 @@
 Flask==3.1.3
 Jinja2==3.1.6
-huggingface_hub>=0.23.0
-llama-cpp-python>=0.2.90,<0.3.0
+# Note: LLM dependencies removed to avoid security vulnerabilities
+# To use LLM features, install: pip install llama-cpp-python>=0.2.90 huggingface_hub>=0.23.0

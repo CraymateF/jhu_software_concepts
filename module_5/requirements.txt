@@ -15,9 +15,9 @@ python-dotenv==1.2.1
 beautifulsoup4==4.12.3
 lxml==5.1.0
 
-# LLM Processing Dependencies (from module_2)
-huggingface_hub>=0.23.0
-llama-cpp-python>=0.2.90,<0.3.0
+# Note: LLM dependencies (llama-cpp-python, huggingface_hub) removed
+# They are only used in legacy module_2_code and have security vulnerabilities
+# Install separately if you need the LLM data standardization features
 
 # Testing Dependencies
 pytest==7.4.3
