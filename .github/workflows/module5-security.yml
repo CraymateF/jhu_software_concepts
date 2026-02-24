@@ -13,6 +13,7 @@ on:
 jobs:
   security-and-quality:
     runs-on: ubuntu-latest
+    timeout-minutes: 15  # Prevent job from hanging indefinitely
     
     # Set environment variables at job level for all steps
     env:
@@ -119,7 +120,9 @@ jobs:
         DATABASE_URL: postgresql://testuser:testpass@localhost:5432/gradcafe_test
       run: |
         echo "Running tests with coverage..."
-        pytest --cov=src --cov-report=term-missing --cov-fail-under=50
+        pytest -n auto --timeout=60 --timeout-method=thread \
+          --cov=src --cov-report=term-missing --cov-fail-under=50 \
+          -v --tb=short
         echo "✓ Tests passed with required coverage"
       continue-on-error: false
     
