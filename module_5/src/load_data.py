@@ -4,6 +4,7 @@ Module to load GradCafe data from JSON files into PostgreSQL database.
 import json
 import os
 import sys
+import tempfile
 from datetime import datetime
 from pathlib import Path
 
@@ -78,7 +79,7 @@ def get_db_params(dbname='gradcafe_sample'):
 
     return conn_params
 
-def load_data(dbname=None, file_path=None):  # pylint: disable=too-many-statements
+def load_data(dbname=None, file_path=None):  # pylint: disable=too-many-statements,too-many-locals,too-many-branches
     """
     Load data into specified database from specified file
 
@@ -91,7 +92,17 @@ def load_data(dbname=None, file_path=None):  # pylint: disable=too-many-statemen
         dbname = 'gradcafe_sample'
 
     if file_path is None:
-        file_path = 'module_3/sample_data/llm_extend_applicant_data.json'
+        default_candidates = [
+            'src/sample_data/llm_extend_applicant_data.json',
+            'sample_data/llm_extend_applicant_data.json',
+            'module_3/sample_data/llm_extend_applicant_data.json'
+        ]
+        for candidate in default_candidates:
+            if Path(candidate).exists():
+                file_path = candidate
+                break
+        else:
+            file_path = default_candidates[0]
 
     # Validate dbname to prevent SSRF - only alphanumeric and underscores
     if not dbname.replace('_', '').isalnum():
@@ -133,6 +144,7 @@ def load_data(dbname=None, file_path=None):  # pylint: disable=too-many-statemen
                 raw_data JSONB
             );
         """)
+        cur.execute("ALTER TABLE gradcafe_main ADD COLUMN IF NOT EXISTS raw_data JSONB;")
         cur.execute("DELETE FROM gradcafe_main;")
 
         # 3. Load and parse JSON file
@@ -144,12 +156,12 @@ def load_data(dbname=None, file_path=None):  # pylint: disable=too-many-statemen
         allowed_dirs = [
             Path('module_3/sample_data').resolve(),
             Path('sample_data').resolve(),
+            Path('src/sample_data').resolve(),
+            Path(tempfile.gettempdir()).resolve(),
             Path('.').resolve()
         ]
         if not any(abs_file_path.is_relative_to(d) for d in allowed_dirs):
             raise ValueError(f"Access denied: {file_path} is outside allowed directories")
-        if not abs_file_path.exists():
-            raise FileNotFoundError(f"File not found: {file_path}")
 
         # Try to handle both standard JSON array and JSONL (newline-delimited JSON)
         with open(abs_file_path, 'r', encoding='utf-8') as f:

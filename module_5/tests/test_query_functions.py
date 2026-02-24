@@ -40,6 +40,7 @@ def populated_test_db():
             raw_data JSONB
         );
     """)
+    cur.execute("ALTER TABLE gradcafe_main ADD COLUMN IF NOT EXISTS raw_data JSONB;")
     cur.execute("DELETE FROM gradcafe_main;")
     
     # Insert sample data
