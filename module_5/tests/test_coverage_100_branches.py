@@ -188,3 +188,48 @@ def test_load_data_invalid_dbname_raises_value_error():
 
     exc = exc_info.value
     assert "Invalid database name" in str(exc)
+
+
+def test_data_updater_get_db_params_fallback_missing_env_raises(monkeypatch):
+    """Covers ValueError path when DB env vars are missing in data_updater."""
+    from data_updater import get_db_params
+
+    monkeypatch.delenv("DATABASE_URL", raising=False)
+    monkeypatch.delenv("DB_USER", raising=False)
+    monkeypatch.delenv("DB_HOST", raising=False)
+    monkeypatch.delenv("DB_PORT", raising=False)
+
+    with pytest.raises(ValueError) as exc_info:
+        get_db_params("gradcafe_test")
+
+    assert "DB_USER, DB_HOST, and DB_PORT" in str(exc_info.value)
+
+
+def test_load_data_get_db_params_fallback_missing_env_raises(monkeypatch):
+    """Covers ValueError path when DB env vars are missing in load_data."""
+    from load_data import get_db_params
+
+    monkeypatch.delenv("DATABASE_URL", raising=False)
+    monkeypatch.delenv("DB_USER", raising=False)
+    monkeypatch.delenv("DB_HOST", raising=False)
+    monkeypatch.delenv("DB_PORT", raising=False)
+
+    with pytest.raises(ValueError) as exc_info:
+        get_db_params("gradcafe_test")
+
+    assert "DB_USER, DB_HOST, and DB_PORT" in str(exc_info.value)
+
+
+def test_query_data_get_db_connection_fallback_missing_env_raises(monkeypatch):
+    """Covers ValueError path when DB env vars are missing in query_data."""
+    from query_data import get_db_connection
+
+    monkeypatch.delenv("DATABASE_URL", raising=False)
+    monkeypatch.delenv("DB_USER", raising=False)
+    monkeypatch.delenv("DB_HOST", raising=False)
+    monkeypatch.delenv("DB_PORT", raising=False)
+
+    with pytest.raises(ValueError) as exc_info:
+        get_db_connection("gradcafe_test")
+
+    assert "DB_USER, DB_HOST, and DB_PORT" in str(exc_info.value)
