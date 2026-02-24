@@ -78,7 +78,7 @@ def get_db_params(dbname='gradcafe_sample'):
 
     return conn_params
 
-def load_data(dbname=None, file_path=None):
+def load_data(dbname=None, file_path=None):  # pylint: disable=too-many-statements
     """
     Load data into specified database from specified file
 
@@ -107,7 +107,7 @@ def load_data(dbname=None, file_path=None):
         conn = psycopg2.connect(**conn_params)
         conn.autocommit = True  # Prevent transaction lock issues
         cur = conn.cursor()
-        
+
         # Terminate idle connections that might hold locks (test environments)
         try:
             cur.execute("""
@@ -117,7 +117,7 @@ def load_data(dbname=None, file_path=None):
                   AND pid <> pg_backend_pid()
                   AND state = 'idle';
             """)
-        except Exception:
+        except psycopg2.Error:
             pass  # Ignore if insufficient permissions
 
         # 2. Prepare table structure
