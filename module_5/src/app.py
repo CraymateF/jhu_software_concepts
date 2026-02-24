@@ -14,8 +14,8 @@ from dotenv import load_dotenv
 from query_data import run_all_queries
 from data_updater import start_scraping, get_scraping_status
 
-# Load environment variables from .env file
-load_dotenv()
+# Load environment variables from .env file (don't override existing vars for testing)
+load_dotenv(override=False)
 
 # Database configuration mapping
 DATABASE_INFO = {

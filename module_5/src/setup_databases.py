@@ -7,8 +7,8 @@ import subprocess
 from dotenv import load_dotenv
 from load_data import load_data
 
-# Load environment variables
-load_dotenv()
+# Load environment variables (don't override existing vars for testing)
+load_dotenv(override=False)
 
 def run_command(cmd):
     """Run a shell command and return success status"""

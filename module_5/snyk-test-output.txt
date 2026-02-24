@@ -1,0 +1,25 @@
+
+Testing /Users/fadetoblack/repo/jhu_software_concepts/module_5...
+
+Tested 69 dependencies for known issues, found 1 issue, 1 vulnerable path.
+
+
+Issues with no direct upgrade or patch:
+  ✗ Deserialization of Untrusted Data [High Severity][https://security.snyk.io/vuln/SNYK-PYTHON-DISKCACHE-15268422] in diskcache@5.6.3
+    introduced by llama-cpp-python@0.2.90 > diskcache@5.6.3
+  No upgrade or patch available
+
+
+
+Organization:      craymatef
+Package manager:   pip
+Target file:       requirements.txt
+Project name:      module_5
+Open source:       no
+Project path:      /Users/fadetoblack/repo/jhu_software_concepts/module_5
+Local Snyk policy: found
+Licenses:          enabled
+
+Tip: Detected multiple supported manifests (3), use --all-projects to scan all of them at once.
+
+

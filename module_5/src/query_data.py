@@ -7,26 +7,73 @@ import psycopg2
 from psycopg2 import sql
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
-load_dotenv()
+# Load environment variables from .env file (don't override existing vars for testing)
+load_dotenv(override=False)
 
 def get_db_connection(dbname=None):
-    """Create and return a database connection using environment variables"""
+    """
+    Create and return a database connection using environment variables.
+    Supports both DATABASE_URL and individual DB_* variables.
+    """
     if dbname is None:
         dbname = os.getenv('DB_NAME', 'gradcafe_sample')
 
-    # Read database configuration from environment variables
-    conn_params = {
-        "dbname": dbname,
-        "user": os.getenv('DB_USER', 'fadetoblack'),
-        "host": os.getenv('DB_HOST', 'localhost'),
-        "port": os.getenv('DB_PORT', '5432')
-    }
+    # Check if DATABASE_URL is set (for testing and GitHub Actions)
+    database_url = os.getenv('DATABASE_URL')
+    if database_url:
+        # Parse DATABASE_URL format: postgresql://user:pass@host:port/dbname
+        if database_url.startswith('postgresql://'):
+            database_url = database_url.replace('postgresql://', '')
+        
+        conn_params = {}
+        
+        if '@' in database_url:
+            user_part, host_part = database_url.split('@', 1)
+            # Extract password if present
+            if ':' in user_part:
+                user, password = user_part.split(':', 1)
+                conn_params["password"] = password
+            else:
+                user = user_part
+            conn_params["user"] = user
+            
+            # Parse host:port/dbname
+            if '/' in host_part:
+                host_and_port, url_db = host_part.split('/', 1)
+                # Use parameter dbname if provided, otherwise use URL dbname
+                conn_params["dbname"] = dbname if dbname else url_db
+            else:
+                host_and_port = host_part
+                conn_params["dbname"] = dbname if dbname else os.getenv('DB_NAME', 'gradcafe_sample')
+            
+            # Parse port if present
+            if ':' in host_and_port:
+                host, port = host_and_port.split(':', 1)
+                conn_params["host"] = host
+                conn_params["port"] = port
+            else:
+                conn_params["host"] = host_and_port
+        else:
+            # No @ sign - DATABASE_URL is malformed, use defaults
+            conn_params = {
+                "dbname": dbname if dbname else os.getenv('DB_NAME', 'gradcafe_sample'),
+                "user": os.getenv('DB_USER', 'fadetoblack'),
+                "host": os.getenv('DB_HOST', 'localhost'),
+                "port": os.getenv('DB_PORT', '5432')
+            }
+    else:
+        # Fall back to individual environment variables
+        conn_params = {
+            "dbname": dbname,
+            "user": os.getenv('DB_USER', 'fadetoblack'),
+            "host": os.getenv('DB_HOST', 'localhost'),
+            "port": os.getenv('DB_PORT', '5432')
+        }
 
-    # Only add password if it's set in environment
-    db_password = os.getenv('DB_PASSWORD')
-    if db_password:
-        conn_params["password"] = db_password
+        # Only add password if it's set in environment
+        db_password = os.getenv('DB_PASSWORD')
+        if db_password:
+            conn_params["password"] = db_password
 
     return psycopg2.connect(**conn_params)
 
