@@ -20,7 +20,7 @@ def get_test_db_params():
     if db_url.startswith('postgresql://'):
         db_url = db_url.replace('postgresql://', '')
     
-    # Parse username:password@host/dbname
+    # Parse username:password@host:port/dbname
     if '@' in db_url:
         user_part, host_part = db_url.split('@')
         # Extract password if present
@@ -29,16 +29,25 @@ def get_test_db_params():
         else:
             user = user_part
             password = None
+        
+        # Parse host:port/dbname
         if '/' in host_part:
-            host, dbname = host_part.split('/')
+            host_and_port, dbname = host_part.split('/', 1)
         else:
-            host = host_part
+            host_and_port = host_part
             dbname = 'gradcafe_test'
+        
+        # Extract port if present
+        if ':' in host_and_port:
+            host, port = host_and_port.split(':', 1)
+        else:
+            host = host_and_port
+            port = None
     else:
         # No DATABASE_URL provided and no defaults with credentials
         raise ValueError(
             "DATABASE_URL is malformed. Expected format: "
-            "postgresql://[user[:password]@]host/dbname"
+            "postgresql://[user[:password]@]host[:port]/dbname"
         )
     
     conn_params = {
@@ -48,5 +57,7 @@ def get_test_db_params():
     }
     if password:
         conn_params["password"] = password
+    if port:
+        conn_params["port"] = port
     
     return conn_params

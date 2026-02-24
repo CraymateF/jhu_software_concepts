@@ -25,10 +25,17 @@ def test_run_command_handles_existing_database():
     
     # Get postgres credentials from DATABASE_URL if available
     db_url = os.getenv('DATABASE_URL', '')
-    if 'postgres:postgres@' in db_url:
-        # GitHub Actions environment - use TCP connection
-        user_flag = ['-U', 'postgres', '-h', 'localhost']
-        env_password = 'postgres'
+    if '@' in db_url and 'localhost' in db_url:
+        # GitHub Actions or configured environment - use TCP connection
+        from db_helpers import get_test_db_params
+        try:
+            params = get_test_db_params()
+            user_flag = ['-U', params['user'], '-h', params['host']]
+            env_password = params.get('password')
+        except (ValueError, KeyError):
+            # Fallback to local
+            user_flag = []
+            env_password = None
     else:
         # Local environment
         user_flag = []
