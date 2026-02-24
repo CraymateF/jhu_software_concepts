@@ -120,7 +120,10 @@ jobs:
         DATABASE_URL: postgresql://testuser:testpass@localhost:5432/gradcafe_test
       run: |
         echo "Running tests with coverage..."
-        pytest -n auto --timeout=60 --timeout-method=thread \
+        # Note: Parallel execution disabled (-n auto removed) because most tests
+        # use database fixtures that can't run concurrently. Sequential execution
+        # with --timeout prevents hangs while avoiding lock conflicts.
+        pytest --timeout=60 --timeout-method=thread \
           --cov=src --cov-report=term-missing --cov-fail-under=50 \
           -v --tb=short
         echo "✓ Tests passed with required coverage"
