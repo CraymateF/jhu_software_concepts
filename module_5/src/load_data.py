@@ -105,11 +105,24 @@ def load_data(dbname=None, file_path=None):
     conn = None
     try:
         conn = psycopg2.connect(**conn_params)
+        conn.autocommit = True  # Prevent transaction lock issues
         cur = conn.cursor()
+        
+        # Terminate idle connections that might hold locks (test environments)
+        try:
+            cur.execute("""
+                SELECT pg_terminate_backend(pid)
+                FROM pg_stat_activity
+                WHERE datname = current_database()
+                  AND pid <> pg_backend_pid()
+                  AND state = 'idle';
+            """)
+        except Exception:
+            pass  # Ignore if insufficient permissions
 
         # 2. Prepare table structure
         print("Cleaning up and preparing table schema...")
-        cur.execute("DROP TABLE IF EXISTS gradcafe_main;")
+        cur.execute("DROP TABLE IF EXISTS gradcafe_main CASCADE;")
         cur.execute("""
             CREATE TABLE gradcafe_main (
                 p_id SERIAL PRIMARY KEY,

@@ -54,10 +54,21 @@ def test_db():
     """Create and setup a test database connection."""
     conn_params = get_test_db_params()
     conn = psycopg2.connect(**conn_params)
+    conn.autocommit = True  # Prevent locks from idle transactions
     
     # Setup: Create table
     cur = conn.cursor()
-    cur.execute("DROP TABLE IF EXISTS gradcafe_main;")
+    
+    # Terminate any other connections to avoid lock conflicts
+    cur.execute("""
+        SELECT pg_terminate_backend(pid)
+        FROM pg_stat_activity
+        WHERE datname = current_database()
+          AND pid <> pg_backend_pid()
+          AND state = 'idle';
+    """)
+    
+    cur.execute("DROP TABLE IF EXISTS gradcafe_main CASCADE;")
     cur.execute("""
         CREATE TABLE gradcafe_main (
             p_id SERIAL PRIMARY KEY,
@@ -78,7 +89,6 @@ def test_db():
             raw_data JSONB
         );
     """)
-    conn.commit()
     cur.close()
     
     yield conn
