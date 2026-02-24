@@ -45,6 +45,7 @@ def test_db():
     """)
     cur.execute("ALTER TABLE gradcafe_main ADD COLUMN IF NOT EXISTS raw_data JSONB;")
     cur.execute("DELETE FROM gradcafe_main;")
+    cur.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_gradcafe_main_url_unique ON gradcafe_main (url);")
     cur.close()
     
     yield conn
