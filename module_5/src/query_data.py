@@ -24,9 +24,9 @@ def get_db_connection(dbname=None):
         # Parse DATABASE_URL format: postgresql://user:pass@host:port/dbname
         if database_url.startswith('postgresql://'):
             database_url = database_url.replace('postgresql://', '')
-        
+
         conn_params = {}
-        
+
         if '@' in database_url:
             user_part, host_part = database_url.split('@', 1)
             # Extract password if present
@@ -36,7 +36,7 @@ def get_db_connection(dbname=None):
             else:
                 user = user_part
             conn_params["user"] = user
-            
+
             # Parse host:port/dbname
             if '/' in host_part:
                 host_and_port, url_db = host_part.split('/', 1)
@@ -45,7 +45,7 @@ def get_db_connection(dbname=None):
             else:
                 host_and_port = host_part
                 conn_params["dbname"] = dbname if dbname else os.getenv('DB_NAME', 'gradcafe_sample')
-            
+
             # Parse port if present
             if ':' in host_and_port:
                 host, port = host_and_port.split(':', 1)
