@@ -20,14 +20,13 @@ setup(
     
     # Runtime dependencies
     install_requires=[
-        "Flask>=3.0.0",
+        "Flask>=3.1.3",
+        "Jinja2>=3.1.6",
         "psycopg2-binary>=2.9.9",
         "psycopg>=3.3.3",
         "python-dotenv>=1.2.1",
         "beautifulsoup4>=4.12.3",
         "lxml>=5.1.0",
-        "huggingface_hub>=0.23.0",
-        "llama-cpp-python>=0.2.90,<0.3.0",
     ],
     
     # Development dependencies

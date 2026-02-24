@@ -10,6 +10,32 @@ from dotenv import load_dotenv
 # Load environment variables from .env file (don't override existing vars for testing)
 load_dotenv(override=False)
 
+
+def _get_env_conn_params(dbname):
+    """Read connection settings from environment variables without hardcoded credentials."""
+    db_user = os.getenv('DB_USER')
+    db_host = os.getenv('DB_HOST')
+    db_port = os.getenv('DB_PORT')
+
+    if not all([db_user, db_host, db_port]):
+        raise ValueError(
+            "DB_USER, DB_HOST, and DB_PORT environment variables are required "
+            "when DATABASE_URL is missing or malformed."
+        )
+
+    conn_params = {
+        "dbname": dbname,
+        "user": db_user,
+        "host": db_host,
+        "port": db_port
+    }
+
+    db_password = os.getenv('DB_PASSWORD')
+    if db_password:
+        conn_params["password"] = db_password
+
+    return conn_params
+
 def get_db_connection(dbname=None):
     """
     Create and return a database connection using environment variables.
@@ -54,26 +80,11 @@ def get_db_connection(dbname=None):
             else:
                 conn_params["host"] = host_and_port
         else:
-            # No @ sign - DATABASE_URL is malformed, use defaults
-            conn_params = {
-                "dbname": dbname if dbname else os.getenv('DB_NAME', 'gradcafe_sample'),
-                "user": os.getenv('DB_USER', 'fadetoblack'),
-                "host": os.getenv('DB_HOST', 'localhost'),
-                "port": os.getenv('DB_PORT', '5432')
-            }
+            # No @ sign - DATABASE_URL is malformed, use env-configured connection settings
+            conn_params = _get_env_conn_params(dbname)
     else:
         # Fall back to individual environment variables
-        conn_params = {
-            "dbname": dbname,
-            "user": os.getenv('DB_USER', 'fadetoblack'),
-            "host": os.getenv('DB_HOST', 'localhost'),
-            "port": os.getenv('DB_PORT', '5432')
-        }
-
-        # Only add password if it's set in environment
-        db_password = os.getenv('DB_PASSWORD')
-        if db_password:
-            conn_params["password"] = db_password
+        conn_params = _get_env_conn_params(dbname)
 
     return psycopg2.connect(**conn_params)
 

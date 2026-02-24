@@ -32,11 +32,17 @@ def test_data_updater_get_db_params_no_at_sign():
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
     from data_updater import get_db_params
     
-    # Test with plain format (no @ sign)
-    with patch.dict(os.environ, {'DATABASE_URL': 'postgresql://justtext'}):
+    # Test with plain format (no @ sign) and env fallback values
+    with patch.dict(os.environ, {
+        'DATABASE_URL': 'postgresql://justtext',
+        'DB_USER': 'env_user',
+        'DB_HOST': 'env_host',
+        'DB_PORT': '6543'
+    }):
         params = get_db_params('gradcafe')
-        assert params['user'] == 'fadetoblack'
-        assert params['host'] == 'localhost'
+        assert params['user'] == 'env_user'
+        assert params['host'] == 'env_host'
+        assert params['port'] == '6543'
         assert params['dbname'] == 'gradcafe'
         assert 'password' not in params
 
@@ -80,11 +86,17 @@ def test_load_data_get_db_params_no_at_sign():
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
     from load_data import get_db_params
     
-    # Test with plain format (no @ sign)
-    with patch.dict(os.environ, {'DATABASE_URL': 'postgresql://justtext'}):
+    # Test with plain format (no @ sign) and env fallback values
+    with patch.dict(os.environ, {
+        'DATABASE_URL': 'postgresql://justtext',
+        'DB_USER': 'env_user',
+        'DB_HOST': 'env_host',
+        'DB_PORT': '6543'
+    }):
         params = get_db_params('gradcafe')
-        assert params['user'] == 'fadetoblack'
-        assert params['host'] == 'localhost'
+        assert params['user'] == 'env_user'
+        assert params['host'] == 'env_host'
+        assert params['port'] == '6543'
         assert params['dbname'] == 'gradcafe'
         assert 'password' not in params
 
@@ -141,13 +153,19 @@ def test_query_data_get_db_connection_no_at_sign():
         mock_connect.return_value = MagicMock()
         from query_data import get_db_connection
         
-        # Test with plain format (no @ sign)
-        with patch.dict(os.environ, {'DATABASE_URL': 'postgresql://justtext'}):
+        # Test with plain format (no @ sign) and env fallback values
+        with patch.dict(os.environ, {
+            'DATABASE_URL': 'postgresql://justtext',
+            'DB_USER': 'env_user',
+            'DB_HOST': 'env_host',
+            'DB_PORT': '6543'
+        }):
             conn = get_db_connection('gradcafe')
             # Verify connect was called with correct params
             call_args = mock_connect.call_args[1]
-            assert call_args['user'] == 'fadetoblack'
-            assert call_args['host'] == 'localhost'
+            assert call_args['user'] == 'env_user'
+            assert call_args['host'] == 'env_host'
+            assert call_args['port'] == '6543'
             assert call_args['dbname'] == 'gradcafe'
             assert 'password' not in call_args
 

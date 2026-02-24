@@ -129,6 +129,9 @@ def test_load_data_default_file_path_falls_back_to_first_candidate(monkeypatch):
     mock_conn.cursor.return_value = mock_cur
 
     monkeypatch.delenv("DATABASE_URL", raising=False)
+    monkeypatch.setenv("DB_USER", "env_user")
+    monkeypatch.setenv("DB_HOST", "env_host")
+    monkeypatch.setenv("DB_PORT", "5432")
 
     with patch("load_data.Path.exists", return_value=False), patch(
         "load_data.psycopg2.connect", return_value=mock_conn
