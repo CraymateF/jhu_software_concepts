@@ -124,7 +124,7 @@ jobs:
         # use database fixtures that can't run concurrently. Sequential execution
         # with --timeout prevents hangs while avoiding lock conflicts.
         pytest --timeout=60 --timeout-method=thread \
-          --cov=src --cov-report=term-missing --cov-fail-under=50 \
+          --cov=src --cov-report=term-missing --cov-fail-under=100 \
           -v --tb=short
         echo "✓ Tests passed with required coverage"
       continue-on-error: false
