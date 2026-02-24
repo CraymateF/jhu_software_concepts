@@ -15,12 +15,13 @@ def populated_test_db():
     """Create a test database with sample data."""
     conn_params = get_test_db_params()
     conn = psycopg2.connect(**conn_params)
+    conn.autocommit = True
     
     # Setup: Create table and insert test data
     cur = conn.cursor()
-    cur.execute("DROP TABLE IF EXISTS gradcafe_main;")
+    cur.execute("SET lock_timeout = '5s';")
     cur.execute("""
-        CREATE TABLE gradcafe_main (
+        CREATE TABLE IF NOT EXISTS gradcafe_main (
             p_id SERIAL PRIMARY KEY,
             program TEXT,
             comments TEXT,
@@ -39,6 +40,7 @@ def populated_test_db():
             raw_data JSONB
         );
     """)
+    cur.execute("DELETE FROM gradcafe_main;")
     
     # Insert sample data
     test_data = [
@@ -59,15 +61,13 @@ def populated_test_db():
         VALUES %s
     """
     execute_values(cur, insert_query, test_data)
-    conn.commit()
     cur.close()
     
     yield conn
     
     # Teardown
     cur = conn.cursor()
-    cur.execute("DROP TABLE IF EXISTS gradcafe_main;")
-    conn.commit()
+    cur.execute("DELETE FROM gradcafe_main;")
     cur.close()
     conn.close()
 

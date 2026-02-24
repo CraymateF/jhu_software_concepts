@@ -129,12 +129,13 @@ def test_get_existing_urls():
     
     try:
         conn = psycopg2.connect(**conn_params)
+        conn.autocommit = True
         cur = conn.cursor()
+        cur.execute("SET lock_timeout = '5s';")
         
         # Setup table
-        cur.execute("DROP TABLE IF EXISTS gradcafe_main;")
         cur.execute("""
-            CREATE TABLE gradcafe_main (
+            CREATE TABLE IF NOT EXISTS gradcafe_main (
                 p_id SERIAL PRIMARY KEY,
                 program TEXT,
                 comments TEXT,
@@ -153,6 +154,7 @@ def test_get_existing_urls():
                 raw_data JSONB
             );
         """)
+        cur.execute("DELETE FROM gradcafe_main;")
         
         # Insert test URLs
         cur.execute("""
@@ -167,8 +169,7 @@ def test_get_existing_urls():
         assert 'http://test2.com' in urls
         
         # Cleanup
-        cur.execute("DROP TABLE IF EXISTS gradcafe_main;")
-        conn.commit()
+        cur.execute("DELETE FROM gradcafe_main;")
         cur.close()
         conn.close()
     except Exception as e:

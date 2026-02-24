@@ -18,12 +18,13 @@ def test_db():
     """Create a test database connection."""
     conn_params = get_test_db_params()
     conn = psycopg2.connect(**conn_params)
+    conn.autocommit = True
     
     # Setup: Create table
     cur = conn.cursor()
-    cur.execute("DROP TABLE IF EXISTS gradcafe_main;")
+    cur.execute("SET lock_timeout = '5s';")
     cur.execute("""
-        CREATE TABLE gradcafe_main (
+        CREATE TABLE IF NOT EXISTS gradcafe_main (
             p_id SERIAL PRIMARY KEY,
             program TEXT,
             comments TEXT,
@@ -42,15 +43,14 @@ def test_db():
             raw_data JSONB
         );
     """)
-    conn.commit()
+    cur.execute("DELETE FROM gradcafe_main;")
     cur.close()
     
     yield conn
     
     # Teardown: Clean up
     cur = conn.cursor()
-    cur.execute("DROP TABLE IF EXISTS gradcafe_main;")
-    conn.commit()
+    cur.execute("DELETE FROM gradcafe_main;")
     cur.close()
     conn.close()
 
