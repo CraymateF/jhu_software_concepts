@@ -34,3 +34,4 @@ pylint==4.0.5
 pydeps==3.0.2
 
 # Python version requirement: 3.10+
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
