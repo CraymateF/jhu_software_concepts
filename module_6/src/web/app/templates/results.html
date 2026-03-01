@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GradCafe Database Query Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <div class="header-left">
+                    <h1>GradCafe Database Analysis</h1>
+                    <p class="subtitle">Graduate School Admissions Data Insights</p>
+                    <div class="database-indicator">
+                        <span class="db-label">Current Database:</span>
+                        <span class="db-name">{{ db_info[current_db].display_name }}</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button id="updateAnalysisBtn" class="control-btn update-btn" data-testid="update-analysis-btn"
+                            title="Queue an analytics recompute in the background worker">
+                        <span class="btn-icon">🔄</span>
+                        <span class="btn-text">Update Analysis</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="data-controls">
+                <button id="pullDataBtn" class="pull-data-btn" data-testid="pull-data-btn">
+                    <span class="btn-icon">📥</span>
+                    <span class="btn-text">Pull Data</span>
+                </button>
+                <p class="control-description">
+                    <strong>Pull Data:</strong> Enqueues a scrape task in RabbitMQ.
+                    The worker processes it in the background — click <em>Update Analysis</em> after a minute to see new data.
+                </p>
+            </div>
+
+            <!-- Banner shown after a task is queued (202 response) -->
+            <div id="statusMessage" class="status-message" style="display: none;">
+                <div class="status-content">
+                    <span class="status-icon">✅</span>
+                    <span id="statusText">Request queued</span>
+                </div>
+            </div>
+
+            <!-- Live worker / database status bar (always visible) -->
+            <div id="workerStatus" class="worker-status-bar worker-status-loading">
+                <span id="workerStatusIcon">⏳</span>
+                <span id="workerStatusText">Checking database…</span>
+            </div>
+        </header>
+
+        <div class="results-grid">
+            <!-- Question 1 -->
+            <div class="result-card">
+                <div class="card-header"><h2>Question 1</h2></div>
+                <div class="card-body">
+                    <p class="question">{{ results.q1.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-label-prefix">Answer:</span>
+                        <span class="answer-value">{{ results.q1.answer }}</span>
+                        <span class="answer-label">entries</span>
+                    </div>
+                    <details><summary>View SQL Query</summary><pre class="query">{{ results.q1.query }}</pre></details>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="result-card">
+                <div class="card-header"><h2>Question 2</h2></div>
+                <div class="card-body">
+                    <p class="question">{{ results.q2.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q2.answer }}</span>
+                    </div>
+                    <details><summary>View SQL Query</summary><pre class="query">{{ results.q2.query }}</pre></details>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="result-card">
+                <div class="card-header"><h2>Question 3</h2></div>
+                <div class="card-body">
+                    <p class="question">{{ results.q3.question }}</p>
+                    <div class="stats-grid">
+                        <div class="stat"><span class="stat-label">Avg GPA</span><span class="stat-value">{{ results.q3.answer.avg_gpa }}</span></div>
+                        <div class="stat"><span class="stat-label">Avg GRE</span><span class="stat-value">{{ results.q3.answer.avg_gre }}</span></div>
+                        <div class="stat"><span class="stat-label">Avg GRE V</span><span class="stat-value">{{ results.q3.answer.avg_gre_v }}</span></div>
+                        <div class="stat"><span class="stat-label">Avg GRE AW</span><span class="stat-value">{{ results.q3.answer.avg_gre_aw }}</span></div>
+                    </div>
+                    <details><summary>View SQL Query</summary><pre class="query">{{ results.q3.query }}</pre></details>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="result-card">
+                <div class="card-header"><h2>Question 4</h2></div>
+                <div class="card-body">
+                    <p class="question">{{ results.q4.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q4.answer }}</span>
+                        <span class="answer-label">GPA</span>
+                    </div>
+                    <details><summary>View SQL Query</summary><pre class="query">{{ results.q4.query }}</pre></details>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="result-card">
+                <div class="card-header"><h2>Question 5</h2></div>
+                <div class="card-body">
+                    <p class="question">{{ results.q5.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q5.answer }}</span>
+                    </div>
+                    <details><summary>View SQL Query</summary><pre class="query">{{ results.q5.query }}</pre></details>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="result-card">
+                <div class="card-header"><h2>Question 6</h2></div>
+                <div class="card-body">
+                    <p class="question">{{ results.q6.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q6.answer }}</span>
+                        <span class="answer-label">GPA</span>
+                    </div>
+                    <details><summary>View SQL Query</summary><pre class="query">{{ results.q6.query }}</pre></details>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="result-card">
+                <div class="card-header"><h2>Question 7</h2></div>
+                <div class="card-body">
+                    <p class="question">{{ results.q7.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q7.answer }}</span>
+                        <span class="answer-label">entries</span>
+                    </div>
+                    <details><summary>View SQL Query</summary><pre class="query">{{ results.q7.query }}</pre></details>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="result-card">
+                <div class="card-header"><h2>Question 8</h2></div>
+                <div class="card-body">
+                    <p class="question">{{ results.q8.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q8.answer }}</span>
+                        <span class="answer-label">acceptances</span>
+                    </div>
+                    <details><summary>View SQL Query</summary><pre class="query">{{ results.q8.query }}</pre></details>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="result-card">
+                <div class="card-header"><h2>Question 9</h2></div>
+                <div class="card-body">
+                    <p class="question">{{ results.q9.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q9.answer }}</span>
+                        <span class="answer-label">applications (original aliases)</span>
+                    </div>
+                    <p class="comparison">Reference count (Q8): {{ results.q8.answer }}</p>
+                    <details><summary>View SQL Query</summary><pre class="query">{{ results.q9.query }}</pre></details>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="result-card additional">
+                <div class="card-header"><h2>Additional Question 1</h2></div>
+                <div class="card-body">
+                    <p class="question">{{ results.q10.question }}</p>
+                    <div class="answer-box">
+                        <span class="answer-value">{{ results.q10.answer }}</span>
+                    </div>
+                    <details><summary>View SQL Query</summary><pre class="query">{{ results.q10.query }}</pre></details>
+                </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="result-card additional full-width">
+                <div class="card-header"><h2>Additional Question 2</h2></div>
+                <div class="card-body">
+                    <p class="question">{{ results.q11.question }}</p>
+                    <div class="table-container">
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>University</th>
+                                    <th>Average GPA</th>
+                                    <th>Number of Acceptances</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in results.q11.answer %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ row[0] }}</td>
+                                    <td>{{ row[1] }}</td>
+                                    <td>{{ row[2] }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <details><summary>View SQL Query</summary><pre class="query">{{ results.q11.query }}</pre></details>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Data Source: GradCafe Database | JHU Software Concepts Module 6</p>
+        </footer>
+    </div>
+
+    <script>
+        /**
+         * Show the status banner for `durationMs` milliseconds then hide it.
+         */
+        function showBanner(message, durationMs = 5000) {
+            const bannerDiv  = document.getElementById('statusMessage');
+            const bannerText = document.getElementById('statusText');
+            bannerText.textContent = message;
+            bannerDiv.style.display = 'block';
+            setTimeout(() => { bannerDiv.style.display = 'none'; }, durationMs);
+        }
+
+        // ── Live worker status bar ──────────────────────────────────────────
+        const workerBar  = document.getElementById('workerStatus');
+        const workerIcon = document.getElementById('workerStatusIcon');
+        const workerText = document.getElementById('workerStatusText');
+
+        const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+        function formatElapsed(ms) {
+            const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+            const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+            const seconds = String(totalSeconds % 60).padStart(2, '0');
+            return `${minutes}:${seconds}`;
+        }
+
+        async function getWorkerStatusData() {
+            const resp = await fetch('/worker_status');
+            return resp.json();
+        }
+
+        async function refreshWorkerStatus() {
+            try {
+                const resp = await fetch('/worker_status');
+                const data = await resp.json();
+
+                if (!data.ok) {
+                    workerBar.className = 'worker-status-bar worker-status-error';
+                    workerIcon.textContent = '⚠️';
+                    workerText.textContent = 'Database unavailable – ' + (data.error || 'unknown error');
+                    return;
+                }
+
+                const count = data.total_records;
+                if (count === 0) {
+                    workerBar.className = 'worker-status-bar worker-status-loading';
+                    workerIcon.textContent = '⏳';
+                    workerText.textContent = 'Worker is loading data into the database… refresh in a moment.';
+                } else {
+                    workerBar.className = 'worker-status-bar worker-status-ready';
+                    workerIcon.textContent = '✅';
+                    const ts = data.last_updated
+                        ? new Date(data.last_updated).toLocaleString()
+                        : 'unknown';
+                    workerText.textContent =
+                        `Database ready — ${count.toLocaleString()} records | last updated: ${ts}`;
+                }
+            } catch (err) {
+                workerBar.className = 'worker-status-bar worker-status-error';
+                workerIcon.textContent = '⚠️';
+                workerText.textContent = 'Could not reach /worker_status: ' + err.message;
+            }
+        }
+
+        // Poll every 5 s while unseeded, every 30 s once data is loaded
+        let _pollInterval = 5000;
+        async function schedulePoll() {
+            await refreshWorkerStatus();
+            const count = parseInt(document.getElementById('workerStatusText')
+                .textContent.match(/\d[\d,]*/)?.[0]?.replace(/,/g,'') || '0', 10);
+            _pollInterval = count > 0 ? 30000 : 5000;
+            setTimeout(schedulePoll, _pollInterval);
+        }
+        schedulePoll();
+
+        // ── Pull Data button ────────────────────────────────────────────────
+        document.getElementById('pullDataBtn').addEventListener('click', async function () {
+            const btn = this;
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="btn-icon">⏳</span><span class="btn-text">Queuing…</span>';
+
+            try {
+                const baselineStatus = await getWorkerStatusData();
+                const baselineScrapeTs = baselineStatus.scrape_last_updated || '';
+                const baselineCount = baselineStatus.total_records || 0;
+
+                const response = await fetch('/pull_data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ max_pages: 2, dbname: '{{ current_db }}' })
+                });
+                const data = await response.json();
+
+                if (response.status === 202) {
+                    showBanner('⏳ Pull Data queued — scraping in progress. Please wait until completion…', 120000);
+                    btn.innerHTML = '<span class="btn-icon">⏳</span><span class="btn-text">Waiting…</span>';
+                    _pollInterval = 5000;
+
+                    const POLL_MS = 3000;
+                    const TIMEOUT_MS = 10 * 60 * 1000;
+                    const deadline = Date.now() + TIMEOUT_MS;
+                    const startedAt = Date.now();
+
+                    while (Date.now() < deadline) {
+                        await sleep(POLL_MS);
+                        btn.innerHTML = `<span class="btn-icon">⏳</span><span class="btn-text">Waiting… ${formatElapsed(Date.now() - startedAt)}</span>`;
+                        try {
+                            const statusNow = await getWorkerStatusData();
+                            const scrapeChanged =
+                                statusNow.scrape_last_updated &&
+                                statusNow.scrape_last_updated !== baselineScrapeTs;
+
+                            if (scrapeChanged) {
+                                const newCount = statusNow.total_records || baselineCount;
+                                const delta = Math.max(0, newCount - baselineCount);
+                                if (delta > 0) {
+                                    showBanner(`✅ Pull Data complete — ${delta.toLocaleString()} new record(s) added. Reloading…`, 5000);
+                                } else {
+                                    showBanner('✅ Pull Data complete — no new records found. Reloading…', 5000);
+                                }
+                                setTimeout(() => window.location.reload(), 1200);
+                                return;
+                            }
+                        } catch (_) {
+                            // Ignore transient poll failures while waiting.
+                        }
+                    }
+
+                    showBanner('⚠️ Timed out waiting for scrape completion. You can refresh and check status.', 7000);
+                } else if (!data.ok) {
+                    showBanner('⚠️ ' + data.message, 6000);
+                }
+            } catch (err) {
+                showBanner('⚠️ Network error: ' + err.message, 6000);
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = originalHTML;
+        });
+
+        // ── Update Analysis button ──────────────────────────────────────────
+        document.getElementById('updateAnalysisBtn').addEventListener('click', async function () {
+            const btn = this;
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="btn-icon">⏳</span><span class="btn-text">Queuing…</span>';
+            try {
+                const response = await fetch('/update-analysis', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await response.json();
+                if (response.status === 202) {
+                    showBanner('⏳ Analytics recompute queued — waiting for worker…', 60000);
+                    btn.innerHTML = '<span class="btn-icon">⏳</span><span class="btn-text">Waiting…</span>';
+
+                    // Capture recompute watermark timestamp, then poll until it advances
+                    const tsData = await getWorkerStatusData();
+                    const baseline = tsData.recompute_last_updated || '';
+
+                    const POLL_MS = 3000;
+                    const TIMEOUT_MS = 120000;
+                    const deadline = Date.now() + TIMEOUT_MS;
+                    const startedAt = Date.now();
+
+                    while (Date.now() <= deadline) {
+                        await sleep(POLL_MS);
+                        btn.innerHTML = `<span class="btn-icon">⏳</span><span class="btn-text">Waiting… ${formatElapsed(Date.now() - startedAt)}</span>`;
+                        try {
+                            const d = await getWorkerStatusData();
+                            if (d.recompute_last_updated && d.recompute_last_updated !== baseline) {
+                                showBanner('✅ Analysis updated — reloading…', 3000);
+                                setTimeout(() => window.location.reload(), 1000);
+                                return;
+                            }
+                        } catch (_) {
+                            // Ignore transient poll failures while waiting.
+                        }
+                    }
+
+                    showBanner('⚠️ Timed out waiting for recompute — reloading anyway.', 4000);
+                    setTimeout(() => window.location.reload(), 1000);
+                    return;
+
+                } else if (!data.ok) {
+                    showBanner('⚠️ ' + data.message, 6000);
+                }
+            } catch (err) {
+                showBanner('⚠️ Network error: ' + err.message, 6000);
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = originalHTML;
+        });
+    </script>
+</body>
+</html>
