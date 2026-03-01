@@ -1,158 +1,39 @@
-name: Module 5 - Security & Quality Checks
+name: Module 6 - Lint
 
 on:
   push:
     branches: [ main, master ]
     paths:
-      - 'module_5/**'
+      - 'module_6/**'
+      - '.github/workflows/ci.yml'
   pull_request:
     branches: [ main, master ]
     paths:
-      - 'module_5/**'
+      - 'module_6/**'
+      - '.github/workflows/ci.yml'
 
 jobs:
-  security-and-quality:
+  lint:
     runs-on: ubuntu-latest
-    timeout-minutes: 15  # Prevent job from hanging indefinitely
-    
-    # Set environment variables at job level for all steps
-    env:
-      DATABASE_URL: postgresql://testuser:testpass@localhost:5432/gradcafe_test
-    
-    # Add PostgreSQL service container
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: testuser
-          POSTGRES_PASSWORD: testpass
-          POSTGRES_DB: gradcafe_test
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-    
     defaults:
       run:
-        working-directory: module_5
-    
+        working-directory: module_6
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.12'
-        cache: 'pip'
-        cache-dependency-path: 'module_5/requirements.txt'
-    
-    - name: Install Graphviz
-      run: sudo apt-get update && sudo apt-get install -y graphviz postgresql-client
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    
-    - name: Run Pylint (10/10 Required)
-      run: |
-        echo "Running Pylint - Score must be 10/10"
-        pylint src/*.py --fail-under=10 --max-line-length=120
-        echo "✓ Pylint passed with 10/10"
-    
-    - name: Generate dependency graph
-      run: |
-        echo "Generating dependency graph..."
-        pydeps src/app.py --noshow -T svg -o dependency.svg
-        if [ ! -f dependency.svg ]; then
-          echo "❌ dependency.svg was not generated"
-          exit 1
-        fi
-        echo "✓ Dependency graph generated successfully"
-    
-    - name: Upload dependency graph
-      uses: actions/upload-artifact@v4
-      with:
-        name: dependency-graph
-        path: module_5/dependency.svg
-    
-    - name: Set up test database
-      env:
-        PGPASSWORD: testpass
-      run: |
-        echo "Setting up test database schema..."
-        psql -h localhost -U testuser -d gradcafe_test -c "
-        CREATE TABLE IF NOT EXISTS gradcafe_main (
-          p_id SERIAL PRIMARY KEY,
-          program TEXT,
-          comments TEXT,
-          date_added DATE,
-          url TEXT,
-          status TEXT,
-          term TEXT,
-          us_or_international TEXT,
-          gpa FLOAT,
-          gre FLOAT,
-          gre_v FLOAT,
-          gre_aw FLOAT,
-          degree TEXT,
-          llm_generated_program TEXT,
-          llm_generated_university TEXT
-        );"
-        echo "✓ Database schema created"
-    
-    - name: Verify environment variables
-      run: |
-        echo "Checking DATABASE_URL availability..."
-        if [ -z "$DATABASE_URL" ]; then
-          echo "❌ DATABASE_URL is not set!"
-          exit 1
-        fi
-        echo "✓ DATABASE_URL is set: ${DATABASE_URL}"
-        python3 -c "import os; print(f'Python sees DATABASE_URL: {os.getenv(\"DATABASE_URL\")}')"
-    
-    - name: Run Pytest with coverage
-      env:
-        DATABASE_URL: postgresql://testuser:testpass@localhost:5432/gradcafe_test
-      run: |
-        echo "Running tests with coverage..."
-        # Note: Parallel execution disabled (-n auto removed) because most tests
-        # use database fixtures that can't run concurrently. Sequential execution
-        # with --timeout prevents hangs while avoiding lock conflicts.
-        pytest --timeout=60 --timeout-method=thread \
-          --cov=src --cov-report=term-missing --cov-fail-under=100 \
-          -v --tb=short
-        echo "✓ Tests passed with required coverage"
-      continue-on-error: false
-    
-    - name: Set up Snyk
-      uses: snyk/actions/setup@master
-    
-    - name: Run Snyk dependency scan
-      env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      run: |
-        echo "Running Snyk dependency scan..."
-        snyk test --file=requirements.txt --severity-threshold=high || echo "⚠️  Vulnerabilities found - review required"
-      continue-on-error: true
-    
-    - name: Generate test report
-      if: always()
-      run: |
-        echo "=== Security & Quality Check Summary ===" > check-summary.txt
-        echo "Pylint: PASSED (10/10)" >> check-summary.txt
-        echo "Dependency Graph: GENERATED" >> check-summary.txt
-        echo "Tests: PASSED" >> check-summary.txt
-        echo "Snyk Scan: COMPLETED" >> check-summary.txt
-        cat check-summary.txt
-    
-    - name: Upload check summary
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: check-summary
-        path: module_5/check-summary.txt
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install lint dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pylint
+          pip install -r src/web/requirements.txt
+
+      - name: Run Pylint (10/10 required)
+        run: |
+          pylint src/web/app/__init__.py --disable=C0305 --fail-under=10
