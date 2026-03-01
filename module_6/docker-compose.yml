@@ -34,6 +34,17 @@ services:
       RABBITMQ_URL: ${RABBITMQ_URL}
     ports:
       - "8080:8080"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8080/worker_status', timeout=3)",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     depends_on:
       db:
         condition: service_healthy
@@ -50,6 +61,17 @@ services:
       ID_KEY: ${ID_KEY}
     volumes:
       - ./src/data:/data:ro
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import os, socket; socket.create_connection(('db', 5432), timeout=3).close(); socket.create_connection(('rabbitmq', 5672), timeout=3).close()",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     depends_on:
       db:
         condition: service_healthy

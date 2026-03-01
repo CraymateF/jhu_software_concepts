@@ -69,18 +69,24 @@ docker compose down -v
 
 ## Docker Registry Links
 
-Replace `<username>` with your DockerHub username:
+- Repository: `https://hub.docker.com/repository/docker/fadetobiack/module_6/general`
+- Web image tag: `fadetobiack/module_6:v1-web`
+- Worker image tag: `fadetobiack/module_6:v1-worker`
 
-- `docker.io/<username>/module_6-web:latest`
-- `docker.io/<username>/module_6-worker:latest`
-
-Example push commands:
+Push commands:
 
 ```bash
-docker build -t <username>/module_6-web:latest ./src/web
-docker build -t <username>/module_6-worker:latest ./src/worker
-docker push <username>/module_6-web:latest
-docker push <username>/module_6-worker:latest
+docker build -t fadetobiack/module_6:v1-web ./src/web
+docker build -t fadetobiack/module_6:v1-worker ./src/worker
+docker push fadetobiack/module_6:v1-web
+docker push fadetobiack/module_6:v1-worker
+```
+
+Pull commands:
+
+```bash
+docker pull fadetobiack/module_6:v1-web
+docker pull fadetobiack/module_6:v1-worker
 ```
 
 ## Notes
