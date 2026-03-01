@@ -1,0 +1,46 @@
+[MASTER]
+ignore-patterns=^\.#,.*__pycache__.*
+init-hook=import os,sys;root=os.getcwd();sys.path[:0]=[os.path.join(root,'src/web'),os.path.join(root,'src/worker'),os.path.join(root,'src/worker/etl'),os.path.join(root,'src/worker/etl/module_2_code'),os.path.join(root,'tests')]
+
+[MESSAGES CONTROL]
+disable=
+    C0103,
+    C0121,
+    C0206,
+    C0114,
+    C0115,
+    C0116,
+    C0301,
+    C0302,
+    C0303,
+    C0304,
+    C0305,
+    C0411,
+    C0413,
+    C0415,
+    E0401,
+    E0611,
+    R0801,
+    R0902,
+    R0903,
+    R0913,
+    R0917,
+    R0912,
+    R0914,
+    R0915,
+    R1702,
+    R1705,
+    W0311,
+    W0122,
+    W0404,
+    W0611,
+    W0612,
+    W0613,
+    W0621,
+    W0718,
+    W1309,
+    W1514,
+    W1510
+
+[REPORTS]
+score=yes
